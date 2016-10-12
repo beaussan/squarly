@@ -21,6 +21,16 @@ repositories {
     mavenCentral()
 }
 
+
+sourceSets {
+    test {
+        java {
+            srcDir 'src/test/java'
+            srcDir 'src/test/java-gen'
+        }
+    }
+}
+
 dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
 

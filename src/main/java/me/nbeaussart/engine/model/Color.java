@@ -1,8 +1,9 @@
 package me.nbeaussart.engine.model;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 
-import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**
@@ -40,7 +41,7 @@ public class Color {
 
     @Override
     public String toString() {
-        return toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("red", red)
                 .add("green", green)
                 .add("blue", blue)
