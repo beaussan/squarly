@@ -35,7 +35,7 @@ public class ColorTest {
     }
 
     @Test
-    public void testExceptionRedNegavie() throws Exception {
+    public void testExceptionRedNegate() throws Exception {
         assertThatThrownBy(() -> new Color(-1, 0, 0))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Red should be between 0 and 255");
@@ -48,7 +48,7 @@ public class ColorTest {
     }
 
     @Test
-    public void testExceptionGreenNegavie() throws Exception {
+    public void testExceptionGreenNegate() throws Exception {
         assertThatThrownBy(() -> new Color( 0, -1, 0))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Green should be between 0 and 255");
@@ -61,7 +61,7 @@ public class ColorTest {
     }
 
     @Test
-    public void testExceptionBlueNegavie() throws Exception {
+    public void testExceptionBlueNegate() throws Exception {
         assertThatThrownBy(() -> new Color(0, 0, -1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Blue should be between 0 and 255");

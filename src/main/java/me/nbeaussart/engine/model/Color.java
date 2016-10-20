@@ -7,7 +7,7 @@ import java.util.Objects;
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**
- * Color class, basic rgb
+ * Color class, basic rgb color system
  *
  * @author Nicolas Beaussart
  * @since 12/10/16
