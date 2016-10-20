@@ -1,0 +1,62 @@
+group 'me.nbeaussart'
+version '1.0-SNAPSHOT'
+
+
+// use assertj generator from gradle example
+
+def assertjOutput = file('src/test/java-gen')
+
+configurations {
+    assertj
+}
+
+dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: '19.0'
+
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.5.2'
+    testCompile group: 'org.assertj', name: 'assertj-guava', version: '3.0.0'
+
+        assertj 'org.assertj:assertj-assertions-generator:2.0.0'
+        assertj project(':core-lib')
+
+}
+
+
+sourceSets {
+    test {
+        java {
+            srcDir 'src/test/java'
+            srcDir 'src/test/java-gen'
+        }
+    }
+}
+
+task assertjClean(type: Delete) {
+    delete assertjOutput
+}
+
+task assertjGen(dependsOn: assertjClean, type: JavaExec) {
+    doFirst {
+        if (!assertjOutput.exists()) {
+            logger.info("Creating `$assertjOutput` directory")
+
+            if (!assertjOutput.mkdirs()) {
+                throw new InvalidUserDataException("Unable to create `$assertjOutput` directory")
+            }
+        }
+    }
+
+    main 'org.assertj.assertions.generator.cli.AssertionGeneratorLauncher'
+    classpath = files(configurations.assertj)
+    workingDir = assertjOutput
+    args = [
+            'me.nbeaussart'
+    ]
+}
+
+compileTestJava.dependsOn(assertjGen)
