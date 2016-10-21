@@ -63,7 +63,7 @@ public class GameSquareAssert extends AbstractAssert<GameSquareAssert, GameSquar
     String assertjErrorMessage = "\nExpecting coords of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
     
     // null safe check
-    Coord actualCoords = actual.getCoords();
+    Coord actualCoords = actual.getCoord();
     if (!Objects.areEqual(actualCoords, coords)) {
       failWithMessage(assertjErrorMessage, actual, coords, actualCoords);
     }

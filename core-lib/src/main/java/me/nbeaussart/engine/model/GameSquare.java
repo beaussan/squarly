@@ -6,7 +6,7 @@ package me.nbeaussart.engine.model;
  */
 public interface GameSquare {
 
-    Coord getCoords();
+    Coord getCoord();
     Color getColor();
 
     GameMap getGameMap();

@@ -11,7 +11,7 @@ public interface GameMap {
     List<GameSquare> getMapData();
 
     int sizeX();
-    int siseY();
+    int sizeY();
 
     default int getHeight() {
         return 10;
