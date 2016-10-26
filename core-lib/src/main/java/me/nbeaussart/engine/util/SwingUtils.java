@@ -13,6 +13,8 @@ public final class SwingUtils {
     public static <T> T askForAStringInArrayReturning(String question, String header, T[] options, String errorMessage, String errorHeader) {
         return options[askForAStringInArray(question, header, options, errorMessage, errorHeader)];
     }
+
+    @SafeVarargs
     public static <T> T askForAStringInArrayReturning(String question, String header, T     ...options) {
         return options[askForAStringInArray(question, header, options, "Vous devez faire un choix", "Erreur choix")];
     }

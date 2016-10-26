@@ -1,4 +1,4 @@
-package me.nbeaussart.impl;
+package me.nbeaussart.impl.gui.swingutil;
 
 import me.nbeaussart.engine.model.Color;
 

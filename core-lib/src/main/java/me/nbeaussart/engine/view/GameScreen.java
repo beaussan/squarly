@@ -1,9 +1,7 @@
-package me.nbeaussart.engine.model;
+package me.nbeaussart.engine.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 /**
  * @author Nicolas Beaussart
@@ -11,20 +9,9 @@ import java.util.List;
  */
 public class GameScreen extends JFrame {
 
-    public GameScreen(String name, MapPrinter mapPrinter) {
+    private GameScreen(String name, MapPrinter mapPrinter) {
 
         initUIGame(name, mapPrinter);
-    }
-
-    private void initUIGame(String name, MapPrinter mapPrinter) {
-
-        add(mapPrinter);
-
-        setSize(mapPrinter.getSizeWidth(), mapPrinter.getSizeHeight());
-        setTitle(name);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-
     }
 
     public static GameScreen createGameScreen(String name, MapPrinter mapPrinter){
@@ -35,6 +22,15 @@ public class GameScreen extends JFrame {
         });
 
         return gameScreen[0];
+    }
+
+    private void initUIGame(String name, MapPrinter mapPrinter) {
+
+        add(mapPrinter);
+        setTitle(name);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        pack();
     }
 
 

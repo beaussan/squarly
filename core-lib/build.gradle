@@ -56,7 +56,7 @@ task assertjGen(dependsOn: assertjClean, type: JavaExec) {
     classpath = files(configurations.assertj)
     workingDir = assertjOutput
     args = [
-            'me.nbeaussart'
+            'me.nbeaussart.engine.model'
     ]
 }
 
