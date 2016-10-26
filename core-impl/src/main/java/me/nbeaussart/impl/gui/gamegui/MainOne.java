@@ -1,6 +1,7 @@
 package me.nbeaussart.impl.gui.gamegui;
 
-import me.nbeaussart.engine.model.*;
+import me.nbeaussart.engine.model.Color;
+import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.view.GameScreen;
 import me.nbeaussart.engine.view.GameSquareClicked;
 import me.nbeaussart.engine.view.MapPrinter;
@@ -35,14 +36,15 @@ public class MainOne {
                         c = new Color(0, 0, (255/ (sizeXY-i))*j);
                         break;
                 }
-                gm.getMapData().add(new GameSquare(c, new Coord(i, j), gm));
-                gm.getMapData().add(new GameSquare(c, new Coord(j, i), gm));
-                gm.getMapData().add(new GameSquare(c, new Coord(sizeXY - i, sizeXY - j), gm));
-                gm.getMapData().add(new GameSquare(c, new Coord(sizeXY - j, sizeXY - i), gm));
+                gm.getMapData().add(new GameSquare(c, new Cord(i, j), gm));
+                gm.getMapData().add(new GameSquare(c, new Cord(j, i), gm));
+                gm.getMapData().add(new GameSquare(c, new Cord(sizeXY - i, sizeXY - j), gm));
+                gm.getMapData().add(new GameSquare(c, new Cord(sizeXY - j, sizeXY - i), gm));
             }
         }
 
         gm.deleteDuplicate();
+        gm.setChanged(null);
 
     }
 
@@ -52,9 +54,9 @@ public class MainOne {
         MapPrinter<GameSquare> mp = new MapPrinter<>(gm);
         drawShape(gm, sizeXY);
 
-        System.out.println(gm.getFromCoords(new Coord(sizeXY, sizeXY)));
-        System.out.println(gm.getFromCoords(new Coord(sizeXY - 1, sizeXY - 1)));
-        System.out.println(gm.getFromCoords(new Coord(sizeXY - 2, sizeXY - 2)));
+        System.out.println(gm.getFromCords(new Cord(sizeXY, sizeXY)));
+        System.out.println(gm.getFromCords(new Cord(sizeXY - 1, sizeXY - 1)));
+        System.out.println(gm.getFromCords(new Cord(sizeXY - 2, sizeXY - 2)));
 
         mp.addGameClicked(new GameSquareClicked<GameSquare>() {
             @Override
@@ -62,7 +64,7 @@ public class MainOne {
                 System.out.println("Clicked");
                 System.out.println(square);
                 square.setColor(new Color(0, 0, 0));
-                mp.repaint();
+                //mp.repaint();
 
             }
 
@@ -71,7 +73,7 @@ public class MainOne {
                 System.out.println("Pressed");
                 System.out.println(square);
                 square.setColor(new Color(0, 0, 0));
-                mp.repaint();
+                //mp.repaint();
             }
 
             @Override
@@ -79,7 +81,7 @@ public class MainOne {
                 System.out.println("Dragged");
                 System.out.println(square);
                 square.setColor(new Color(0, 0, 0));
-                mp.repaint();
+                //mp.repaint();
             }
         });
         mp.addKeyListener(new KeyAdapter() {
@@ -88,7 +90,7 @@ public class MainOne {
                 System.out.println("typed");
                 System.out.println(e);
                 drawShape(gm, sizeXY);
-                mp.repaint();
+                //mp.repaint();
             }
 
             @Override

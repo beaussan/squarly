@@ -10,11 +10,11 @@ import java.util.Objects;
  * @author Nicolas Beaussart
  * @since 12/10/16
  */
-public class Coord {
+public class Cord {
     private final int x;
     private final int y;
 
-    public Coord(int x, int y) {
+    public Cord(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -29,42 +29,42 @@ public class Coord {
     }
 
     /**
-     * Add x and y to this {@link Coord} to get a new one
+     * Add x and y to this {@link Cord} to get a new one
      * @param x The x to add
      * @param y The y to add
-     * @return The new {@link Coord} generated
+     * @return The new {@link Cord} generated
      */
-    public Coord add(int x, int y){
-        return new Coord(this.x + x, this.y + y);
+    public Cord add(int x, int y) {
+        return new Cord(this.x + x, this.y + y);
     }
 
     /**
      *
-     * Add a {@link Coord} to this one
-     * @param coord The {@link Coord} to add to this one
-     * @return The new {@link Coord} generated
+     * Add a {@link Cord} to this one
+     * @param cord The {@link Cord} to add to this one
+     * @return The new {@link Cord} generated
      */
-    public Coord add(Coord coord){
-        return add(coord.getX(), coord.getY());
+    public Cord add(Cord cord) {
+        return add(cord.getX(), cord.getY());
     }
 
     /**
-     * Minus x and y to this {@link Coord} to get a new one
+     * Minus x and y to this {@link Cord} to get a new one
      * @param x The x to minus
      * @param y The y to minus
-     * @return The new {@link Coord} generated
+     * @return The new {@link Cord} generated
      */
-    public Coord minus(int x, int y){
-        return new Coord(this.x - x, this.y - y);
+    public Cord minus(int x, int y) {
+        return new Cord(this.x - x, this.y - y);
     }
 
     /**
-     * Minus a {@link Coord} to this one
-     * @param coord The {@link Coord} to minus to this one
-     * @return The new {@link Coord} generated
+     * Minus a {@link Cord} to this one
+     * @param cord The {@link Cord} to minus to this one
+     * @return The new {@link Cord} generated
      */
-    public Coord minus(Coord coord){
-        return minus(coord.getX(), coord.getY());
+    public Cord minus(Cord cord) {
+        return minus(cord.getX(), cord.getY());
     }
 
 
@@ -80,9 +80,9 @@ public class Coord {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Coord coord = (Coord) o;
-        return x == coord.x &&
-                y == coord.y;
+        Cord cord = (Cord) o;
+        return x == cord.x &&
+                y == cord.y;
     }
 
     @Override

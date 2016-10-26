@@ -6,7 +6,6 @@ import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 
 import javax.swing.*;
-import java.awt.Color;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -27,12 +26,7 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
 
         setFocusable(true);
         this.requestFocusInWindow();
-        System.out.println("Height\t" + getSizeHeight());
-        System.out.println("sizeY\t" + gameMap.sizeY());
-        System.out.println("getHeightPixel\t" + gameMap.getHeightPixel());
-        System.out.println("Width\t" + getSizeWidth());
-        System.out.println("sizeX\t" + gameMap.sizeX());
-        System.out.println("getWidthPixel\t" + gameMap.getWidthPixel());
+        gameMap.addUpdatesHandlers(t -> repaint());
     }
 
     public IGameMap getGameMap() {
@@ -47,8 +41,8 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
         int xReal = x / gameMap.getHeightPixel();
         //int yReal = (y-gameMap.sizeY()-1)/gameMap.getHeightPixel();
         int yReal = gameMap.sizeY() - y / gameMap.getHeightPixel() - 1;
-        return gameMap.getMapData().stream().filter(square -> square.getCoord().getX() == xReal)
-                .filter(square -> square.getCoord().getY() == yReal)
+        return gameMap.getMapData().stream().filter(square -> square.getCord().getX() == xReal)
+                .filter(square -> square.getCord().getY() == yReal)
                 .findFirst();
     }
 
@@ -96,21 +90,24 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
         });
     }
 
+    private void paintSquare(Graphics g, T gs) {
+        Preconditions.checkNotNull(gs, "An item in the map was null");
+        Preconditions.checkNotNull(gs.getColor(), "The item %s colors was null !", gs);
+        Preconditions.checkNotNull(gs.getCord(), "The item %s coordinate was null !", gs);
+        g.setColor(new Color(gs.getColor().getRed(), gs.getColor().getGreen(), gs.getColor().getBlue()));
+        g.fillRect(
+                gs.getCord().getX() * gameMap.getWidthPixel(),
+                (gameMap.getHeightPixel() * (gameMap.sizeY() - gs.getCord().getY() - 1)),
+                gameMap.getWidthPixel(),
+                gameMap.getHeightPixel()
+        );
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         gameMap.getMapData().forEach(gs -> {
-            Preconditions.checkNotNull(gs, "An item in the map was null");
-            Preconditions.checkNotNull(gs.getColor(), "The item %s colors was null !", gs);
-            Preconditions.checkNotNull(gs.getCoord(), "The item %s coordinate was null !", gs);
-            g.setColor(new Color(gs.getColor().getRed(), gs.getColor().getGreen(), gs.getColor().getBlue()));
-            g.fillRect(
-                    gs.getCoord().getX() * gameMap.getWidthPixel(),
-                    (gameMap.getHeightPixel() * (gameMap.sizeY() - gs.getCoord().getY() - 1)),
-                    gameMap.getWidthPixel(),
-                    gameMap.getHeightPixel()
-            );
-            // g.fillRect(x,y,width, height);
+            paintSquare(g, gs);
         });
     }
 

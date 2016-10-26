@@ -1,7 +1,7 @@
 package me.nbeaussart.impl.gui.gamegui;
 
 import me.nbeaussart.engine.model.Color;
-import me.nbeaussart.engine.model.Coord;
+import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.Direction;
 import me.nbeaussart.engine.view.GameScreen;
 import me.nbeaussart.engine.view.GameSquareClicked;
@@ -28,28 +28,27 @@ public class MainTwo {
         int cpt = 0;
         for (int i = 0; i < gm.sizeX(); i++) {
             for (int i1 = 0; i1 < gm.sizeY(); i1++) {
-                gm.getMapData().add(new GameSquare((cpt % 2 == 0) ? COLOR_BACK1 : COLOR_BACK2, new Coord(i, i1), gm));
+                gm.getMapData().add(new GameSquare((cpt % 2 == 0) ? COLOR_BACK1 : COLOR_BACK2, new Cord(i, i1), gm));
                 cpt++;
             }
         }
         gm.deleteDuplicate();
     }
 
-    public static Coord move(GameMap gm, Coord old, Coord newCord) {
-        gm.getFromCoords(old).ifPresent(coloredSquare -> coloredSquare.setColor(COLOR_BACK));
-        gm.getFromCoords(newCord).ifPresent(coloredSquare -> coloredSquare.setColor(COLOR_PLAYER));
+    public static Cord move(GameMap gm, Cord old, Cord newCord) {
+        gm.getFromCords(old).ifPresent(coloredSquare -> coloredSquare.setColor(COLOR_BACK));
+        gm.getFromCords(newCord).ifPresent(coloredSquare -> coloredSquare.setColor(COLOR_PLAYER));
         return newCord;
     }
 
 
     public static void main(String... args) {
-        int sizeXY = 20;
         GameMap gm = new GameMap(20, 40, 10, 30);
         MapPrinter<GameSquare> mp = new MapPrinter<>(gm);
         drawFull(gm);
-        final Coord[] current = {new Coord(4, 4)};
+        final Cord[] current = {new Cord(4, 4)};
 
-        gm.getFromCoords(current[0]).ifPresent(coloredSquare -> coloredSquare.setColor(new Color(0, 0, 0)));
+        gm.getFromCords(current[0]).ifPresent(coloredSquare -> coloredSquare.setColor(new Color(0, 0, 0)));
 
 
         mp.addGameClicked(new GameSquareClicked<GameSquare>() {
@@ -65,14 +64,14 @@ public class MainTwo {
             public void mousePressed(GameSquare square, MouseEvent e) {
                 System.out.println("Pressed");
                 System.out.println(square);
-                mp.repaint();
+                //mp.repaint();
             }
 
             @Override
             public void mouseDragged(GameSquare square, MouseEvent e) {
                 System.out.println("Dragged");
                 System.out.println(square);
-                mp.repaint();
+                //mp.repaint();
             }
         });
         mp.addKeyListener(new KeyAdapter() {
@@ -81,7 +80,7 @@ public class MainTwo {
                 System.out.println("typed");
                 //System.out.println(e);
 
-                mp.repaint();
+                //mp.repaint();
             }
 
             @Override
@@ -107,7 +106,7 @@ public class MainTwo {
                 }
                 System.out.println(e.getKeyChar());
                 System.out.println(current[0]);
-                mp.repaint();
+                //mp.repaint();
 
             }
 

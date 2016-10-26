@@ -4,6 +4,7 @@ import me.nbeaussart.engine.model.interfaces.IGameMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +18,7 @@ public class GameMap implements IGameMap<GameSquare> {
     private final int height;
     private final int width;
     private List<GameSquare> mapData = new ArrayList<>();
+    private List<Consumer<GameSquare>> listUpdateHandlers = new ArrayList<>();
 
     public GameMap(int sizeX, int sizeY, int height, int width) {
         this.sizeX = sizeX;
@@ -28,6 +30,11 @@ public class GameMap implements IGameMap<GameSquare> {
     @Override
     public List<GameSquare> getMapData() {
         return mapData;
+    }
+
+    @Override
+    public List<Consumer<GameSquare>> getUpdatesHandlers() {
+        return listUpdateHandlers;
     }
 
     @Override

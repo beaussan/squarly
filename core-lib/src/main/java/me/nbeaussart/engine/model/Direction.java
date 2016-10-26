@@ -5,10 +5,10 @@ package me.nbeaussart.engine.model;
  * @since 26/10/16
  */
 public enum Direction {
-    UP(new Coord(0, +1)),
-    DOWN(new Coord(0, -1)),
-    RIGHT(new Coord(+1, 0)),
-    LEFT(new Coord(-1, 0));
+    UP(new Cord(0, +1)),
+    DOWN(new Cord(0, -1)),
+    RIGHT(new Cord(+1, 0)),
+    LEFT(new Cord(-1, 0));
 
 
     static {
@@ -18,15 +18,15 @@ public enum Direction {
         LEFT.setOpposite(RIGHT);
     }
 
-    private final Coord cords;
+    private final Cord cords;
     private Direction opposite;
 
-    Direction(Coord cords) {
+    Direction(Cord cords) {
         this.cords = cords;
     }
 
 
-    public Coord getCords() {
+    public Cord getCords() {
         return cords;
     }
 
