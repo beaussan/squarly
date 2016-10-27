@@ -18,7 +18,7 @@ public class GameSquare implements IColoredSquare, ICoordinateSquare {
     private final Cord cord;
     private final IGameMap<GameSquare> gameMap;
     private Color color;
-    private IState state;
+    private IState state = IState.WALL;
 
     public GameSquare(Color color, Cord cord, IGameMap<GameSquare> gameMap) {
         this.color = color;
@@ -35,6 +35,9 @@ public class GameSquare implements IColoredSquare, ICoordinateSquare {
     public void setColor(Color color) {
         this.color = color;
         setUpdated();
+    }
+    public void setColorWithoutUpdate(Color color) {
+        this.color = color;
     }
 
     @Override
@@ -55,7 +58,7 @@ public class GameSquare implements IColoredSquare, ICoordinateSquare {
     @Override
     public void setState(IState state) {
         this.state = state;
-        setUpdated();
+        //setUpdated();
     }
 
     public Cord getCord() {
@@ -67,6 +70,7 @@ public class GameSquare implements IColoredSquare, ICoordinateSquare {
         return MoreObjects.toStringHelper(this)
                 .add("color", color)
                 .add("cord", cord)
+                .add("state", state)
                 .toString();
     }
 
