@@ -1,6 +1,5 @@
 package me.nbeaussart.engine.model;
 
-import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.generator.AbsGenerator;
 import me.nbeaussart.engine.model.generator.MazeGenerator;
 import me.nbeaussart.engine.model.generator.MazeGeneratorClean;
@@ -13,6 +12,7 @@ import me.nbeaussart.engine.view.MapPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -101,7 +101,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
 
     private class GameMapWrapper implements IGameMap<ColorWrapper>{
         public List<ColorWrapper> wrapper = new ArrayList<>();
-        private  List<Consumer<ColorWrapper>> data = new ArrayList<>();
+        private  List<Consumer<Optional<ColorWrapper>>> data = new ArrayList<>();
         @Override
         public List<ColorWrapper> getMapData() {
             return wrapper;
@@ -113,7 +113,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
         }
 
         @Override
-        public List<Consumer<ColorWrapper>> getUpdatesHandlers() {
+        public List<Consumer<Optional<ColorWrapper>>> getUpdatesHandlers() {
             return data;
         }
 
@@ -145,14 +145,17 @@ public class GameGenerator<T extends ICoordinateSquare> {
             this.t = t;
             this.gmw = gmw;
             gameMap.addUpdatesHandlers(t1 -> {
-                if (t1.getCord().equals(t.getCord())){
-                    setUpdated();
-                    try {
-                        Thread.sleep(PAUSE_DURATION);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                t1.ifPresent(t2 -> {
+                    if (t2.getCord().equals(t.getCord())){
+                        setUpdated();
+                        try {
+                            Thread.sleep(PAUSE_DURATION);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
+                });
+
             });
         }
         @Override

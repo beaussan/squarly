@@ -28,9 +28,9 @@ public interface IGameMap<T extends ICoordinateSquare> {
                 sizeY() <= square.getCord().getY());
     }
 
-    List<Consumer<T>> getUpdatesHandlers();
+    List<Consumer<Optional<T>>> getUpdatesHandlers();
 
-    default void addUpdatesHandlers(Consumer<T> obj) {
+    default void addUpdatesHandlers(Consumer<Optional<T>> obj) {
         if (!getUpdatesHandlers().contains(Preconditions.checkNotNull(obj))) {
             getUpdatesHandlers().add(obj);
         }
@@ -42,7 +42,7 @@ public interface IGameMap<T extends ICoordinateSquare> {
     }
 
     default void setChanged(T object) {
-        getUpdatesHandlers().forEach(tConsumer -> tConsumer.accept(object));
+        getUpdatesHandlers().forEach(tConsumer -> tConsumer.accept(Optional.ofNullable(object)));
     }
 
 

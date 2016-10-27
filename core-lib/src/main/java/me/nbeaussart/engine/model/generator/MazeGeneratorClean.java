@@ -7,7 +7,6 @@ import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 import me.nbeaussart.engine.model.interfaces.IState;
 
-import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,22 +34,20 @@ public class MazeGeneratorClean<T extends ICoordinateSquare> extends AbsGenerato
         Optional<T> fromCords = gameMap.getFromCords(new Cord(1, 1));
         if (fromCords.isPresent()) {
             fromCords.get().setState(IState.ROOM);
-            wallList.addAll(getWallsArround(fromCords.get()));
+            wallList.addAll(getWallsAround(fromCords.get()));
         } else {
             throw new IllegalStateException("The map is too small");
         }
 
         while (!wallList.isEmpty()){
             T rmd = wallList.remove(r.nextInt(wallList.size()));
-            /*
-            if (getArround(rmd).size() != 4){
-                continue;
-            }
-            */
-            if (getRoomArround(rmd).size() == 1 &&
-                    getWallsArround(rmd).size() >= 6){
+
+            List<T> around = getAround(rmd);
+
+            if (getRoomAround(rmd, around).size() == 1 &&
+                    getWallsAroundDiagonal(rmd, around).size() >= 6){
                 rmd.setState(IState.ROOM);
-                wallList.addAll(getWallsArround(rmd));
+                wallList.addAll(getWallsAround(rmd, around));
             }
         }
 
@@ -70,25 +67,40 @@ public class MazeGeneratorClean<T extends ICoordinateSquare> extends AbsGenerato
 
      */
 
-    private List<T> getWallsArround(T t){
-        return getArround2(t).stream().filter(t1 -> t1.getState() == IState.WALL).collect(Collectors.toList());
-    }
-    private List<T> getRoomArround(T t){
-        return getArround(t).stream().filter(t1 -> t1.getState() == IState.ROOM).collect(Collectors.toList());
+    private List<T> getWallsAround(T t, List<T> arround){
+        return arround.parallelStream().filter(t1 -> t1.getState() == IState.WALL).collect(Collectors.toList());
     }
 
-    private List<T> getArround(T t){
-        return Arrays.stream(Direction.values()).map(direction -> gameMap.getFromCords(t.getCord().add(direction.getCords())))
+
+    private List<T> getWallsAround(T t){
+        return getWallsAround(t, getAround(t));
+    }
+
+
+    private List<T> getWallsAroundDiagonal(T t, List<T> arround){
+        List<T> aroundDiagonal = getAroundDiagonal(t);
+        aroundDiagonal.addAll(arround);
+        return aroundDiagonal.parallelStream().filter(t1 -> t1.getState() == IState.WALL).collect(Collectors.toList());
+    }
+
+    private List<T> getRoomAround(T t, List<T> arround){
+        return arround.parallelStream().filter(t1 -> t1.getState() == IState.ROOM).collect(Collectors.toList());
+    }
+
+    private List<T> getAround(T t){
+        return Arrays.stream(Direction.values())
+                .map(direction -> gameMap.getFromCords(t.getCord().add(direction.getCords())))
                 .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
     }
 
-    private List<T> getArround2(T t){
-        List<Cord> cordList = Arrays.stream(Direction.values()).map(Direction::getCords).collect(Collectors.toList());
+
+    private List<T> getAroundDiagonal(T t){
+        List<Cord> cordList =new ArrayList<>();
         cordList.add(Direction.UP.getCords().add(Direction.RIGHT.getCords()));
         cordList.add(Direction.UP.getCords().add(Direction.LEFT.getCords()));
         cordList.add(Direction.DOWN.getCords().add(Direction.RIGHT.getCords()));
         cordList.add(Direction.DOWN.getCords().add(Direction.LEFT.getCords()));
-        return cordList.stream().map(direction -> gameMap.getFromCords(t.getCord().add(direction)))
+        return cordList.parallelStream().map(direction -> gameMap.getFromCords(t.getCord().add(direction)))
                 .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
     }
 

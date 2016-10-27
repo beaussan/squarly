@@ -9,6 +9,8 @@ import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 import me.nbeaussart.engine.model.interfaces.IState;
 
+import java.util.Optional;
+
 /**
  * @author Nicolas Beaussart
  * @since 20/10/16

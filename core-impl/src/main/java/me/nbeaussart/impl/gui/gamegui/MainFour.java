@@ -24,29 +24,31 @@ public class MainFour {
                 gm.getMapData().add(new GameSquare(COLOR_WALL, new Cord(x,y), gm));
             }
         }
+        System.out.println("Starging");
+        long start = System.currentTimeMillis();
         new GameGenerator<>(gm).useMazeGeneratorClean().generate();
-        gm.setChanged(null);
+        long end = System.currentTimeMillis();
+        System.out.println("Done in " + (end - start) + "ms");
+        gm.getMapData().forEach(gameSquare -> {
+            switch (gameSquare.getState()){
+                case DOOR:
+                    gameSquare.setColorWithoutUpdate(COLOR_DOOR);
+                    break;
+                case ROOM:
+                    gameSquare.setColorWithoutUpdate(COLOR_ROOM);
+                    break;
+                case WALL:
+                    gameSquare.setColorWithoutUpdate(COLOR_WALL);
+                    break;
+            }
+        });
+        System.out.println("Done Coloring");
         gm.setChanged(null);
     }
 
 
     public static void main(String... args){
-        GameMap gm = new GameMap(40, 40, 20, 20);
-        gm.addUpdatesHandlers(gameSquare3 -> {
-            gm.getMapData().forEach(gameSquare -> {
-                switch (gameSquare.getState()){
-                    case DOOR:
-                        gameSquare.setColorWithoutUpdate(COLOR_DOOR);
-                        break;
-                    case ROOM:
-                        gameSquare.setColorWithoutUpdate(COLOR_ROOM);
-                        break;
-                    case WALL:
-                        gameSquare.setColorWithoutUpdate(COLOR_WALL);
-                        break;
-                }
-            });
-        });
+        GameMap gm = new GameMap(80, 80, 20, 20);
         generate(gm);
         MapPrinter<GameSquare> mapPrinter = new MapPrinter<>(gm);
         GameScreen.createGameScreen("Hello world", mapPrinter);
