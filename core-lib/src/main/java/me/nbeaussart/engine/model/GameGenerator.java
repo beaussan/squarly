@@ -3,6 +3,7 @@ package me.nbeaussart.engine.model;
 import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.generator.AbsGenerator;
 import me.nbeaussart.engine.model.generator.MazeGenerator;
+import me.nbeaussart.engine.model.generator.MazeGeneratorClean;
 import me.nbeaussart.engine.model.interfaces.IColoredSquare;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
@@ -27,7 +28,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
     private final static Color COLOR_WALL=new Color(0,0,0);
     private final static Color COLOR_ROOM=new Color(255,255,255);
     private final static Color COLOR_DOOR=new Color(255,0,0);
-    private final static long PAUSE_DURATION = 100;
+    private final static long PAUSE_DURATION = 5;
 
     private final IGameMap<T> gameMap;
     private final boolean isShowing;
@@ -51,6 +52,11 @@ public class GameGenerator<T extends ICoordinateSquare> {
 
     public GameGenerator<T> useMazeGenerator(){
         usedGenerator = new MazeGenerator<T>(this);
+        return this;
+    }
+
+    public GameGenerator<T> useMazeGeneratorClean(){
+        usedGenerator = new MazeGeneratorClean<T>(this);
         return this;
     }
 
