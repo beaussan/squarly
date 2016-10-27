@@ -6,6 +6,7 @@ import me.nbeaussart.engine.model.Cord;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author Nicolas Beaussart
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 public interface IGameMap<T extends ICoordinateSquare> {
 
     List<T> getMapData();
+    void setMapData(List<T> data);
 
     default Optional<T> getFromCords(Cord cord) {
         return getMapData().stream().filter(t -> t.getCord().equals(cord)).findFirst();
@@ -32,6 +34,11 @@ public interface IGameMap<T extends ICoordinateSquare> {
         if (!getUpdatesHandlers().contains(Preconditions.checkNotNull(obj))) {
             getUpdatesHandlers().add(obj);
         }
+    }
+
+
+    default void removeDuplicate(){
+        setMapData(getMapData().stream().distinct().collect(Collectors.toList()));
     }
 
     default void setChanged(T object) {

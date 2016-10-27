@@ -33,6 +33,11 @@ public class GameMap implements IGameMap<GameSquare> {
     }
 
     @Override
+    public void setMapData(List<GameSquare> data) {
+        this.mapData = data;
+    }
+
+    @Override
     public List<Consumer<GameSquare>> getUpdatesHandlers() {
         return listUpdateHandlers;
     }
@@ -57,10 +62,5 @@ public class GameMap implements IGameMap<GameSquare> {
         return width;
     }
 
-
-    public void deleteDuplicate() {
-        mapData = mapData.stream().distinct().collect(Collectors.toList());
-        removeOutOfBounds();
-    }
 
 }

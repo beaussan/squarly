@@ -7,6 +7,7 @@ import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.interfaces.IColoredSquare;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
+import me.nbeaussart.engine.model.interfaces.IState;
 
 /**
  * @author Nicolas Beaussart
@@ -17,6 +18,7 @@ public class GameSquare implements IColoredSquare, ICoordinateSquare {
     private final Cord cord;
     private final IGameMap<GameSquare> gameMap;
     private Color color;
+    private IState state;
 
     public GameSquare(Color color, Cord cord, IGameMap<GameSquare> gameMap) {
         this.color = color;
@@ -43,6 +45,17 @@ public class GameSquare implements IColoredSquare, ICoordinateSquare {
     @Override
     public void setUpdated() {
         gameMap.setChanged(this);
+    }
+
+    @Override
+    public IState getState() {
+        return state;
+    }
+
+    @Override
+    public void setState(IState state) {
+        this.state = state;
+        setUpdated();
     }
 
     public Cord getCord() {

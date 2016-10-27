@@ -32,7 +32,8 @@ public class MainTwo {
                 cpt++;
             }
         }
-        gm.deleteDuplicate();
+        gm.removeDuplicate();
+        gm.removeOutOfBounds();
     }
 
     public static Cord move(GameMap gm, Cord old, Cord newCord) {

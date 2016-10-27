@@ -12,4 +12,7 @@ public interface ICoordinateSquare {
     IGameMap<? extends ICoordinateSquare> getGameMap();
 
     void setUpdated();
+
+    IState getState();
+    void setState(IState state);
 }

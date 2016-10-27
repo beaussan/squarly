@@ -43,7 +43,8 @@ public class MainOne {
             }
         }
 
-        gm.deleteDuplicate();
+        gm.removeDuplicate();
+        gm.removeOutOfBounds();
         gm.setChanged(null);
 
     }
