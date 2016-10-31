@@ -4,17 +4,24 @@ import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.Direction;
 import me.nbeaussart.engine.model.GameGenerator;
+import me.nbeaussart.engine.model.interfaces.IState;
 import me.nbeaussart.engine.view.GameScreen;
 import me.nbeaussart.engine.view.MapPrinter;
+import me.nbeaussart.game.action.Action;
 import me.nbeaussart.game.action.Move;
 import me.nbeaussart.game.entity.Entity;
+import me.nbeaussart.game.entity.Monster;
 import me.nbeaussart.game.entity.Player;
+import me.nbeaussart.game.ia.AbstractIA;
+import me.nbeaussart.game.ia.DummyIA;
 import me.nbeaussart.game.map.GameMap;
 import me.nbeaussart.game.map.GameSquare;
 
 import javax.print.attribute.standard.PrinterLocation;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by beaussan on 31/10/16.
@@ -25,6 +32,8 @@ public class Main {
     private final GameScreen application;
     private GameMap gameMap;
     private Entity player;
+    private List<Monster> monsters = new ArrayList<>();
+    private AbstractIA ia = new DummyIA();
 
     public Main(){
         gameMap = new GameMap(20,20);
@@ -36,9 +45,37 @@ public class Main {
         new GameGenerator<GameSquare>(gameMap).useMazeGeneratorClean().generate();
 
         player = new Player("Player",100,20,gameMap.getFromCords(new Cord(1,1)).get());
+
+
+        for (GameSquare gameSquare : gameMap.getMapData()) {
+            if (gameSquare.getState() == IState.ROOM){
+                monsters.add(new Monster("MONSTER", 10,20, gameSquare));
+                if (monsters.size() >= 3){
+                    break;
+                }
+
+            }
+        }
+
+
         this.mapPrinter = new MapPrinter<>(gameMap);
+
         application = GameScreen.createGameScreen("APPLICATION", mapPrinter);
+
         setupLister();
+        loop();
+    }
+    private void loop(){
+        new Thread(() -> {
+            while (true){
+                monsters.forEach(monster -> ia.getAction(monster).ifPresent(Action::act));
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void setupLister(){
@@ -78,7 +115,6 @@ public class Main {
             }
         });
     }
-
 
     public static void main(String ... args){
         new Main();
