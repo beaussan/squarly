@@ -16,6 +16,7 @@ import me.nbeaussart.game.ia.AbstractIA;
 import me.nbeaussart.game.ia.DummyIA;
 import me.nbeaussart.game.map.GameMap;
 import me.nbeaussart.game.map.GameSquare;
+import me.nbeaussart.game.utils.KeyInputManager;
 
 import javax.print.attribute.standard.PrinterLocation;
 import java.awt.event.KeyEvent;
@@ -30,10 +31,13 @@ public class Main {
 
     private final MapPrinter<GameSquare> mapPrinter;
     private final GameScreen application;
+    private final KeyInputManager keyInputManager;
     private GameMap gameMap;
     private Entity player;
     private List<Monster> monsters = new ArrayList<>();
     private AbstractIA ia = new DummyIA();
+    private long lastFpsTime;
+    private int fps;
 
     public Main(){
         gameMap = new GameMap(20,20);
@@ -45,7 +49,7 @@ public class Main {
         new GameGenerator<GameSquare>(gameMap).useMazeGeneratorClean().generate();
 
         player = new Player("Player",100,20,gameMap.getFromCords(new Cord(1,1)).get());
-
+        keyInputManager = new KeyInputManager();
 
         for (GameSquare gameSquare : gameMap.getMapData()) {
             if (gameSquare.getState() == IState.ROOM){
@@ -59,64 +63,53 @@ public class Main {
 
 
         this.mapPrinter = new MapPrinter<>(gameMap);
-
+        mapPrinter.addKeyListener(keyInputManager);
         application = GameScreen.createGameScreen("APPLICATION", mapPrinter);
 
-        setupLister();
-        loop();
-    }
-    private void loop(){
-        new Thread(() -> {
-            while (true){
-                monsters.forEach(monster -> ia.getAction(monster).ifPresent(Action::act));
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+
     }
 
-    private void setupLister(){
-        mapPrinter.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
+    public void gameLoop(){
+        final int TARGET_FPS = 10;
+        final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+        long lastLoopTime = System.nanoTime();
+        while(player.isALive()){
+            long now = System.nanoTime();
+            long updateLength = now - lastLoopTime;
+            lastLoopTime = now;
+            lastFpsTime += updateLength;
+            fps++;
+            if(lastFpsTime >= 1000000000){
+                System.out.println("(FPS: "+fps+")");
+                lastFpsTime = 0;
+                fps = 0;
             }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-                switch (e.getKeyChar()) {
-                    case 'z':
-                    case 'Z':
-                        new Move(player, Direction.UP).act();
-                        break;
-                    case 's':
-                    case 'S':
-                        new Move(player, Direction.DOWN).act();
-                        break;
-                    case 'q':
-                    case 'Q':
-                        new Move(player, Direction.LEFT).act();
-                        break;
-                    case 'd':
-                    case 'D':
-                        new Move(player, Direction.RIGHT).act();
-                        break;
-                }
-                System.out.println(player);
+            handlePlayerAction();
+            monsters.forEach(monster -> ia.getAction(monster).ifPresent(Action::act));
+            try {
+                Thread.sleep( (lastLoopTime - System.nanoTime() + OPTIMAL_TIME)/1000000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        }
+    }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });
+    private void handlePlayerAction(){
+        if (keyInputManager.isPressed(KeyEvent.VK_Z)){
+            new Move(player, Direction.UP).act();
+        }
+        if (keyInputManager.isPressed(KeyEvent.VK_S)){
+            new Move(player, Direction.DOWN).act();
+        }
+        if(keyInputManager.isPressed(KeyEvent.VK_Q)){
+            new Move(player, Direction.LEFT).act();
+        }
+        if(keyInputManager.isPressed(KeyEvent.VK_D)){
+            new Move(player, Direction.RIGHT).act();
+        }
     }
 
     public static void main(String ... args){
-        new Main();
+        new Main().gameLoop();
     }
 }
