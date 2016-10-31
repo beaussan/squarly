@@ -5,7 +5,7 @@ import me.nbeaussart.engine.model.interfaces.IState;
 import me.nbeaussart.game.map.GameSquare;
 
 /**
- * Created by beaussan on 31/10/16.
+ * Created by  on 31/10/16.
  */
 public class Player extends Entity{
 
