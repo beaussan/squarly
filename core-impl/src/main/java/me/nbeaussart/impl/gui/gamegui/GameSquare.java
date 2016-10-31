@@ -60,7 +60,7 @@ public class GameSquare implements IColoredSquare, ICoordinateSquare {
     @Override
     public void setState(IState state) {
         this.state = state;
-        //setUpdated();
+        setUpdated();
     }
 
     public Cord getCord() {

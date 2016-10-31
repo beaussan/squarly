@@ -33,6 +33,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
     private final IGameMap<T> gameMap;
     private final boolean isShowing;
     private AbsGenerator<T> usedGenerator;
+    private List<Consumer<List<T>>> postProssesors = new ArrayList<>();
 
     public GameGenerator(IGameMap<T> gameMap) {
         this.gameMap = checkNotNull(gameMap, "GameMap should not be null");
@@ -50,6 +51,17 @@ public class GameGenerator<T extends ICoordinateSquare> {
         }
     }
 
+    public GameGenerator<T> addPostProsessor(Consumer<List<T>> constor){
+        postProssesors.add(constor);
+        return this;
+    }
+
+    public GameGenerator<T> useGenerator(AbsGenerator<T> generator){
+        generator.setGameGenerator(this);
+        usedGenerator = generator;
+        return this;
+    }
+
     public GameGenerator<T> useMazeGenerator(){
         usedGenerator = new MazeGenerator<T>(this);
         return this;
@@ -60,10 +72,9 @@ public class GameGenerator<T extends ICoordinateSquare> {
         return this;
     }
 
-
-
     public IGameMap<T> generate(){
         usedGenerator.generate();
+        postProssesors.forEach(tConsumer -> tConsumer.accept(gameMap.getMapData()));
         return gameMap;
     }
 
@@ -77,15 +88,17 @@ public class GameGenerator<T extends ICoordinateSquare> {
     }
 
 
+
     private void checkIntegrityMap(){
         gameMap.removeOutOfBounds();
         gameMap.removeDuplicate();
         checkState(gameMap.sizeX() > 0, "SizeX should be over 0");
         checkState(gameMap.sizeY() > 0, "SizeY should be over 0");
         checkState(checkNotNull(gameMap.getMapData(), "Map data should not be null").size() ==
-                gameMap.sizeX()*gameMap.sizeY(), "The map is not full");
-
+                gameMap.sizeX()*gameMap.sizeY(), "The map is not the correct lenght, expected %s but got %s tiles",
+                gameMap.sizeX()*gameMap.sizeY(), gameMap.getMapData().size());
     }
+
 
     private void setupMap(){
         gameMap.getMapData().forEach(t -> t.setState(IState.WALL));
@@ -146,15 +159,17 @@ public class GameGenerator<T extends ICoordinateSquare> {
             this.gmw = gmw;
             gameMap.addUpdatesHandlers(t1 -> {
                 t1.ifPresent(t2 -> {
-                    if (t2.getCord().equals(t.getCord())){
+                    if (t2.getCord().equals(getCord())){
                         setUpdated();
                         try {
+                            System.out.println("Sleeping");
                             Thread.sleep(PAUSE_DURATION);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                 });
+                setUpdated();
 
             });
         }

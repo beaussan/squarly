@@ -27,7 +27,7 @@ public class MazeGenerator<T extends ICoordinateSquare> extends AbsGenerator<T> 
     }
 
     @Override
-    public void generate() {
+    public void doGenerate() {
 
         List<T> wallList = new ArrayList<T>();
         Random r = new Random();

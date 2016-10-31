@@ -7,6 +7,7 @@ import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * @author Nicolas Beaussart
@@ -20,9 +21,19 @@ public abstract class AbsGenerator<T extends ICoordinateSquare> {
     public AbsGenerator(GameGenerator<T> gameGenerator) {
         this.gameGenerator = checkNotNull(gameGenerator);
     }
+    public AbsGenerator() {
+    }
 
+    public void setGameGenerator(GameGenerator<T> gameGenerator) {
+        this.gameGenerator = checkNotNull(gameGenerator);
+    }
 
-    public abstract void generate();
+    public void generate(){
+        checkState(gameGenerator != null, "Game map is null");
+        doGenerate();
+    }
+
+    public abstract void doGenerate();
 
 
     public GameGenerator<T> getGameGenerator() {
