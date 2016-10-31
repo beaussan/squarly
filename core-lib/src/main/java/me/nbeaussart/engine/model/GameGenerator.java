@@ -158,17 +158,12 @@ public class GameGenerator<T extends ICoordinateSquare> {
             this.t = t;
             this.gmw = gmw;
             gameMap.addUpdatesHandlers(t1 -> {
-                t1.ifPresent(t2 -> {
-                    if (t2.getCord().equals(getCord())){
-                        setUpdated();
-                        try {
-                            System.out.println("Sleeping");
-                            Thread.sleep(PAUSE_DURATION);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                try {
+                    System.out.println("Sleeping");
+                    Thread.sleep(PAUSE_DURATION);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 setUpdated();
 
             });

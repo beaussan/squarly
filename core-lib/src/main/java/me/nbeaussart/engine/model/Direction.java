@@ -26,6 +26,9 @@ public enum Direction {
     }
 
 
+    public Cord add(Direction direction){
+        return cords.add(direction);
+    }
     public Cord getCords() {
         return cords;
     }

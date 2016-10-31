@@ -3,6 +3,8 @@ package me.nbeaussart.engine.model.generator;
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.Direction;
 import me.nbeaussart.engine.model.GameGenerator;
+import me.nbeaussart.engine.model.generator.wrapper.GameMapWrapper;
+import me.nbeaussart.engine.model.generator.wrapper.SquareWrapper;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 import me.nbeaussart.engine.model.interfaces.IState;
@@ -29,30 +31,31 @@ public class MazeGenerator<T extends ICoordinateSquare> extends AbsGenerator<T> 
     @Override
     public void doGenerate() {
 
-        List<T> wallList = new ArrayList<T>();
+        GameMapWrapper<T> mapWrapper = getMapWrapper();
+
+        List<SquareWrapper<T>> wallList = new ArrayList<>();
         Random r = new Random();
 
-        Optional<T> fromCords = gameMap.getFromCords(new Cord(1, 1));
+        Optional<SquareWrapper<T>> fromCords = mapWrapper.getFromCords(new Cord(1, 1));
+
         if (fromCords.isPresent()) {
             fromCords.get().setState(IState.ROOM);
-            wallList.addAll(getWallsArround(fromCords.get()));
+            wallList.addAll(fromCords.get().getNeighs(IState.WALL));
+
         } else {
             throw new IllegalStateException("The map is too small");
         }
 
         while (!wallList.isEmpty()){
-            T rmd = wallList.remove(r.nextInt(wallList.size()));
-            if (getArround(rmd).size() != 4){
+            SquareWrapper<T> rmd = wallList.remove(r.nextInt(wallList.size()));
+            if (rmd.getNeighs().size() != 4){
                 continue;
             }
-            if (getRoomArround(rmd).size() == 1){
+            if (rmd.getNeighs(IState.ROOM).size() == 1){
                 rmd.setState(IState.ROOM);
-                wallList.addAll(getWallsArround(rmd));
+                wallList.addAll(rmd.getNeighs(IState.WALL));
             }
         }
-
-
-
     }
 
     /*
@@ -66,18 +69,6 @@ public class MazeGenerator<T extends ICoordinateSquare> extends AbsGenerator<T> 
         Remove the wall from the list.
 
      */
-
-    private List<T> getWallsArround(T t){
-        return getArround(t).stream().filter(t1 -> t1.getState() == IState.WALL).collect(Collectors.toList());
-    }
-    private List<T> getRoomArround(T t){
-        return getArround(t).stream().filter(t1 -> t1.getState() == IState.ROOM).collect(Collectors.toList());
-    }
-
-    private List<T> getArround(T t){
-        return Arrays.stream(Direction.values()).map(direction -> gameMap.getFromCords(t.getCord().add(direction.getCords())))
-                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
-    }
 
 
 }
