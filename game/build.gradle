@@ -2,7 +2,14 @@ version 'SNAPSHOT-0'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
+
+def assertjOutput = file('src/test/java-gen')
+
+configurations {
+    assertj
+}
+
 
 repositories {
     mavenCentral()
@@ -20,4 +27,40 @@ dependencies {
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.5.2'
     testCompile group: 'org.assertj', name: 'assertj-guava', version: '3.0.0'
 
+    assertj 'org.assertj:assertj-assertions-generator:2.0.0'
+    assertj project(':game')
 }
+
+sourceSets {
+    test {
+        java {
+            srcDir 'src/test/java'
+            srcDir 'src/test/java-gen'
+        }
+    }
+}
+
+task assertjClean(type: Delete) {
+    delete assertjOutput
+}
+
+task assertjGen(dependsOn: assertjClean, type: JavaExec) {
+    doFirst {
+        if (!assertjOutput.exists()) {
+            logger.info("Creating `$assertjOutput` directory")
+
+            if (!assertjOutput.mkdirs()) {
+                throw new InvalidUserDataException("Unable to create `$assertjOutput` directory")
+            }
+        }
+    }
+
+    main 'org.assertj.assertions.generator.cli.AssertionGeneratorLauncher'
+    classpath = files(configurations.assertj)
+    workingDir = assertjOutput
+    args = [
+            'me.nbeaussart.game'
+    ]
+}
+
+compileTestJava.dependsOn(assertjGen)

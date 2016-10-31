@@ -143,7 +143,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 core-lib/src/test/java-gen
-
+game/src/test/java-gen
 
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
