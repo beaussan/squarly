@@ -3,10 +3,13 @@ package me.nbeaussart.engine.model.interfaces;
 import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.Cord;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+import static me.nbeaussart.engine.util.StreamUtils.distinctByKey;
 
 /**
  * @author Nicolas Beaussart
@@ -38,7 +41,9 @@ public interface IGameMap<T extends ICoordinateSquare> {
 
 
     default void removeDuplicate(){
-        setMapData(getMapData().stream().distinct().collect(Collectors.toList()));
+        setMapData(
+                getMapData().stream().filter(distinctByKey(ICoordinateSquare::getCord)).collect(Collectors.toList()));
+
     }
 
     default void setChanged(T object) {
