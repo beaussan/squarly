@@ -1,2 +1,4 @@
 rootProject.name = '2d-gameLib'
 include 'core-lib', 'core-impl'
+include 'game'
+
