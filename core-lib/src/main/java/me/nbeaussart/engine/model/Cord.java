@@ -40,6 +40,16 @@ public class Cord {
 
     /**
      *
+     * Add a {@link Direction} to this one
+     * @param direction The {@link Direction} to add to this one
+     * @return The new {@link Cord} generated
+     */
+    public Cord add(Direction direction) {
+        return add(direction.getCords());
+    }
+
+    /**
+     *
      * Add a {@link Cord} to this one
      * @param cord The {@link Cord} to add to this one
      * @return The new {@link Cord} generated

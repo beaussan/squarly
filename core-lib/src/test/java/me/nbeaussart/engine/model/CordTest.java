@@ -31,6 +31,13 @@ public class CordTest {
     }
 
     @Test
+    public void testAddDirection() throws Exception {
+        CordAssert.assertThat(cord.add(Direction.UP))
+                .hasX(10)
+                .hasY(5);
+    }
+
+    @Test
     public void testAddObj() throws Exception {
         CordAssert.assertThat(cord.add(new Cord(5, 6)))
                 .hasX(15)
