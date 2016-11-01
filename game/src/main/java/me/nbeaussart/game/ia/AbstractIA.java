@@ -13,6 +13,9 @@ public abstract class AbstractIA {
     protected abstract Action doStuff(Monster monster);
 
     public Optional<Action> getAction(Monster monster){
+        if (!monster.isALive()) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(doStuff(monster));
     }
 

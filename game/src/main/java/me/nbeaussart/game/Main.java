@@ -8,8 +8,10 @@ import me.nbeaussart.engine.model.interfaces.IState;
 import me.nbeaussart.engine.view.GameScreen;
 import me.nbeaussart.engine.view.MapPrinter;
 import me.nbeaussart.game.action.Action;
+import me.nbeaussart.game.action.Attack;
 import me.nbeaussart.game.action.Move;
 import me.nbeaussart.game.entity.Entity;
+import me.nbeaussart.game.entity.EntityListener;
 import me.nbeaussart.game.entity.Monster;
 import me.nbeaussart.game.entity.Player;
 import me.nbeaussart.game.ia.AbstractIA;
@@ -23,6 +25,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * Created by beaussan on 31/10/16.
@@ -38,6 +42,8 @@ public class Main {
     private AbstractIA ia = new DummyIA();
     private long lastFpsTime;
     private int fps;
+    private final int NMB_MONSTER = 10;
+    private int score = 0;
 
     public Main(){
         gameMap = new GameMap(20,20);
@@ -46,20 +52,38 @@ public class Main {
                 new GameSquare(new Cord(x,y), gameMap);
             }
         }
-        new GameGenerator<GameSquare>(gameMap).useMazeGeneratorClean().generate();
+        new GameGenerator<GameSquare>(gameMap)
+                .useMazeGeneratorClean()
+                .addPostProsessor(gameSquares -> {
+                    player = new Player("Player",100,20,gameMap.getFromCords(new Cord(1,1)).get());
 
-        player = new Player("Player",100,20,gameMap.getFromCords(new Cord(1,1)).get());
-        keyInputManager = new KeyInputManager();
+                    while (monsters.size() < NMB_MONSTER){
+                        Random r = new Random();
+                        GameSquare sq = gameSquares.get(r.nextInt(gameSquares.size()));
+                        if (sq.getEntity() == null && (sq.getState() == IState.ROOM || sq.getState() == IState.DOOR)) {
+                            monsters.add(new Monster("MONSTER", 20, 10, sq));
+                        }
+                    }
+                }).generate();
 
-        for (GameSquare gameSquare : gameMap.getMapData()) {
-            if (gameSquare.getState() == IState.ROOM){
-                monsters.add(new Monster("MONSTER", 10,20, gameSquare));
-                if (monsters.size() >= 3){
-                    break;
+        monsters.forEach(monster -> monster.addListener(new EntityListener() {
+            @Override
+            public void entityDeath(Entity entity) {
+                monsters.remove(monster);
+                score+=100;
+                for (int i = 0; i < monsters.size(); i++) {
+                    System.out.println(i+ " - " + monsters.get(i));
                 }
-
+                System.out.println("SCORE = " + score);
             }
-        }
+
+            @Override
+            public void entityLifeChanged(Entity entity) {
+                System.out.printf("Entity %s just changed pv !\n", monster.getName());
+            }
+        }));
+
+        keyInputManager = new KeyInputManager();
 
 
         this.mapPrinter = new MapPrinter<>(gameMap);
@@ -94,18 +118,30 @@ public class Main {
         }
     }
 
+    private void tryToMoveTo(Direction direction){
+        Optional<GameSquare> fromCords = gameMap.getFromCords(player.getGameSquare().getCord().add(direction));
+        if (fromCords.isPresent()) {
+            GameSquare gameSquare = fromCords.get();
+            if (gameSquare.getEntity() != null){
+                new Attack(player, gameSquare.getEntity()).act();
+            } else {
+                new Move(player, direction).act();
+            }
+        }
+    }
+
     private void handlePlayerAction(){
         if (keyInputManager.isPressed(KeyEvent.VK_Z)){
-            new Move(player, Direction.UP).act();
+            tryToMoveTo(Direction.UP);
         }
         if (keyInputManager.isPressed(KeyEvent.VK_S)){
-            new Move(player, Direction.DOWN).act();
+            tryToMoveTo(Direction.DOWN);
         }
         if(keyInputManager.isPressed(KeyEvent.VK_Q)){
-            new Move(player, Direction.LEFT).act();
+            tryToMoveTo(Direction.LEFT);
         }
         if(keyInputManager.isPressed(KeyEvent.VK_D)){
-            new Move(player, Direction.RIGHT).act();
+            tryToMoveTo(Direction.RIGHT);
         }
     }
 

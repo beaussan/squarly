@@ -1,5 +1,6 @@
 package me.nbeaussart.game.action;
 
+import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.Direction;
 import me.nbeaussart.game.map.GameMap;
@@ -18,6 +19,7 @@ public class Move extends Action {
 
     @Override
     public void doStuff() {
+        Preconditions.checkState(getSource().isALive(), "Entity %s is dead then cannot move !", getSource());
         GameMap gameMap = getSource().getGameSquare().getGameMap();
         Cord newCord = getSource().getGameSquare().getCord().add(direction.getCords());
         gameMap.getFromCords(newCord).ifPresent(gameSquare -> {

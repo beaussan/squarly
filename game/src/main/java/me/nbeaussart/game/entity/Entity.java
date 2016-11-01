@@ -3,7 +3,11 @@ package me.nbeaussart.game.entity;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import me.nbeaussart.engine.model.Color;
+import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.game.map.GameSquare;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -11,6 +15,8 @@ import static com.google.common.base.Preconditions.*;
  * Created by beaussan on 31/10/16.
  */
 public abstract class Entity {
+
+    private List<EntityListener> listeners = new ArrayList<>();
 
     private String name;
     private int life;
@@ -26,7 +32,15 @@ public abstract class Entity {
         setGameSquare(gameSquare);
     }
 
+    public boolean addListener(EntityListener entityListener) {
+        return listeners.add(entityListener);
+    }
+
     public abstract boolean canPassOn(GameSquare gameSquare);
+
+    public Cord getCord() {
+        return gameSquare.getCord();
+    }
 
     public String getName() {
         return name;
@@ -46,6 +60,12 @@ public abstract class Entity {
 
     public void setLife(int life) {
         this.life = Math.max(life, 0);
+        listeners.forEach(entityListener -> entityListener.entityLifeChanged(this));
+        if(!isALive()){
+            System.out.println("DEATH TO THERE");
+            listeners.forEach(entityListener -> entityListener.entityDeath(this));
+            gameSquare.setEntity(null);
+        }
     }
 
     public Color getColor() {
@@ -59,6 +79,7 @@ public abstract class Entity {
     public void setAtk(int atk) {
         checkArgument(atk >= 0, "The attack was below 0 (%s)", atk);
         this.atk = atk;
+        listeners.forEach(entityListener -> entityListener.entityStrengthChanged(this));
     }
 
     public GameSquare getGameSquare() {
