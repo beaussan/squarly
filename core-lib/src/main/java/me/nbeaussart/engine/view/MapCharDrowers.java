@@ -103,7 +103,7 @@ public class MapCharDrowers<T extends ICoordinateSquare & ICaracterSquare> exten
     private void paintSquare(Graphics g, T gs) {
         checkNotNull(gs, "An item in the map was null");
 
-        g.setColor(new Color(gs.getColor().getRed(), gs.getColor().getGreen(), gs.getColor().getBlue()));
+        //g.setColor(new Color(gs.getColor().getRed(), gs.getColor().getGreen(), gs.getColor().getBlue()));
         g.fillRect(
                 gs.getCord().getX() * gameMap.getWidthPixel(),
                 (gameMap.getHeightPixel() * (gameMap.sizeY() - gs.getCord().getY() - 1)),
