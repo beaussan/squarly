@@ -1,6 +1,5 @@
 package me.nbeaussart.game;
 
-import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.Direction;
 import me.nbeaussart.engine.model.GameGenerator;
@@ -20,9 +19,7 @@ import me.nbeaussart.game.map.GameMap;
 import me.nbeaussart.game.map.GameSquare;
 import me.nbeaussart.game.utils.KeyInputManager;
 
-import javax.print.attribute.standard.PrinterLocation;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,25 +34,31 @@ public class Main {
     private final GameScreen application;
     private final KeyInputManager keyInputManager;
     private GameMap gameMap;
-    private Entity player;
+    private Player player;
     private List<Monster> monsters = new ArrayList<>();
-    private AbstractIA ia = new DummyIA();
+    private AbstractIA ia;
     private long lastFpsTime;
     private int fps;
     private final int NMB_MONSTER = 10;
     private int score = 0;
+    private Random rand = new Random();
 
     public Main(){
-        gameMap = new GameMap(20,20);
-        for (int x = 0; x < 20; x++) {
-            for (int y = 0; y < 20; y++) {
-                new GameSquare(new Cord(x,y), gameMap);
+        gameMap = new GameMap(80,80);
+        for (int x = 0; x < 80; x++) {
+            for (int y = 0; y < 80; y++) {
+                new GameSquare(new Cord(x, y), gameMap);
             }
         }
         new GameGenerator<GameSquare>(gameMap)
-                .useMazeGeneratorClean()
+                .useDungeonGenerator()
                 .addPostProsessor(gameSquares -> {
-                    player = new Player("Player",100,20,gameMap.getFromCords(new Cord(1,1)).get());
+                    while(player == null){
+                        GameSquare gs = gameSquares.get(rand.nextInt(gameSquares.size()));
+                        if (gs.getEntity() == null && (gs.getState() == IState.ROOM || gs.getState() == IState.DOOR)) {
+                            player = new Player("Player", 100, 20, gs);
+                        }
+                    }
 
                     while (monsters.size() < NMB_MONSTER){
                         Random r = new Random();
@@ -65,7 +68,7 @@ public class Main {
                         }
                     }
                 }).generate();
-
+        ia = new DummyIA(player);
         monsters.forEach(monster -> monster.addListener(new EntityListener() {
             @Override
             public void entityDeath(Entity entity) {
