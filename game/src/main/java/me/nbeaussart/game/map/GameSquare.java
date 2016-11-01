@@ -5,6 +5,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.Cord;
+import me.nbeaussart.engine.model.interfaces.ICaracterSquare;
 import me.nbeaussart.engine.model.interfaces.IColoredSquare;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IState;
@@ -15,7 +16,7 @@ import java.util.function.Consumer;
 /**
  * Created by beaussan on 31/10/16.
  */
-public class GameSquare implements IColoredSquare, ICoordinateSquare{
+public class GameSquare implements ICaracterSquare, ICoordinateSquare{
 
     private final static Color COLOR_WALL = new Color(0,0,0);
     private final static Color COLOR_ROOM = new Color(255,255,255);
@@ -31,6 +32,21 @@ public class GameSquare implements IColoredSquare, ICoordinateSquare{
         this.cord=cord;
         this.gamemap=gm;
         gamemap.add(this);
+    }
+
+    @Override
+    public char getChar() {
+        return 0;
+    }
+
+    @Override
+    public Color getBackground() {
+        return null;
+    }
+
+    @Override
+    public Color getForeground() {
+        return null;
     }
 
     public Color getColor() {
