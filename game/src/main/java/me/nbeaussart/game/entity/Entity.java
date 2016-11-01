@@ -22,16 +22,14 @@ public abstract class Entity {
 
     private String name;
     private int life;
-    private Color color;
     private int atk;
     private GameSquare gameSquare;
     private SquareContent squareContent;
 
-    public Entity(String name, int life, int atk, Color color, GameSquare gameSquare, SquareContent squareContent){
+    public Entity(String name, int life, int atk, GameSquare gameSquare, SquareContent squareContent){
         setName(name);
         setLife(life);
         setAtk(atk);
-        this.color=color;
         setGameSquare(gameSquare);
         this.squareContent= checkNotNull(squareContent);
     }
@@ -76,10 +74,6 @@ public abstract class Entity {
         }
     }
 
-    public Color getColor() {
-        return color;
-    }
-
     public int getAtk() {
         return atk;
     }
@@ -112,7 +106,6 @@ public abstract class Entity {
         return MoreObjects.toStringHelper(this)
                 .add("name", name)
                 .add("life", life)
-                .add("color", color)
                 .add("atk", atk)
                 .add("isAlive", isALive())
                 .add("gameSquare", gameSquare)
@@ -126,12 +119,11 @@ public abstract class Entity {
         Entity entity = (Entity) o;
         return life == entity.life &&
                 atk == entity.atk &&
-                Objects.equal(name, entity.name) &&
-                Objects.equal(color, entity.color);
+                Objects.equal(name, entity.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name, life, color, atk);
+        return Objects.hashCode(name, life, atk);
     }
 }

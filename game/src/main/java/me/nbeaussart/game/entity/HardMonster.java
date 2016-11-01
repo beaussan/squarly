@@ -9,7 +9,7 @@ import me.nbeaussart.game.map.SquareContent;
  */
 public class HardMonster extends Monster {
     public HardMonster(GameSquare gameSquare) {
-        super("Petit gros et moche", 100, 30, new Color(255,0,255), gameSquare, new SquareContent('c', new Color(255,0,0), new Color(255,0,0)));
+        super("PGM", 100, 30, gameSquare, new SquareContent('c', new Color(255,0,0), new Color(255,0,0)));
     }
 
     @Override

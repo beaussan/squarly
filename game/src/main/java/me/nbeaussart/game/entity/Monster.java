@@ -10,8 +10,8 @@ import me.nbeaussart.game.map.SquareContent;
  */
 public abstract class Monster extends Entity {
 
-    public Monster(String name, int life, int atk, Color color, GameSquare gameSquare, SquareContent squareContent) {
-        super(name, life, atk, color, gameSquare, squareContent);
+    public Monster(String name, int life, int atk, GameSquare gameSquare, SquareContent squareContent) {
+        super(name, life, atk, gameSquare, squareContent);
     }
 
     @Override
