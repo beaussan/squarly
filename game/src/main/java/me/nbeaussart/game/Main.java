@@ -43,7 +43,6 @@ public class Main {
     private final int NMB_MONSTER_MEDIUM = 5;
     private final int NMB_MONSTER_HARD = 2;
     private int score = 0;
-    private Random rand = new Random();
 
     public Main(){
         gameMap = new GameMap(80,80);
@@ -56,7 +55,8 @@ public class Main {
                 .useDungeonGenerator()
                 .addPostProsessor(gameSquares -> {
                     while(player == null){
-                        GameSquare gs = gameSquares.get(rand.nextInt(gameSquares.size()));
+                        Random r = new Random();
+                        GameSquare gs = gameSquares.get(r.nextInt(gameSquares.size()));
                         if (gs.getEntity() == null && (gs.getState() == IState.ROOM || gs.getState() == IState.DOOR)) {
                             player = new Player("Player", 100, 20, gs);
                         }
