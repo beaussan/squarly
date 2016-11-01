@@ -1,10 +1,9 @@
 package me.nbeaussart.game.map;
 
+import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -14,7 +13,7 @@ public class GameMap implements IGameMap<GameSquare>{
 
     private final int sizeX;
     private final int sizeY;
-    private List<GameSquare> list = new ArrayList<>();
+    private Map<Cord, GameSquare> list = new HashMap<>();
     private List<Consumer<Optional<GameSquare>>> machin = new ArrayList<>();
 
     public GameMap(int sizeX, int sizeY) {
@@ -22,11 +21,10 @@ public class GameMap implements IGameMap<GameSquare>{
         this.sizeY = sizeY;
     }
 
-    public List<GameSquare> getMapData() {
-        return list;
-    }
+    public Map<Cord, GameSquare> getMapData() { return list; }
 
-    public void setMapData(List<GameSquare> data) {
+    @Override
+    public void setMapData(Map<Cord, GameSquare> data) {
         list = data;
     }
 

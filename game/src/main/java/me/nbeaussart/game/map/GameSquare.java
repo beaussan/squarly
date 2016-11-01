@@ -2,6 +2,7 @@ package me.nbeaussart.game.map;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.interfaces.IColoredSquare;
@@ -27,10 +28,9 @@ public class GameSquare implements IColoredSquare, ICoordinateSquare{
 
 
     public GameSquare(Cord cord, GameMap gm){
-
         this.cord=cord;
         this.gamemap=gm;
-        gamemap.getMapData().add(this);
+        gamemap.add(this);
     }
 
     public Color getColor() {
