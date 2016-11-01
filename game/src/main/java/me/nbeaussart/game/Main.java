@@ -5,7 +5,9 @@ import me.nbeaussart.engine.model.Direction;
 import me.nbeaussart.engine.model.GameGenerator;
 import me.nbeaussart.engine.model.interfaces.IState;
 import me.nbeaussart.engine.view.GameScreen;
+import me.nbeaussart.engine.view.MapCharDrowers;
 import me.nbeaussart.engine.view.MapPrinter;
+import me.nbeaussart.engine.view.console.JConsole;
 import me.nbeaussart.game.action.Action;
 import me.nbeaussart.game.action.Attack;
 import me.nbeaussart.game.action.Move;
@@ -27,9 +29,11 @@ import java.util.Random;
  */
 public class Main {
 
-    private final MapPrinter<GameSquare> mapPrinter;
-    private final GameScreen application;
+    private final MapCharDrowers<GameSquare> mapPrinter;
+    private final JConsole jConsole;
+
     private final KeyInputManager keyInputManager;
+    private final GameScreen application;
     private GameMap gameMap;
     private Player player;
     private List<Monster> monsters = new ArrayList<>();
@@ -39,15 +43,45 @@ public class Main {
     private AbstractIA ia;
     private long lastFpsTime;
     private int fps;
-    private final int NMB_MONSTER_EASY = 10;
+    private final int NMB_MONSTER_EASY = 10*20;
     private final int NMB_MONSTER_MEDIUM = 5;
     private final int NMB_MONSTER_HARD = 2;
+    private final int SIZEMAP = 80;
     private int score = 0;
 
     public Main(){
-        gameMap = new GameMap(80,80);
-        for (int x = 0; x < 80; x++) {
-            for (int y = 0; y < 80; y++) {
+        gameMap = new GameMap(SIZEMAP,SIZEMAP);
+        generateMap();
+
+        keyInputManager = new KeyInputManager();
+
+        jConsole = new JConsole(SIZEMAP+2, SIZEMAP+2);
+
+        jConsole.setCursorBlink(false);
+        jConsole.setFocusable(true);
+        jConsole.requestFocus();
+        this.mapPrinter = new MapCharDrowers<>(gameMap, jConsole);
+        //Frames.display(console);
+        //jConsole.setCursorPos(0,0);
+        //jConsole.writeln("Hello world ! :D");
+
+
+        //this.mapPrinter = new MapPrinter<>(gameMap);
+        jConsole.addKeyListener(keyInputManager);
+        application = GameScreen.createGameScreen("Main", jConsole);
+        jConsole.setCursorPos(0, SIZEMAP+1);
+        jConsole.write("SCORE = " + 0);
+
+        //gameMap.addUpdatesHandlers(System.out::println);
+        //application = GameScreen.createGameScreen("APPLICATION", jConsole);
+
+
+    }
+
+    private void generateMap(){
+
+        for (int x = 0; x < SIZEMAP; x++) {
+            for (int y = 0; y < SIZEMAP; y++) {
                 new GameSquare(new Cord(x, y), gameMap);
             }
         }
@@ -97,6 +131,8 @@ public class Main {
                     System.out.println(i+ " - " + monsters.get(i));
                 }
                 System.out.println("SCORE = " + score);
+                jConsole.setCursorPos(0, SIZEMAP+1);
+                jConsole.write("SCORE = " + score);
             }
 
             @Override
@@ -104,15 +140,6 @@ public class Main {
                 System.out.printf("Entity %s just changed pv !\n", monster.getName());
             }
         }));
-
-        keyInputManager = new KeyInputManager();
-
-
-        this.mapPrinter = new MapPrinter<>(gameMap);
-        mapPrinter.addKeyListener(keyInputManager);
-        application = GameScreen.createGameScreen("APPLICATION", mapPrinter);
-
-
     }
 
     public void gameLoop(){
@@ -132,6 +159,7 @@ public class Main {
             }
             handlePlayerAction();
             monsters.forEach(monster -> ia.getAction(monster).ifPresent(Action::act));
+
             try {
                 Thread.sleep( (lastLoopTime - System.nanoTime() + OPTIMAL_TIME)/1000000);
             } catch (InterruptedException e) {
@@ -141,6 +169,7 @@ public class Main {
     }
 
     private void tryToMoveTo(Direction direction){
+        //System.out.println("hey");
         Optional<GameSquare> fromCords = gameMap.getFromCords(player.getGameSquare().getCord().add(direction));
         if (fromCords.isPresent()) {
             GameSquare gameSquare = fromCords.get();

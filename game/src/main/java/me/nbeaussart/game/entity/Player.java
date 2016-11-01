@@ -11,7 +11,7 @@ import me.nbeaussart.game.map.SquareContent;
 public class Player extends Entity{
 
     public Player(String name, int life, int atk, GameSquare gameSquare) {
-        super(name, life, atk, gameSquare, new SquareContent('@', new Color(0,0,0), new Color(0,0,255)));
+        super(name, life, atk, gameSquare, new SquareContent('@', new Color(255,255,255), new Color(0,0,255)));
     }
 
     @Override

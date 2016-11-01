@@ -9,7 +9,8 @@ import me.nbeaussart.game.map.SquareContent;
  */
 public class EasyMonster extends Monster {
     public EasyMonster(GameSquare gameSquare) {
-        super("Noob", 20, 10, gameSquare, new SquareContent('a', new Color(255,0,255), new Color(255,0,255)));
+        super("Noob", 20, 10, gameSquare, new SquareContent('a', new Color(255,0,255), new Color(255,244,255)));
+
     }
 
     @Override
