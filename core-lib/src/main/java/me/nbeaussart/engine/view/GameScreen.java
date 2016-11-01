@@ -1,5 +1,7 @@
 package me.nbeaussart.engine.view;
 
+import me.nbeaussart.engine.view.console.JConsole;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,7 +11,7 @@ import java.awt.*;
  */
 public class GameScreen extends JFrame {
 
-    private GameScreen(String name, MapPrinter mapPrinter) {
+    private GameScreen(String name, JComponent mapPrinter) {
 
         initUIGame(name, mapPrinter);
     }
@@ -23,8 +25,17 @@ public class GameScreen extends JFrame {
 
         return gameScreen[0];
     }
+    public static GameScreen createGameScreen(String name, JConsole console){
+        final GameScreen[] gameScreen = new GameScreen[1];
+        EventQueue.invokeLater(() -> {
+            gameScreen[0] = new GameScreen(name, console);
+            gameScreen[0].setVisible(true);
+        });
 
-    private void initUIGame(String name, MapPrinter mapPrinter) {
+        return gameScreen[0];
+    }
+
+    private void initUIGame(String name, JComponent mapPrinter) {
 
         add(mapPrinter);
         setTitle(name);

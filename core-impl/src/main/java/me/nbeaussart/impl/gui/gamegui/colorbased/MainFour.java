@@ -1,4 +1,4 @@
-package me.nbeaussart.impl.gui.gamegui;
+package me.nbeaussart.impl.gui.gamegui.colorbased;
 
 import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.Cord;
@@ -8,10 +8,6 @@ import me.nbeaussart.engine.view.GameSquareClicked;
 import me.nbeaussart.engine.view.MapPrinter;
 
 import java.awt.event.MouseEvent;
-
-import static me.nbeaussart.engine.model.interfaces.IState.DOOR;
-import static me.nbeaussart.engine.model.interfaces.IState.ROOM;
-import static me.nbeaussart.engine.model.interfaces.IState.WALL;
 
 /**
  * @author Nicolas Beaussart

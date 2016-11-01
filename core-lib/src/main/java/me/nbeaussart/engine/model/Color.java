@@ -16,6 +16,11 @@ public class Color {
     private final int red;
     private final int green;
     private final int blue;
+    private final java.awt.Color awt;
+
+    public static Color from(java.awt.Color awt){
+        return new Color(awt.getRed(), awt.getGreen(), awt.getBlue());
+    }
 
     public Color(int red, int green, int blue) {
         checkArgument(0 <= red && red <= 255, "Red should be between 0 and 255");
@@ -25,6 +30,7 @@ public class Color {
         this.red = red;
         this.green = green;
         this.blue = blue;
+        awt = new java.awt.Color(red, green, blue);
     }
 
     public int getRed() {
@@ -61,5 +67,9 @@ public class Color {
     @Override
     public int hashCode() {
         return Objects.hash(red, green, blue);
+    }
+
+    public java.awt.Color getAwt() {
+        return awt;
     }
 }

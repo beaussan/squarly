@@ -1,4 +1,4 @@
-package me.nbeaussart.impl.gui.gamegui;
+package me.nbeaussart.impl.gui.gamegui.colorbased;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -8,8 +8,6 @@ import me.nbeaussart.engine.model.interfaces.IColoredSquare;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 import me.nbeaussart.engine.model.interfaces.IState;
-
-import java.util.Optional;
 
 /**
  * @author Nicolas Beaussart

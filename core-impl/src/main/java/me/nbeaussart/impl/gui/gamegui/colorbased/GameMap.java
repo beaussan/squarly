@@ -1,4 +1,4 @@
-package me.nbeaussart.impl.gui.gamegui;
+package me.nbeaussart.impl.gui.gamegui.colorbased;
 
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.interfaces.IGameMap;

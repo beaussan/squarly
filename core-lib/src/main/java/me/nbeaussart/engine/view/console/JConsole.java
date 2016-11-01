@@ -30,7 +30,7 @@ public class JConsole extends JComponent implements HierarchyListener {
     private static final Color DEFAULT_BACKGROUND = Color.BLACK;
     private static final Font DEFAULT_FONT = new Font("Courier New", Font.PLAIN, 18);
     private static final int DEFAULT_BLINKRATE = 200;
-    private static final boolean DEFAULT_BLINK_ON = true;
+    private static final boolean DEFAULT_BLINK_ON = false;
 
     private ConsoleData data = new ConsoleData();
 
