@@ -7,6 +7,8 @@ import me.nbeaussart.engine.model.interfaces.IColoredSquare;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 
+import java.util.Random;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -19,6 +21,7 @@ public abstract class AbsGenerator<T extends ICoordinateSquare> {
 
     private GameGenerator<T> gameGenerator;
     private GameMapWrapper<T> mapWrapper;
+    Random r = new Random(System.currentTimeMillis());
 
     public AbsGenerator(GameGenerator<T> gameGenerator) {
         this.gameGenerator = checkNotNull(gameGenerator);

@@ -65,6 +65,10 @@ public class GameMapWrapper<T extends ICoordinateSquare> implements IGameMap<Squ
         dataMapped = data.stream().collect(Collectors.toMap(SquareWrapper::getCord, item -> item));
     }
 
+    public Map<Cord, SquareWrapper<T>> getDataMapped() {
+        return dataMapped;
+    }
+
     @Override
     public List<Consumer<Optional<SquareWrapper<T>>>> getUpdatesHandlers() {
         return data;

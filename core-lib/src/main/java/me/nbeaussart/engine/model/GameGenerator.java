@@ -1,6 +1,7 @@
 package me.nbeaussart.engine.model;
 
 import me.nbeaussart.engine.model.generator.AbsGenerator;
+import me.nbeaussart.engine.model.generator.DungeonGenerator;
 import me.nbeaussart.engine.model.generator.MazeGenerator;
 import me.nbeaussart.engine.model.generator.MazeGeneratorClean;
 import me.nbeaussart.engine.model.interfaces.IColoredSquare;
@@ -69,6 +70,11 @@ public class GameGenerator<T extends ICoordinateSquare> {
 
     public GameGenerator<T> useMazeGeneratorClean(){
         usedGenerator = new MazeGeneratorClean<T>(this);
+        return this;
+    }
+
+    public GameGenerator<T> useDungeonGenerator(){
+        usedGenerator = new DungeonGenerator<T>(this);
         return this;
     }
 
@@ -158,14 +164,18 @@ public class GameGenerator<T extends ICoordinateSquare> {
             this.t = t;
             this.gmw = gmw;
             gameMap.addUpdatesHandlers(t1 -> {
-                try {
-                    System.out.println("Sleeping");
-                    Thread.sleep(PAUSE_DURATION);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                t1.ifPresent(t2 -> {
+                    if (t2.getCord().equals(getCord())){
+                        setUpdated();
+                        try {
+                            //System.out.println("Sleeping");
+                            Thread.sleep(PAUSE_DURATION);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 setUpdated();
-
             });
         }
         @Override

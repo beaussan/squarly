@@ -26,7 +26,7 @@ public class MainFour {
         }
         System.out.println("Starging");
         long start = System.currentTimeMillis();
-        new GameGenerator<>(gm).useMazeGeneratorClean().generate();
+        new GameGenerator<>(gm).useDungeonGenerator().generate();
         long end = System.currentTimeMillis();
         System.out.println("Done in " + (end - start) + "ms");
         gm.getMapData().forEach(gameSquare -> {

@@ -23,6 +23,8 @@ public class SquareWrapper<T extends ICoordinateSquare> implements ICoordinateSq
     Map<Direction, SquareWrapper<T>> neighs = new HashMap<>();
     List<SquareWrapper<T>> diagonals = new ArrayList<>();
 
+    private boolean visited = false;
+
 
     SquareWrapper(T t, GameMapWrapper<T> gmw){
         this.t = t;
@@ -42,7 +44,7 @@ public class SquareWrapper<T extends ICoordinateSquare> implements ICoordinateSq
 
     @Override
     public void setUpdated() {
-        t.getGameMap().setChanged(null);
+        //t.getGameMap().setChanged(null);
     }
 
     @Override
@@ -88,5 +90,11 @@ public class SquareWrapper<T extends ICoordinateSquare> implements ICoordinateSq
     }
 
 
+    public boolean isVisited() {
+        return visited;
+    }
 
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
 }
