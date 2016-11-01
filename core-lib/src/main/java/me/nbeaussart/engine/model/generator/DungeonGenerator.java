@@ -51,7 +51,7 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
     }
 
     private void removeUnessery(){
-        List<SquareWrapper<T>> data = gameMap.getMapData()
+        List<SquareWrapper<T>> data = gameMap.getMapData().values()
                 .stream()
                 .filter(tSquareWrapper -> tSquareWrapper.getState() == IState.ROOM)
                 .collect(Collectors.toList());
@@ -100,7 +100,7 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
             curr.setVisited(true);
             fronts.addAll(curr.getNeighs(IState.ROOM));
         }
-        gameMap.getMapData().stream().filter(tSquareWrapper -> !tSquareWrapper.isVisited())
+        gameMap.getMapData().values().stream().filter(tSquareWrapper -> !tSquareWrapper.isVisited())
                 .forEach(tSquareWrapper -> tSquareWrapper.setState(IState.WALL));
     }
 
@@ -111,7 +111,7 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
         List<SquareWrapper<T>> wallList = new ArrayList<>();
         Random r = new Random();
 
-        for (SquareWrapper<T> sw : gameMap.getMapData()) {
+        for (SquareWrapper<T> sw : gameMap.getMapData().values()) {
             if (sw.getDiagonals(IState.WALL).size() != 8){
                 continue;
             }

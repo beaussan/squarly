@@ -13,7 +13,7 @@ public class MainThree {
         gm = new GameMap(60, 60, 20, 20);
         for (int y = 0; y < gm.sizeY(); y++) {
             for (int x = 0; x < gm.sizeX(); x++) {
-                gm.getMapData().add(new GameSquare(null, new Cord(x,y), gm));
+                gm.add(new GameSquare(null, new Cord(x,y), gm));
             }
         }
         new GameGenerator<GameSquare>(gm, true).useDungeonGenerator().generate();

@@ -1,6 +1,7 @@
 package me.nbeaussart.engine.view;
 
 import com.google.common.base.Preconditions;
+import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.interfaces.IColoredSquare;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
@@ -41,9 +42,11 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
         int xReal = x / gameMap.getHeightPixel();
         //int yReal = (y-gameMap.sizeY()-1)/gameMap.getHeightPixel();
         int yReal = gameMap.sizeY() - y / gameMap.getHeightPixel() - 1;
+        return gameMap.getFromCords(new Cord(xReal, yReal));
+        /*
         return gameMap.getMapData().stream().filter(square -> square.getCord().getX() == xReal)
                 .filter(square -> square.getCord().getY() == yReal)
-                .findFirst();
+                .findFirst();*/
     }
 
     private Optional<T> findSquareAt(Point point) {
@@ -106,7 +109,7 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        gameMap.getMapData().forEach(gs -> {
+        gameMap.getMapData().values().forEach(gs -> {
             paintSquare(g, gs);
         });
     }

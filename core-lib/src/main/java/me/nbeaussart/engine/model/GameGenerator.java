@@ -13,6 +13,7 @@ import me.nbeaussart.engine.view.MapPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -80,14 +81,16 @@ public class GameGenerator<T extends ICoordinateSquare> {
 
     public IGameMap<T> generate(){
         usedGenerator.generate();
-        postProssesors.forEach(tConsumer -> tConsumer.accept(gameMap.getMapData()));
+        postProssesors.forEach(tConsumer -> tConsumer.accept(new ArrayList<T>(gameMap.getMapData().values())));
         return gameMap;
     }
 
     private void setupShowing(){
         GameMapWrapper gm = new GameMapWrapper();
         gm.setMapData(
-                gameMap.getMapData().stream().map( t -> new ColorWrapper(t, gm)).collect(Collectors.toList())
+                gameMap.getMapData().values()
+                        .stream().map(t ->  new ColorWrapper(t, gm))
+                        .collect(Collectors.toMap(ColorWrapper::getCord, o -> o))
         );
         MapPrinter<ColorWrapper> map = new MapPrinter<>(gm);
         GameScreen.createGameScreen("GENERATOR", map);
@@ -97,7 +100,6 @@ public class GameGenerator<T extends ICoordinateSquare> {
 
     private void checkIntegrityMap(){
         gameMap.removeOutOfBounds();
-        gameMap.removeDuplicate();
         checkState(gameMap.sizeX() > 0, "SizeX should be over 0");
         checkState(gameMap.sizeY() > 0, "SizeY should be over 0");
         checkState(checkNotNull(gameMap.getMapData(), "Map data should not be null").size() ==
@@ -107,7 +109,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
 
 
     private void setupMap(){
-        gameMap.getMapData().forEach(t -> t.setState(IState.WALL));
+        gameMap.getMapData().values().forEach(t -> t.setState(IState.WALL));
     }
 
     public IGameMap<T> getGameMap() {
@@ -121,14 +123,15 @@ public class GameGenerator<T extends ICoordinateSquare> {
     private class GameMapWrapper implements IGameMap<ColorWrapper>{
         public List<ColorWrapper> wrapper = new ArrayList<>();
         private  List<Consumer<Optional<ColorWrapper>>> data = new ArrayList<>();
+
         @Override
-        public List<ColorWrapper> getMapData() {
-            return wrapper;
+        public Map<Cord, ColorWrapper> getMapData() {
+            return null;
         }
 
         @Override
-        public void setMapData(List<ColorWrapper> data) {
-            this.wrapper = data;
+        public void setMapData(Map<Cord, ColorWrapper> data) {
+
         }
 
         @Override
