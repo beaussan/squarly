@@ -32,19 +32,6 @@ public class MainTwo {
                 });
             }
         }
-        /*
-        gm.getFromCords(new Cord(0, 0)).ifPresent(gameSquareText -> gameSquareText.setChardata('0'));
-        gm.getFromCords(new Cord(1, 0)).ifPresent(gameSquareText -> gameSquareText.setChardata('1'));
-        gm.getFromCords(new Cord(0, 1)).ifPresent(gameSquareText -> gameSquareText.setChardata('1'));
-        gm.getFromCords(new Cord(1, 1)).ifPresent(gameSquareText -> gameSquareText.setChardata('2'));
-        gm.getFromCords(new Cord(2, 0)).ifPresent(gameSquareText -> gameSquareText.setChardata('2'));
-        gm.getFromCords(new Cord(0, 2)).ifPresent(gameSquareText -> gameSquareText.setChardata('2'));
-        gm.getFromCords(new Cord(3, 0)).ifPresent(gameSquareText -> gameSquareText.setChardata('3'));
-        gm.getFromCords(new Cord(0, 3)).ifPresent(gameSquareText -> gameSquareText.setChardata('3'));
-        gm.getFromCords(new Cord(4, 0)).ifPresent(gameSquareText -> gameSquareText.setChardata('4'));
-        gm.getFromCords(new Cord(0, 4)).ifPresent(gameSquareText -> gameSquareText.setChardata('4'));
-        */
-
 
         gm.getFromCords(new Cord(1, 0)).ifPresent(gameSquareText -> gameSquareText.setBackground(new Color(255, 0, 0)));
         gm.getFromCords(new Cord(1, 0)).ifPresent(gameSquareText -> gameSquareText.setForeground(new Color(0, 0, 0)));
@@ -57,7 +44,8 @@ public class MainTwo {
         MapCharDrowers<GameSquareText> mapCharDrowers = new MapCharDrowers<>(gm, console, 2, 1);
         GameScreen.createGameScreen("Main", console);
         //Frames.display(console);
-
+        console.setCursorPos(0,0);
+        console.writeln("Hello world ! :D");
 
         System.out.println("Done");
     }
