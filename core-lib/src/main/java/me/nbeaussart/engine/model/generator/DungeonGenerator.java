@@ -72,7 +72,7 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
     }
 
     private void connectRooms() {
-
+        // TODO DO a better stuff here...
         lsRooms.forEach(tRoom -> {
             List<SquareWrapper<T>> neigh = tRoom.getNeigh();
 
