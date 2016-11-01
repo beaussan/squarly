@@ -2,7 +2,7 @@ package me.nbeaussart.engine.view;
 
 import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.Cord;
-import me.nbeaussart.engine.model.interfaces.IColoredSquare;
+import me.nbeaussart.engine.model.interfaces.ICaracterSquare;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 
@@ -13,18 +13,23 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Nicolas Beaussart
- * @since 20/10/16
+ * @since 01/11/16
  */
-public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JPanel {
-    private IGameMap<T> gameMap;
+public class MapCharDrowers<T extends ICoordinateSquare & ICaracterSquare> extends JPanel{
 
-    public MapPrinter(IGameMap<T> gameMap) {
+    private IGameMap<T> gameMap;
+    private Font font;
+
+
+    public MapCharDrowers(IGameMap<T> gameMap) {
         this.gameMap = checkNotNull(gameMap, "Game map should not be null.");
+
         setPreferredSize(new Dimension(getSizeWidth(), getSizeHeight()));
+        font = new Font("Monospaced", Font.PLAIN, 32);
 
 
         setFocusable(true);
@@ -97,8 +102,7 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
 
     private void paintSquare(Graphics g, T gs) {
         checkNotNull(gs, "An item in the map was null");
-        checkNotNull(gs.getColor(), "The item %s colors was null !", gs);
-        checkNotNull(gs.getCord(), "The item %s coordinate was null !", gs);
+
         g.setColor(new Color(gs.getColor().getRed(), gs.getColor().getGreen(), gs.getColor().getBlue()));
         g.fillRect(
                 gs.getCord().getX() * gameMap.getWidthPixel(),
