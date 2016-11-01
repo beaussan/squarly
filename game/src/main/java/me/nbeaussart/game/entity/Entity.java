@@ -62,7 +62,7 @@ public abstract class Entity {
         this.life = Math.max(life, 0);
         listeners.forEach(entityListener -> entityListener.entityLifeChanged(this));
         if(!isALive()){
-            System.out.println("DEATH TO THERE");
+            System.out.println("You are dead !");
             listeners.forEach(entityListener -> entityListener.entityDeath(this));
             gameSquare.setEntity(null);
         }
