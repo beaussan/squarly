@@ -2,30 +2,27 @@ package me.nbeaussart.game.map;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.interfaces.ICaracterSquare;
-import me.nbeaussart.engine.model.interfaces.IColoredSquare;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IState;
 import me.nbeaussart.game.entity.Entity;
-
-import java.util.function.Consumer;
 
 /**
  * Created by beaussan on 31/10/16.
  */
 public class GameSquare implements ICaracterSquare, ICoordinateSquare{
 
-    private final static Color COLOR_WALL = new Color(0,0,0);
-    private final static Color COLOR_ROOM = new Color(255,255,255);
-    private final static Color COLOR_DOOR = new Color(0,200,0);
+    private final static SquareContent COLOR_WALL = new SquareContent('#', new Color(0,0,0), new Color(0,0,0));
+    private final static SquareContent COLOR_ROOM = new SquareContent(' ', new Color(255,255,255),new Color(255,255,255));
+    private final static SquareContent COLOR_DOOR = new SquareContent('+', new Color(255,255,255),new Color(255,255,255));
 
     private final Cord cord;
     private final GameMap gamemap;
     private IState state = IState.WALL;
     private Entity entity;
+    private SquareContent squareContent;
 
 
     public GameSquare(Cord cord, GameMap gm){
@@ -36,22 +33,22 @@ public class GameSquare implements ICaracterSquare, ICoordinateSquare{
 
     @Override
     public char getChar() {
-        return 0;
+        return getSquareContent().getCharData();
     }
 
     @Override
     public Color getBackground() {
-        return null;
+        return getSquareContent().getBackground();
     }
 
     @Override
     public Color getForeground() {
-        return null;
+        return getSquareContent().getForeground();
     }
 
-    public Color getColor() {
+    public SquareContent getSquareContent() {
         if (entity != null){
-            return entity.getColor();
+            return entity.getSquareContent();
         }
         switch (state){
             case ROOM:

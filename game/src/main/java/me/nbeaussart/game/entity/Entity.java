@@ -2,9 +2,11 @@ package me.nbeaussart.game.entity;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.game.map.GameSquare;
+import me.nbeaussart.game.map.SquareContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +25,15 @@ public abstract class Entity {
     private Color color;
     private int atk;
     private GameSquare gameSquare;
+    private SquareContent squareContent;
 
-    public Entity(String name, int life, int atk, Color color, GameSquare gameSquare){
+    public Entity(String name, int life, int atk, Color color, GameSquare gameSquare, SquareContent squareContent){
         setName(name);
         setLife(life);
         setAtk(atk);
         this.color=color;
         setGameSquare(gameSquare);
+        this.squareContent= checkNotNull(squareContent);
     }
 
     public boolean addListener(EntityListener entityListener) {
@@ -44,6 +48,10 @@ public abstract class Entity {
 
     public String getName() {
         return name;
+    }
+
+    public SquareContent getSquareContent() {
+        return squareContent;
     }
 
     public void setName(String name) {
@@ -93,6 +101,10 @@ public abstract class Entity {
         this.gameSquare=checkNotNull(gameSquare, "gameSquare is null");
         this.gameSquare.setEntity(this);
 
+    }
+
+    public void setSquareContent(SquareContent squareContent) {
+        this.squareContent = squareContent;
     }
 
     @Override
