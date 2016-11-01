@@ -28,11 +28,10 @@ public class MainTwo {
         int cpt = 0;
         for (int i = 0; i < gm.sizeX(); i++) {
             for (int i1 = 0; i1 < gm.sizeY(); i1++) {
-                gm.getMapData().add(new GameSquare((cpt % 2 == 0) ? COLOR_BACK1 : COLOR_BACK2, new Cord(i, i1), gm));
+                gm.add(new GameSquare((cpt % 2 == 0) ? COLOR_BACK1 : COLOR_BACK2, new Cord(i, i1), gm));
                 cpt++;
             }
         }
-        gm.removeDuplicate();
         gm.removeOutOfBounds();
     }
 

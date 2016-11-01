@@ -1,10 +1,9 @@
 package me.nbeaussart.impl.gui.gamegui;
 
+import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -17,7 +16,7 @@ public class GameMap implements IGameMap<GameSquare> {
     private final int sizeY;
     private final int height;
     private final int width;
-    private List<GameSquare> mapData = new ArrayList<>();
+    private Map<Cord, GameSquare> mapData = new HashMap<>();
     private List<Consumer<Optional<GameSquare>>> listUpdateHandlers = new ArrayList<>();
 
     public GameMap(int sizeX, int sizeY, int height, int width) {
@@ -28,12 +27,13 @@ public class GameMap implements IGameMap<GameSquare> {
     }
 
     @Override
-    public List<GameSquare> getMapData() {
+    public Map<Cord, GameSquare> getMapData() {
         return mapData;
     }
 
+
     @Override
-    public void setMapData(List<GameSquare> data) {
+    public void setMapData(Map<Cord, GameSquare> data) {
         this.mapData = data;
     }
 

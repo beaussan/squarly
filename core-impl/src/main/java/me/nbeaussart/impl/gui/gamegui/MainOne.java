@@ -36,14 +36,13 @@ public class MainOne {
                         c = new Color(0, 0, (255/ (sizeXY-i))*j);
                         break;
                 }
-                gm.getMapData().add(new GameSquare(c, new Cord(i, j), gm));
-                gm.getMapData().add(new GameSquare(c, new Cord(j, i), gm));
-                gm.getMapData().add(new GameSquare(c, new Cord(sizeXY - i, sizeXY - j), gm));
-                gm.getMapData().add(new GameSquare(c, new Cord(sizeXY - j, sizeXY - i), gm));
+                gm.add(new GameSquare(c, new Cord(i, j), gm));
+                gm.add(new GameSquare(c, new Cord(j, i), gm));
+                gm.add(new GameSquare(c, new Cord(sizeXY - i, sizeXY - j), gm));
+                gm.add(new GameSquare(c, new Cord(sizeXY - j, sizeXY - i), gm));
             }
         }
 
-        gm.removeDuplicate();
         gm.removeOutOfBounds();
         gm.setChanged(null);
 

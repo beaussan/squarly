@@ -9,6 +9,10 @@ import me.nbeaussart.engine.view.MapPrinter;
 
 import java.awt.event.MouseEvent;
 
+import static me.nbeaussart.engine.model.interfaces.IState.DOOR;
+import static me.nbeaussart.engine.model.interfaces.IState.ROOM;
+import static me.nbeaussart.engine.model.interfaces.IState.WALL;
+
 /**
  * @author Nicolas Beaussart
  * @since 27/10/16
@@ -21,7 +25,7 @@ public class MainFour {
         gm.getMapData().clear();
         for (int y = 0; y < gm.sizeY(); y++) {
             for (int x = 0; x < gm.sizeX(); x++) {
-                gm.getMapData().add(new GameSquare(COLOR_WALL, new Cord(x,y), gm));
+                gm.add(new GameSquare(COLOR_WALL, new Cord(x,y), gm));
             }
         }
         System.out.println("Starging");
@@ -29,7 +33,7 @@ public class MainFour {
         new GameGenerator<>(gm).useDungeonGenerator().generate();
         long end = System.currentTimeMillis();
         System.out.println("Done in " + (end - start) + "ms");
-        gm.getMapData().forEach(gameSquare -> {
+        gm.getMapData().values().forEach(gameSquare -> {
             switch (gameSquare.getState()){
                 case DOOR:
                     gameSquare.setColorWithoutUpdate(COLOR_DOOR);

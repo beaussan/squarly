@@ -31,7 +31,7 @@ public class GameMapWrapper<T extends ICoordinateSquare> implements IGameMap<Squ
         cordList.add(Direction.DOWN.add(Direction.RIGHT));
         cordList.add(Direction.DOWN.add(Direction.LEFT));
 
-        gameMap.getMapData().forEach(t -> new SquareWrapper<>(t, this));
+        gameMap.getMapData().values().forEach(t -> new SquareWrapper<T>(t, this));
 
         dataMapped.forEach((cord, squareWrapper) -> {
             for (Direction direction : Direction.values()) {
@@ -56,14 +56,16 @@ public class GameMapWrapper<T extends ICoordinateSquare> implements IGameMap<Squ
 
 
     @Override
-    public List<SquareWrapper<T>> getMapData() {
-        return new ArrayList<>(dataMapped.values());
+    public Map<Cord, SquareWrapper<T>> getMapData() {
+        return dataMapped;
     }
 
     @Override
-    public void setMapData(List<SquareWrapper<T>> data) {
-        dataMapped = data.stream().collect(Collectors.toMap(SquareWrapper::getCord, item -> item));
+    public void setMapData(Map<Cord, SquareWrapper<T>> data) {
+
     }
+
+
 
     public Map<Cord, SquareWrapper<T>> getDataMapped() {
         return dataMapped;

@@ -20,12 +20,10 @@ import java.util.stream.Collectors;
 public class MazeGenerator<T extends ICoordinateSquare> extends AbsGenerator<T> {
 
     private final IGameMap<T> gameMap;
-    private final List<T> mapData;
 
     public MazeGenerator(GameGenerator<T> gameGenerator) {
         super(gameGenerator);
         gameMap = getGameGenerator().getGameMap();
-        mapData = gameMap.getMapData();
     }
 
     @Override
