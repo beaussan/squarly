@@ -9,10 +9,7 @@ import me.nbeaussart.engine.view.MapPrinter;
 import me.nbeaussart.game.action.Action;
 import me.nbeaussart.game.action.Attack;
 import me.nbeaussart.game.action.Move;
-import me.nbeaussart.game.entity.Entity;
-import me.nbeaussart.game.entity.EntityListener;
-import me.nbeaussart.game.entity.Monster;
-import me.nbeaussart.game.entity.Player;
+import me.nbeaussart.game.entity.*;
 import me.nbeaussart.game.ia.AbstractIA;
 import me.nbeaussart.game.ia.DummyIA;
 import me.nbeaussart.game.map.GameMap;
@@ -36,10 +33,15 @@ public class Main {
     private GameMap gameMap;
     private Player player;
     private List<Monster> monsters = new ArrayList<>();
+    private List<Monster> monstersEasy = new ArrayList<>();
+    private List<Monster> monstersMedium = new ArrayList<>();
+    private List<Monster> monstersHard = new ArrayList<>();
     private AbstractIA ia;
     private long lastFpsTime;
     private int fps;
-    private final int NMB_MONSTER = 10;
+    private final int NMB_MONSTER_EASY = 10;
+    private final int NMB_MONSTER_MEDIUM = 5;
+    private final int NMB_MONSTER_HARD = 2;
     private int score = 0;
     private Random rand = new Random();
 
@@ -60,20 +62,37 @@ public class Main {
                         }
                     }
 
-                    while (monsters.size() < NMB_MONSTER){
+                    while (monstersEasy.size() < NMB_MONSTER_EASY){
                         Random r = new Random();
                         GameSquare sq = gameSquares.get(r.nextInt(gameSquares.size()));
                         if (sq.getEntity() == null && (sq.getState() == IState.ROOM || sq.getState() == IState.DOOR)) {
-                            monsters.add(new Monster("MONSTER", 20, 10, sq));
+                            monstersEasy.add(new EasyMonster(sq));
                         }
                     }
+                    while (monstersMedium.size() < NMB_MONSTER_MEDIUM){
+                        Random r = new Random();
+                        GameSquare sq = gameSquares.get(r.nextInt(gameSquares.size()));
+                        if (sq.getEntity() == null && (sq.getState() == IState.ROOM || sq.getState() == IState.DOOR)) {
+                            monstersMedium.add(new NormalMonster(sq));
+                        }
+                    }
+                    while (monstersHard.size() < NMB_MONSTER_HARD){
+                        Random r = new Random();
+                        GameSquare sq = gameSquares.get(r.nextInt(gameSquares.size()));
+                        if (sq.getEntity() == null && (sq.getState() == IState.ROOM || sq.getState() == IState.DOOR)) {
+                            monstersHard.add(new HardMonster(sq));
+                        }
+                    }
+                    monsters.addAll(monstersEasy);
+                    monsters.addAll(monstersHard);
+                    monsters.addAll(monstersMedium);
                 }).generate();
         ia = new DummyIA(player);
         monsters.forEach(monster -> monster.addListener(new EntityListener() {
             @Override
             public void entityDeath(Entity entity) {
                 monsters.remove(monster);
-                score+=100;
+                score+=monster.getPointWhenDeath();
                 for (int i = 0; i < monsters.size(); i++) {
                     System.out.println(i+ " - " + monsters.get(i));
                 }
