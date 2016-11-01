@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
 import static me.nbeaussart.engine.util.StreamUtils.distinctByKey;
@@ -26,7 +27,8 @@ public interface IGameMap<T extends ICoordinateSquare> {
     }
 
     default void add(T t){
-        getMapData().put(t.getCord(), t);
+        checkNotNull(getMapData(), "Map data is null")
+        .put(checkNotNull(t, "Object to add is null").getCord(), t);
     }
 
     default void removeOutOfBounds() {
@@ -45,7 +47,7 @@ public interface IGameMap<T extends ICoordinateSquare> {
     List<Consumer<Optional<T>>> getUpdatesHandlers();
 
     default void addUpdatesHandlers(Consumer<Optional<T>> obj) {
-        if (!getUpdatesHandlers().contains(Preconditions.checkNotNull(obj))) {
+        if (!getUpdatesHandlers().contains(checkNotNull(obj))) {
             getUpdatesHandlers().add(obj);
         }
     }

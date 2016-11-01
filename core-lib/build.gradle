@@ -18,7 +18,6 @@ dependencies {
     compile group: 'es.usc.citius.hipster', name: 'hipster-all', version: '1.0.1'
 
 
-
     testCompile group: 'junit', name: 'junit', version: '4.11'
 
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.5.2'
