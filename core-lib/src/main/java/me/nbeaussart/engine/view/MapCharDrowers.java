@@ -32,14 +32,24 @@ public class MapCharDrowers<T extends ICoordinateSquare & ICaracterSquare> {
         //font = new Font("Monospaced", Font.PLAIN, 32);
 
 
+        /*
+        gameMap.addUpdatesHandlers(t -> {
+            drawEverything();
+            System.out.println(t);
+        });
+        //*/
+        //*
         gameMap.addUpdatesHandlers(t -> {
             if (t.isPresent()){
                 drawSingle(t.get());
             } else {
                 drawEverything();
             }
+            jConsole.repaint();
         });
+        //*/
         drawEverything();
+        jConsole.repaint();
     }
     public MapCharDrowers(IGameMap<T> gameMap, JConsole jConsole, int xoff, int yoff) {
         this.jConsole = checkNotNull(jConsole, "JConsole is null");
@@ -47,6 +57,18 @@ public class MapCharDrowers<T extends ICoordinateSquare & ICaracterSquare> {
         //font = new Font("Monospaced", Font.PLAIN, 32);
 
 
+        checkArgument(0 <= xoff);
+        checkArgument(0 <= yoff);
+        this.xoff = xoff;
+        this.yoff = yoff;
+
+        /*
+        gameMap.addUpdatesHandlers(t -> {
+            drawEverything();
+            System.out.println(t);
+        });
+        //*/
+        //*
         gameMap.addUpdatesHandlers(t -> {
             if (t.isPresent()){
                 drawSingle(t.get());
@@ -54,11 +76,9 @@ public class MapCharDrowers<T extends ICoordinateSquare & ICaracterSquare> {
                 drawEverything();
             }
         });
-        checkArgument(0 <= xoff);
-        checkArgument(0 <= yoff);
-        this.xoff = xoff;
-        this.yoff = yoff;
+        //*/
         drawEverything();
+        jConsole.repaint();
     }
 
     public IGameMap getGameMap() {
@@ -68,34 +88,17 @@ public class MapCharDrowers<T extends ICoordinateSquare & ICaracterSquare> {
     public void drawEverything(){
         gameMap.getMapData().values().forEach(this::drawSingle);
     }
+
     public void drawSingle(T gs){
+        /*
         jConsole.setCursorPos(gs.getCord().getX() + xoff,
                 gameMap.sizeY()-gs.getCord().getY()-1 + yoff
         );
-        jConsole.write(""+gs.getChar(),gs.getForeground().getAwt(), gs.getBackground().getAwt());
+        */
+        jConsole.write(""+gs.getChar(),gs.getForeground().getAwt(), gs.getBackground().getAwt(), gs.getCord().getX() + xoff
+        , gameMap.sizeY()-gs.getCord().getY()-1 + yoff);
         //jConsole.write(st, fore, back);
     }
 
-    /*
-    private void paintSquare(T gs) {
-        checkNotNull(gs, "An item in the map was null");
-
-        //g.setColor(new Color(gs.getColor().getRed(), gs.getColor().getGreen(), gs.getColor().getBlue()));
-        g.fillRect(
-                gs.getCord().getX() * gameMap.getWidthPixel(),
-                (gameMap.getHeightPixel() * (gameMap.sizeY() - gs.getCord().getY() - 1)),
-                gameMap.getWidthPixel(),
-                gameMap.getHeightPixel()
-        );
-    }*/
-/*
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        gameMap.getMapData().values().forEach(gs -> {
-            paintSquare(g, gs);
-        });
-    }
-    */
 
 }

@@ -32,7 +32,7 @@ public class JConsole extends JComponent implements HierarchyListener {
     private static final int DEFAULT_BLINKRATE = 200;
     private static final boolean DEFAULT_BLINK_ON = false;
 
-    private ConsoleData data = new ConsoleData();
+    volatile private ConsoleData data = new ConsoleData();
 
     private int fontWidth;
     private int fontHeight;
@@ -383,6 +383,17 @@ public class JConsole extends JComponent implements HierarchyListener {
     }
 
     public void write(String string, Color foreGround, Color backGround) {
+        Color foreTemp = currentForeground;
+        Color backTemp = currentBackground;
+        setForeground(foreGround);
+        setBackground(backGround);
+        write(string);
+        setForeground(foreTemp);
+        setBackground(backTemp);
+    }
+
+    synchronized public void write(String string, Color foreGround, Color backGround, int colums, int rows) {
+        setCursorPos(colums, rows);
         Color foreTemp = currentForeground;
         Color backTemp = currentBackground;
         setForeground(foreGround);

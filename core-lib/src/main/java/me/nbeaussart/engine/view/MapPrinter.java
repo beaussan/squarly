@@ -24,12 +24,14 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
 
     public MapPrinter(IGameMap<T> gameMap) {
         this.gameMap = checkNotNull(gameMap, "Game map should not be null.");
+        gameMap.addUpdatesHandlers(t -> {
+            repaint();
+        });
         setPreferredSize(new Dimension(getSizeWidth(), getSizeHeight()));
 
 
         setFocusable(true);
         this.requestFocusInWindow();
-        gameMap.addUpdatesHandlers(t -> repaint());
     }
 
     public IGameMap getGameMap() {

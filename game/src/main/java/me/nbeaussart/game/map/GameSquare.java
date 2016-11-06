@@ -14,7 +14,7 @@ import me.nbeaussart.game.entity.Entity;
  */
 public class GameSquare implements ICaracterSquare, ICoordinateSquare{
 
-    private final static SquareContent COLOR_WALL = new SquareContent('#', new Color(0,0,0), new Color(0,0,0));
+    private final static SquareContent COLOR_WALL = new SquareContent('#', new Color(0,0,0),      new Color(150,150,150));
     private final static SquareContent COLOR_ROOM = new SquareContent(' ', new Color(255,255,255),new Color(255,255,255));
     private final static SquareContent COLOR_DOOR = new SquareContent('+', new Color(255,255,255),new Color(255,255,255));
 

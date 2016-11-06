@@ -43,7 +43,7 @@ public class Main {
     private AbstractIA ia;
     private long lastFpsTime;
     private int fps;
-    private final int NMB_MONSTER_EASY = 10*20;
+    private final int NMB_MONSTER_EASY = 10;
     private final int NMB_MONSTER_MEDIUM = 5;
     private final int NMB_MONSTER_HARD = 2;
     private final int SIZEMAP = 80;
@@ -162,7 +162,7 @@ public class Main {
 
             try {
                 Thread.sleep( (lastLoopTime - System.nanoTime() + OPTIMAL_TIME)/1000000);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
