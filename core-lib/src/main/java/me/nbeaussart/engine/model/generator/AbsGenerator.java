@@ -6,6 +6,8 @@ import me.nbeaussart.engine.model.generator.wrapper.GameMapWrapper;
 import me.nbeaussart.engine.model.interfaces.IColoredSquare;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
@@ -18,6 +20,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public abstract class AbsGenerator<T extends ICoordinateSquare> {
 
+    private static final Logger log = LoggerFactory.getLogger(AbsGenerator.class);
 
     private GameGenerator<T> gameGenerator;
     private GameMapWrapper<T> mapWrapper;
@@ -36,7 +39,11 @@ public abstract class AbsGenerator<T extends ICoordinateSquare> {
     public void generate(){
         checkState(gameGenerator != null, "Game map is null");
         mapWrapper = new GameMapWrapper<T>(gameGenerator.getGameMap());
+        log.debug("Starting to generate dungeon");
+        long start = System.currentTimeMillis();
         doGenerate();
+        long end = System.currentTimeMillis();
+        log.debug("Done in {} ms", end-start);
     }
 
     public abstract void doGenerate();

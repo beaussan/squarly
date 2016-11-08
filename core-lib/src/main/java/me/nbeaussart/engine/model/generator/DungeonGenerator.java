@@ -1,14 +1,14 @@
 package me.nbeaussart.engine.model.generator;
 
-import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.GameGenerator;
 import me.nbeaussart.engine.model.generator.wrapper.GameMapWrapper;
 import me.nbeaussart.engine.model.generator.wrapper.Room;
 import me.nbeaussart.engine.model.generator.wrapper.SquareWrapper;
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
-import me.nbeaussart.engine.model.interfaces.IGameMap;
 import me.nbeaussart.engine.model.interfaces.IState;
 import me.nbeaussart.engine.util.RmdUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
  * @since 31/10/16
  */
 public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<T> {
+
+    private static final Logger log = LoggerFactory.getLogger(DungeonGenerator.class);
 
     private GameMapWrapper<T> gameMap;
     private final int NMB_ROOM_TRY;
@@ -51,8 +53,9 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
     }
 
     private void removeUnessery(){
+        log.trace("starting removing extra square");
         List<SquareWrapper<T>> data = gameMap.getMapData().values()
-                .stream()
+                .parallelStream()
                 .filter(tSquareWrapper -> tSquareWrapper.getState() == IState.ROOM)
                 .collect(Collectors.toList());
         final boolean[] isdone = {false};
@@ -67,12 +70,13 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
                 }
             });
         }
+        log.trace("Done");
 
 
     }
 
     private void connectRooms() {
-        // TODO DO a better stuff here...
+        log.trace("Starting to connecting rooms");
         lsRooms.forEach(tRoom -> {
             List<SquareWrapper<T>> neigh = tRoom.getNeigh();
 
@@ -83,6 +87,7 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
                 }
             });
         });
+        log.trace("Done adding random connectors, gonna mark one if connected");
         Optional<SquareWrapper<T>> startOPt = gameMap.getFromCords(lsRooms.get(0).getStartingCords());
         SquareWrapper<T> start;
         if (startOPt.isPresent()) {
@@ -100,14 +105,15 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
             curr.setVisited(true);
             fronts.addAll(curr.getNeighs(IState.ROOM));
         }
-        gameMap.getMapData().values().stream().filter(tSquareWrapper -> !tSquareWrapper.isVisited())
+        log.trace("Removing all the non visited walls");
+        gameMap.getMapData().values().parallelStream().filter(tSquareWrapper -> !tSquareWrapper.isVisited())
                 .forEach(tSquareWrapper -> tSquareWrapper.setState(IState.WALL));
+        log.trace("Done connecting rooms");
     }
 
 
     private void genrateWays() {
-
-
+        log.trace("Generating maze around rooms");
         List<SquareWrapper<T>> wallList = new ArrayList<>();
         Random r = new Random();
 
@@ -139,6 +145,7 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
 
 
     private void generateRooms(){
+        log.trace("Generating rooms, trying {} times", NMB_ROOM_TRY);
         int nmbRoomTry = 0;
         Room<T> room;
         boolean isGood = true;
@@ -171,8 +178,8 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
             }
             room.populateCords();
             lsRooms.add(room);
-
         }
+        log.trace("Generating rooms done, we generated {} rooms.", lsRooms.size());
         //     public Room(Cord startingCords, int width, int height, GameMapWrapper<T> gameMapWrapper) {
 
     }

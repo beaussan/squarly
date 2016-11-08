@@ -10,11 +10,10 @@ import me.nbeaussart.engine.model.interfaces.IGameMap;
 import me.nbeaussart.engine.model.interfaces.IState;
 import me.nbeaussart.engine.view.GameScreen;
 import me.nbeaussart.engine.view.MapPrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -31,6 +30,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
     private final static Color COLOR_ROOM=new Color(255,255,255);
     private final static Color COLOR_DOOR=new Color(255,0,0);
     private final static long PAUSE_DURATION = 5;
+    private static final Logger log = LoggerFactory.getLogger(GameGenerator.class);
 
     private final IGameMap<T> gameMap;
     private final boolean isShowing;
@@ -55,37 +55,46 @@ public class GameGenerator<T extends ICoordinateSquare> {
 
     public GameGenerator<T> addPostProsessor(Consumer<List<T>> constor){
         postProssesors.add(constor);
+        log.trace("Adding post prosessor");
         return this;
     }
 
     public GameGenerator<T> useGenerator(AbsGenerator<T> generator){
         generator.setGameGenerator(this);
         usedGenerator = generator;
+        log.debug("Using generator {}", generator);
         return this;
     }
 
     public GameGenerator<T> useMazeGenerator(){
         usedGenerator = new MazeGenerator<T>(this);
+        log.debug("Usinging mazeGenerator");
         return this;
     }
 
     public GameGenerator<T> useMazeGeneratorClean(){
         usedGenerator = new MazeGeneratorClean<T>(this);
+        log.debug("Using MazeGeneratorClean");
         return this;
     }
 
     public GameGenerator<T> useDungeonGenerator(){
         usedGenerator = new DungeonGenerator<T>(this);
+        log.debug("Using DungeonGenerator");
         return this;
     }
 
     public IGameMap<T> generate(){
+        log.debug("Starting to generate dungeon");
         usedGenerator.generate();
+        log.debug("Generating done, lanching postProsessors");
         postProssesors.forEach(tConsumer -> tConsumer.accept(new ArrayList<T>(gameMap.getMapData().values())));
+        log.debug("My job is done.");
         return gameMap;
     }
 
     private void setupShowing(){
+        log.debug("Using showing setings");
         GameMapWrapper gm = new GameMapWrapper();
         gm.setMapData(
                 gameMap.getMapData().values()
@@ -121,17 +130,17 @@ public class GameGenerator<T extends ICoordinateSquare> {
     }
 
     private class GameMapWrapper implements IGameMap<ColorWrapper>{
-        public List<ColorWrapper> wrapper = new ArrayList<>();
+        public Map<Cord, ColorWrapper> wrapper = new HashMap<>();
         private  List<Consumer<Optional<ColorWrapper>>> data = new ArrayList<>();
 
         @Override
         public Map<Cord, ColorWrapper> getMapData() {
-            return null;
+            return wrapper;
         }
 
         @Override
         public void setMapData(Map<Cord, ColorWrapper> data) {
-
+            wrapper = data;
         }
 
         @Override

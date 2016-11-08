@@ -14,6 +14,7 @@ public class MainThree {
         for (int y = 0; y < gm.sizeY(); y++) {
             for (int x = 0; x < gm.sizeX(); x++) {
                 gm.add(new GameSquare(null, new Cord(x,y), gm));
+
             }
         }
         new GameGenerator<GameSquare>(gm, true).useDungeonGenerator().generate();

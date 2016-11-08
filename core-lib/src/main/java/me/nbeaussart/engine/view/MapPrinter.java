@@ -114,7 +114,9 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
     public void paint(Graphics g) {
         super.paint(g);
         gameMap.getMapData().values().forEach(gs -> {
-            paintSquare(g, gs);
+            if (gs != null){
+                paintSquare(g, gs);
+            }
         });
     }
 
