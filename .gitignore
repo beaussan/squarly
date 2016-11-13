@@ -145,6 +145,7 @@ fabric.properties
 core-lib/src/test/java-gen
 game/src/test/java-gen
 
+classes
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle/wrapper/gradle-wrapper.jar
