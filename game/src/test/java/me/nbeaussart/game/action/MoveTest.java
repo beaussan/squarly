@@ -31,7 +31,7 @@ public class MoveTest extends ActionTest{
     @Override
     public Entity getEntity() {
         gameMap = new GameMap(3,3);
-        GameSquare gameSquare = new GameSquare(new Cord(2, 2), gameMap);
+        GameSquare gameSquare = new GameSquare(Cord.get(2, 2), gameMap);
         gameSquare.setState(IState.ROOM);
         GameSquare gs2 = new GameSquare(gameSquare.getCord().add(Direction.UP.getCords()), gameMap);
         gs2.setState(IState.ROOM);

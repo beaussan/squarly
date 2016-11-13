@@ -19,22 +19,26 @@ import java.util.stream.Collectors;
  */
 public class MazeGenerator<T extends ICoordinateSquare> extends AbsGenerator<T> {
 
-    private final IGameMap<T> gameMap;
+    private IGameMap<T> gameMap;
 
     public MazeGenerator(GameGenerator<T> gameGenerator) {
         super(gameGenerator);
-        gameMap = getGameGenerator().getGameMap();
+    }
+
+    public MazeGenerator() {
+        super();
     }
 
     @Override
     public void doGenerate() {
+        gameMap = getGameGenerator().getGameMap();
 
         GameMapWrapper<T> mapWrapper = getMapWrapper();
 
         List<SquareWrapper<T>> wallList = new ArrayList<>();
         Random r = new Random();
 
-        Optional<SquareWrapper<T>> fromCords = mapWrapper.getFromCords(new Cord(1, 1));
+        Optional<SquareWrapper<T>> fromCords = mapWrapper.getFromCords(Cord.get(1, 1));
 
         if (fromCords.isPresent()) {
             fromCords.get().setState(IState.ROOM);

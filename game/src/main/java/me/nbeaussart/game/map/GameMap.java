@@ -21,6 +21,8 @@ public class GameMap implements IGameMap<GameSquare>{
         this.sizeY = sizeY;
     }
 
+
+
     public Map<Cord, GameSquare> getMapData() { return list; }
 
     @Override

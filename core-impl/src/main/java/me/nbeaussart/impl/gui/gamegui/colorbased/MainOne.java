@@ -36,10 +36,10 @@ public class MainOne {
                         c = new Color(0, 0, (255/ (sizeXY-i))*j);
                         break;
                 }
-                gm.add(new GameSquare(c, new Cord(i, j), gm));
-                gm.add(new GameSquare(c, new Cord(j, i), gm));
-                gm.add(new GameSquare(c, new Cord(sizeXY - i, sizeXY - j), gm));
-                gm.add(new GameSquare(c, new Cord(sizeXY - j, sizeXY - i), gm));
+                gm.add(new GameSquare(c, Cord.get(i, j), gm));
+                gm.add(new GameSquare(c, Cord.get(j, i), gm));
+                gm.add(new GameSquare(c, Cord.get(sizeXY - i, sizeXY - j), gm));
+                gm.add(new GameSquare(c, Cord.get(sizeXY - j, sizeXY - i), gm));
             }
         }
 
@@ -54,9 +54,9 @@ public class MainOne {
         MapPrinter<GameSquare> mp = new MapPrinter<>(gm);
         drawShape(gm, sizeXY);
 
-        System.out.println(gm.getFromCords(new Cord(sizeXY, sizeXY)));
-        System.out.println(gm.getFromCords(new Cord(sizeXY - 1, sizeXY - 1)));
-        System.out.println(gm.getFromCords(new Cord(sizeXY - 2, sizeXY - 2)));
+        System.out.println(gm.getFromCords(Cord.get(sizeXY, sizeXY)));
+        System.out.println(gm.getFromCords(Cord.get(sizeXY - 1, sizeXY - 1)));
+        System.out.println(gm.getFromCords(Cord.get(sizeXY - 2, sizeXY - 2)));
 
         mp.addGameClicked(new GameSquareClicked<GameSquare>() {
             @Override

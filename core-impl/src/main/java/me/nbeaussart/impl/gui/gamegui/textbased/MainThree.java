@@ -26,24 +26,24 @@ public class MainThree {
 
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                gm.add(new GameSquareText(gm, new Cord(x, y)));
+                gm.add(new GameSquareText(gm, Cord.get(x, y)));
             }
         }
         for (int x = 0; x < size; x++) {
             int finalX = x%10;
             Color currColor = new Color((255/size)*x,(255/size)*x,(255/size)*x);
             for (int y = 0; y < size; y++) {
-                gm.getFromCords(new Cord(x, y)).ifPresent(gameSquareText -> {
+                gm.getFromCords(Cord.get(x, y)).ifPresent(gameSquareText -> {
                     gameSquareText.setChardata(Character.forDigit(finalX, 10));
                     gameSquareText.setBackground(currColor);
                 });
             }
         }
 
-        gm.getFromCords(new Cord(1, 0)).ifPresent(gameSquareText -> gameSquareText.setBackground(new Color(255, 0, 0)));
-        gm.getFromCords(new Cord(1, 0)).ifPresent(gameSquareText -> gameSquareText.setForeground(new Color(0, 0, 0)));
-        gm.getFromCords(new Cord(0, 1)).ifPresent(gameSquareText -> gameSquareText.setBackground(new Color(0, 255, 0)));
-        gm.getFromCords(new Cord(0, 1)).ifPresent(gameSquareText -> gameSquareText.setForeground(new Color(0, 0, 0)));
+        gm.getFromCords(Cord.get(1, 0)).ifPresent(gameSquareText -> gameSquareText.setBackground(new Color(255, 0, 0)));
+        gm.getFromCords(Cord.get(1, 0)).ifPresent(gameSquareText -> gameSquareText.setForeground(new Color(0, 0, 0)));
+        gm.getFromCords(Cord.get(0, 1)).ifPresent(gameSquareText -> gameSquareText.setBackground(new Color(0, 255, 0)));
+        gm.getFromCords(Cord.get(0, 1)).ifPresent(gameSquareText -> gameSquareText.setForeground(new Color(0, 0, 0)));
 
 
         JConsole console = new JConsole(size, size);
@@ -56,7 +56,7 @@ public class MainThree {
         //console.setCursorPos(0,0);
         //console.writeln("Hello world ! :D");
 
-        final Cord[] cord = {new Cord(1, 1)};
+        final Cord[] cord = {Cord.get(1, 1)};
         gm.getFromCords(cord[0]).ifPresent(gameSquareText -> {
             gameSquareText.setBackground(COLOR_PERSO);
             gameSquareText.setForeground(COLOR_PERSO);

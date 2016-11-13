@@ -2,6 +2,8 @@ package me.nbeaussart.engine.model;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -14,7 +16,26 @@ public class Cord {
     private final int x;
     private final int y;
 
-    public Cord(int x, int y) {
+    private static final Map<Integer, Cord> cache = new HashMap<>();
+
+    /**
+     * Get a coordinate, if not cached, creating it
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the coordinate got
+     */
+    public static Cord get(int x, int y){
+        int hash = Objects.hash(x, y);
+
+        if (!cache.containsKey(hash)) {
+            Cord c = new Cord(x,y);
+            cache.put(hash, c);
+            return c;
+        }
+        return cache.get(hash);
+    }
+
+    private Cord(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -35,7 +56,7 @@ public class Cord {
      * @return The new {@link Cord} generated
      */
     public Cord add(int x, int y) {
-        return new Cord(this.x + x, this.y + y);
+        return Cord.get(this.x + x, this.y + y);
     }
 
     /**
@@ -65,7 +86,7 @@ public class Cord {
      * @return The new {@link Cord} generated
      */
     public Cord minus(int x, int y) {
-        return new Cord(this.x - x, this.y - y);
+        return Cord.get(this.x - x, this.y - y);
     }
 
     /**

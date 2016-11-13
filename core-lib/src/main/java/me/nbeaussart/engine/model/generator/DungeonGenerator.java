@@ -27,10 +27,16 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
     private final int ROOM_ADDING_RMD_BOUND;
     private List<Room<T>> lsRooms = new ArrayList<>();
 
-    
+
 
     public DungeonGenerator(GameGenerator<T> gameGenerator) {
         super(gameGenerator);
+        NMB_ROOM_TRY = 100;
+        ROOM_SIZE_MIN = 5;
+        ROOM_ADDING_RMD_BOUND = 3;
+    }
+    public DungeonGenerator() {
+        super();
         NMB_ROOM_TRY = 100;
         ROOM_SIZE_MIN = 5;
         ROOM_ADDING_RMD_BOUND = 3;

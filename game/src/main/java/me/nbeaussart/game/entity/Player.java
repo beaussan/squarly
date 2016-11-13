@@ -4,6 +4,7 @@ import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.interfaces.IState;
 import me.nbeaussart.game.map.GameSquare;
 import me.nbeaussart.game.map.SquareContent;
+import me.nbeaussart.game.utils.Const;
 
 /**
  * Created by  on 31/10/16.
@@ -11,7 +12,7 @@ import me.nbeaussart.game.map.SquareContent;
 public class Player extends Entity{
 
     public Player(String name, int life, int atk, GameSquare gameSquare) {
-        super(name, life, atk, gameSquare, new SquareContent('@', new Color(255,255,255), new Color(0,0,255)));
+        super(name, life, atk, gameSquare, Const.PLAYER_SQUARE);
     }
 
     @Override

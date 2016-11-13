@@ -14,8 +14,8 @@ import me.nbeaussart.game.entity.Entity;
  */
 public class GameSquare implements ICaracterSquare, ICoordinateSquare{
 
-    private final static SquareContent COLOR_WALL = new SquareContent('#', new Color(0,0,0),      new Color(150,150,150));
-    private final static SquareContent COLOR_ROOM = new SquareContent(' ', new Color(255,255,255),new Color(255,255,255));
+    private final static SquareContent COLOR_WALL = new SquareContent('#', new Color(64, 64, 64), new Color(192, 192, 192));
+    private final static SquareContent COLOR_ROOM = new SquareContent('.', new Color(0,0,0),new Color(128, 128, 128));
     private final static SquareContent COLOR_DOOR = new SquareContent('+', new Color(255,255,255),new Color(255,255,255));
 
     private final Cord cord;
@@ -47,18 +47,23 @@ public class GameSquare implements ICaracterSquare, ICoordinateSquare{
     }
 
     public SquareContent getSquareContent() {
-        if (entity != null){
-            return entity.getSquareContent();
-        }
         switch (state){
             case ROOM:
-                return COLOR_ROOM;
+                return COLOR_ROOM.getOverlaping(getEntitySquare());
             case DOOR:
-                return COLOR_DOOR;
+                return COLOR_DOOR.getOverlaping(getEntitySquare());
             default:
-                return COLOR_WALL;
+                return COLOR_WALL.getOverlaping(getEntitySquare());
         }
 
+    }
+
+    private SquareContent getEntitySquare(){
+        if (entity != null){
+            return entity.getSquareContent();
+        } else {
+            return null;
+        }
     }
 
 

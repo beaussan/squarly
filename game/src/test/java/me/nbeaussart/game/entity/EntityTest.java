@@ -4,6 +4,7 @@ import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.game.map.GameMap;
 import me.nbeaussart.game.map.GameSquare;
+import me.nbeaussart.game.map.SquareContent;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,14 +23,18 @@ public abstract class EntityTest {
     private final int ATTACK_INIT = 10;
     private GameSquare gameSquare;
 
+    public String getNameEntity(){
+        return "ENTITY_TEST";
+    }
+
     public abstract Entity getEntityTested(String name, int life, int attack, GameSquare gameSquare);
 
-    public abstract Color getColorOfEntity();
+    public abstract SquareContent getColorOfEntity();
 
     @Before
     public void setUp() throws Exception {
-        gameSquare = new GameSquare(new Cord(0,0), new GameMap(20,20));
-        entityTested = getEntityTested(NAME, LIFE_INIT, ATTACK_INIT, gameSquare);
+        gameSquare = new GameSquare(Cord.get(0,0), new GameMap(20,20));
+        entityTested = getEntityTested(getNameEntity(), LIFE_INIT, ATTACK_INIT, gameSquare);
     }
 
     @Test
@@ -99,7 +104,7 @@ public abstract class EntityTest {
 
     @Test
     public void testGetColor() throws Exception {
-        assertThat(entityTested).hasColor(getColorOfEntity());
+        assertThat(entityTested).hasSquareContent(getColorOfEntity());
     }
 
     @Test
@@ -119,7 +124,7 @@ public abstract class EntityTest {
                 .contains(
                         "name="+ NAME,
                         "life=" + LIFE_INIT,
-                        "color=" + getColorOfEntity().toString(),
+                        "squareContent=" + getColorOfEntity().toString(),
                         "atk=" + ATTACK_INIT,
                         "gameSquare=" + gameSquare.toString(),
                         "isAlive=" + true);

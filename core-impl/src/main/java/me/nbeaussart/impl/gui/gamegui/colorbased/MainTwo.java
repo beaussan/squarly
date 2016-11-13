@@ -28,7 +28,7 @@ public class MainTwo {
         int cpt = 0;
         for (int i = 0; i < gm.sizeX(); i++) {
             for (int i1 = 0; i1 < gm.sizeY(); i1++) {
-                gm.add(new GameSquare((cpt % 2 == 0) ? COLOR_BACK1 : COLOR_BACK2, new Cord(i, i1), gm));
+                gm.add(new GameSquare((cpt % 2 == 0) ? COLOR_BACK1 : COLOR_BACK2, Cord.get(i, i1), gm));
                 cpt++;
             }
         }
@@ -46,7 +46,7 @@ public class MainTwo {
         GameMap gm = new GameMap(20, 40, 10, 30);
         MapPrinter<GameSquare> mp = new MapPrinter<>(gm);
         drawFull(gm);
-        final Cord[] current = {new Cord(4, 4)};
+        final Cord[] current = {Cord.get(4, 4)};
 
         gm.getFromCords(current[0]).ifPresent(coloredSquare -> coloredSquare.setColor(new Color(0, 0, 0)));
 

@@ -5,10 +5,10 @@ package me.nbeaussart.engine.model;
  * @since 26/10/16
  */
 public enum Direction {
-    UP(new Cord(0, +1)),
-    DOWN(new Cord(0, -1)),
-    RIGHT(new Cord(+1, 0)),
-    LEFT(new Cord(-1, 0));
+    UP(Cord.get(0, +1)),
+    DOWN(Cord.get(0, -1)),
+    RIGHT(Cord.get(+1, 0)),
+    LEFT(Cord.get(-1, 0));
 
 
     static {

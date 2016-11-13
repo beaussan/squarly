@@ -22,6 +22,10 @@ public class MazeGeneratorClean<T extends ICoordinateSquare> extends AbsGenerato
         super(gameGenerator);
     }
 
+    public MazeGeneratorClean() {
+        super();
+    }
+
     @Override
     public void doGenerate() {
         GameMapWrapper<T> mapWrapper = getMapWrapper();
@@ -29,7 +33,7 @@ public class MazeGeneratorClean<T extends ICoordinateSquare> extends AbsGenerato
         List<SquareWrapper<T>> wallList = new ArrayList<>();
         Random r = new Random();
 
-        Optional<SquareWrapper<T>> fromCords = mapWrapper.getFromCords(new Cord(1, 1));
+        Optional<SquareWrapper<T>> fromCords = mapWrapper.getFromCords(Cord.get(1, 1));
 
         if (fromCords.isPresent()) {
             fromCords.get().setState(IState.ROOM);

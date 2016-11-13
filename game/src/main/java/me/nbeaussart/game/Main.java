@@ -82,7 +82,7 @@ public class Main {
 
         for (int x = 0; x < SIZEMAP; x++) {
             for (int y = 0; y < SIZEMAP; y++) {
-                new GameSquare(new Cord(x, y), gameMap);
+                new GameSquare(Cord.get(x, y), gameMap);
             }
         }
         new GameGenerator<GameSquare>(gameMap)

@@ -21,4 +21,15 @@ public final class RmdUtils {
         }
         return null;
     }
+    public static <T> T getRandom(Collection<T> collection){
+        int item = new Random().nextInt(collection.size());
+        int i = 0;
+        for(T obj : collection)
+        {
+            if (i == item)
+                return obj;
+            i = i + 1;
+        }
+        return null;
+    }
 }

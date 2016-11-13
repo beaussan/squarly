@@ -21,7 +21,7 @@ public class MainFour {
         gm.getMapData().clear();
         for (int y = 0; y < gm.sizeY(); y++) {
             for (int x = 0; x < gm.sizeX(); x++) {
-                gm.add(new GameSquare(COLOR_WALL, new Cord(x,y), gm));
+                gm.add(new GameSquare(COLOR_WALL, Cord.get(x,y), gm));
             }
         }
         System.out.println("Starging");

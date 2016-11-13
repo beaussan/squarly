@@ -20,10 +20,28 @@ public class ColorTest {
                 .hasGreen(39)
                 .hasBlue(57);
     }
+
     @Test
     public void testToString() throws Exception {
         assertThat(new Color(10,39,57).toString()).isEqualTo("Color{red=10, green=39, blue=57}");
     }
+
+    @Test
+    public void testGenerateFromAWT() throws Exception {
+        ColorAssert.assertThat(Color.from(new java.awt.Color(20,30,40)))
+                .hasRed(20)
+                .hasGreen(30)
+                .hasBlue(40);
+    }
+
+    @Test
+    public void testGeneratingAWT() throws Exception {
+
+        assertThat(new Color(20,30,40).getAwt()).matches(color -> color.getRed() == 20)
+                .matches(color -> color.getGreen() == 30)
+                .matches(color -> color.getBlue() == 40);
+    }
+
     @Test
     public void testToEquals() throws Exception {
         Color c1 = new Color(10,40,180);
@@ -40,6 +58,7 @@ public class ColorTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Red should be between 0 and 255");
     }
+
     @Test
     public void testExceptionRedUnder255() throws Exception {
         assertThatThrownBy(() ->  new Color(256, 0, 0) )
@@ -53,6 +72,7 @@ public class ColorTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Green should be between 0 and 255");
     }
+
     @Test
     public void testExceptionGreenUnder255() throws Exception {
         assertThatThrownBy(() ->  new Color( 0, 256, 0) )
@@ -66,6 +86,7 @@ public class ColorTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Blue should be between 0 and 255");
     }
+
     @Test
     public void testExceptionBlueUnder255() throws Exception {
         assertThatThrownBy(() ->  new Color(0, 0, 256) )

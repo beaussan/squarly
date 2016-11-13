@@ -68,9 +68,10 @@ public abstract class Entity {
         this.life = Math.max(life, 0);
         listeners.forEach(entityListener -> entityListener.entityLifeChanged(this));
         if(!isALive()){
-            System.out.println("You are dead !");
             listeners.forEach(entityListener -> entityListener.entityDeath(this));
-            gameSquare.setEntity(null);
+            if (gameSquare != null) {
+                gameSquare.setEntity(null);
+            }
         }
     }
 
@@ -109,6 +110,7 @@ public abstract class Entity {
                 .add("atk", atk)
                 .add("isAlive", isALive())
                 .add("gameSquare", gameSquare)
+                .add("squareContent", squareContent)
                 .toString();
     }
 

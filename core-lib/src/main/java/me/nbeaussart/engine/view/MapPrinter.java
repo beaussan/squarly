@@ -46,7 +46,7 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
         int xReal = x / gameMap.getHeightPixel();
         //int yReal = (y-gameMap.sizeY()-1)/gameMap.getHeightPixel();
         int yReal = gameMap.sizeY() - y / gameMap.getHeightPixel() - 1;
-        return gameMap.getFromCords(new Cord(xReal, yReal));
+        return gameMap.getFromCords(Cord.get(xReal, yReal));
         /*
         return gameMap.getMapData().stream().filter(square -> square.getCord().getX() == xReal)
                 .filter(square -> square.getCord().getY() == yReal)

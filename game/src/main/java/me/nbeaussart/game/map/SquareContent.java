@@ -15,8 +15,8 @@ public class SquareContent {
 
     public SquareContent(char charData, Color background, Color foreground) {
         this.charData = charData;
-        this.background = Preconditions.checkNotNull(background);
-        this.foreground = Preconditions.checkNotNull(foreground);
+        this.background = background;
+        this.foreground = foreground;
     }
 
     public char getCharData() {
@@ -30,6 +30,16 @@ public class SquareContent {
     public Color getForeground() {
         return foreground;
     }
+
+
+    public SquareContent getOverlaping(SquareContent over){
+        if (over == null){
+            return this;
+        }
+        return new SquareContent(over.charData, (over.background == null) ? background : over.background, (over.foreground == null) ? foreground : over.foreground);
+    }
+
+
 
     @Override
     public String toString() {
