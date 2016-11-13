@@ -5,6 +5,7 @@ import com.google.common.base.MoreObjects;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Very simple coordinate system for a 2d environment
@@ -13,10 +14,33 @@ import java.util.Objects;
  * @since 12/10/16
  */
 public class Cord {
+    private static class Pair{
+        private Pair(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+        int x;
+        int y;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pair pair = (Pair) o;
+            return x == pair.x &&
+                    y == pair.y;
+        }
+
+        @Override
+        public int hashCode() {
+            return com.google.common.base.Objects.hashCode(x, y);
+        }
+    }
+
     private final int x;
     private final int y;
 
-    private static final Map<Integer, Cord> cache = new HashMap<>();
+    private static final Map<Pair, Cord> cache = new ConcurrentHashMap<>();
 
     /**
      * Get a coordinate, if not cached, creating it
@@ -25,7 +49,7 @@ public class Cord {
      * @return the coordinate got
      */
     public static Cord get(int x, int y){
-        int hash = Objects.hash(x, y);
+        Pair hash = new Pair(x,y);
 
         if (!cache.containsKey(hash)) {
             Cord c = new Cord(x,y);

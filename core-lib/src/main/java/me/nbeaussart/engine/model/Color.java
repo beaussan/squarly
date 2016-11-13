@@ -33,6 +33,14 @@ public class Color {
         awt = new java.awt.Color(red, green, blue);
     }
 
+    public Color darker() {
+        return from(awt.darker());
+    }
+
+    public Color brighter() {
+        return from(awt.brighter());
+    }
+
     public int getRed() {
         return red;
     }

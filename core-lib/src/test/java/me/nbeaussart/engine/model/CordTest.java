@@ -40,6 +40,15 @@ public class CordTest {
     }
 
     @Test
+    public void testHashExtaned() throws Exception {
+        for (int x = -100; x < 100; x++) {
+            for (int y = -100; y < 100; y++) {
+                CordAssert.assertThat(Cord.get(x,y)).hasX(x).hasY(y);
+            }
+        }
+    }
+
+    @Test
     public void testAdd() throws Exception {
         CordAssert.assertThat(cord.add(5, 6))
                 .hasX(X+5)

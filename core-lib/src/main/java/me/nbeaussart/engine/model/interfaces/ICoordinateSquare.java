@@ -23,6 +23,8 @@ public interface ICoordinateSquare {
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
+
+    default boolean isOpaque() { return getState() == IState.WALL; }
     
     Cord getCord();
 

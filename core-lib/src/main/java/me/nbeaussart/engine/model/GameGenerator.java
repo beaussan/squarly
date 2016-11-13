@@ -89,6 +89,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
         usedGenerator.generate();
         log.debug("Generating done, lanching postProsessors");
         postProssesors.forEach(tConsumer -> tConsumer.accept(new ArrayList<T>(gameMap.getMapData().values())));
+        gameMap.setChanged(null);
         log.debug("My job is done.");
         return gameMap;
     }

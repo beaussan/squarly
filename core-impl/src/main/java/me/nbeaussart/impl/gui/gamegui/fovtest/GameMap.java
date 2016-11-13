@@ -1,57 +1,36 @@
-package me.nbeaussart.impl.gui.gamegui.colorbased;
+package me.nbeaussart.impl.gui.gamegui.fovtest;
 
 import me.nbeaussart.engine.model.Cord;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
  * @author Nicolas Beaussart
- * @since 20/10/16
+ * @since 13/11/16
  */
 public class GameMap implements IGameMap<GameSquare> {
 
-    private final int sizeX;
-    private final int sizeY;
-    private final int height;
-    private final int width;
-    private Map<Cord, GameSquare> mapData = new ConcurrentHashMap<>();
-    private List<Consumer<Optional<GameSquare>>> listUpdateHandlers = new ArrayList<>();
+    Map<Cord, GameSquare> data = new HashMap<>();
+    List<Consumer<Optional<GameSquare>>> updateHandlers = new ArrayList<>();
+    final int sizeX;
+    final int sizeY;
+    final private int height;
+    final private int width;
 
     public GameMap(int sizeX, int sizeY, int height, int width) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
+        for (int x = 0; x < sizeX; x++) {
+            for (int y = 0; y < sizeY; y++) {
+                add(new GameSquare(Cord.get(x,y), this));
+            }
+        }
         this.height = height;
         this.width = width;
     }
 
-    @Override
-    public Map<Cord, GameSquare> getMapData() {
-        return mapData;
-    }
-
-
-    @Override
-    public void setMapData(Map<Cord, GameSquare> data) {
-        this.mapData = data;
-    }
-
-    @Override
-    public List<Consumer<Optional<GameSquare>>> getUpdatesHandlers() {
-        return listUpdateHandlers;
-    }
-
-    @Override
-    public int sizeX() {
-        return sizeX;
-    }
-
-    @Override
-    public int sizeY() {
-        return sizeY;
-    }
 
     @Override
     public int getHeightPixel() {
@@ -63,5 +42,28 @@ public class GameMap implements IGameMap<GameSquare> {
         return width;
     }
 
+    @Override
+    public Map<Cord, GameSquare> getMapData() {
+        return data;
+    }
 
+    @Override
+    public void setMapData(Map<Cord, GameSquare> data) {
+        this.data = data;
+    }
+
+    @Override
+    public List<Consumer<Optional<GameSquare>>> getUpdatesHandlers() {
+        return updateHandlers;
+    }
+
+    @Override
+    public int sizeX() {
+        return sizeX;
+    }
+
+    @Override
+    public int sizeY() {
+        return sizeY;
+    }
 }
