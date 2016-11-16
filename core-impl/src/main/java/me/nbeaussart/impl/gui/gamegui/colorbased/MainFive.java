@@ -2,8 +2,7 @@ package me.nbeaussart.impl.gui.gamegui.colorbased;
 
 import me.nbeaussart.engine.model.Color;
 import me.nbeaussart.engine.model.Cord;
-import me.nbeaussart.engine.model.GameGenerator;
-import me.nbeaussart.engine.util.Bresenham;
+import me.nbeaussart.engine.util.MathUtil;
 import me.nbeaussart.engine.view.GameScreen;
 import me.nbeaussart.engine.view.GameSquareClicked;
 import me.nbeaussart.engine.view.MapPrinter;
@@ -37,7 +36,7 @@ public class MainFive {
         gm.setChanged(null);
         MapPrinter<GameSquare> mp = new MapPrinter<>(gm);
         GameScreen hello = createGameScreen("hello", mp);
-        Bresenham.BresenhamAlgorithm(Cord.get(20,20), Cord.get(40,28))
+        MathUtil.BresenhamAlgorithm(Cord.get(20,20), Cord.get(40,28))
                 .stream()
                 .map(gm::getFromCords)
                 .filter(Optional::isPresent)
@@ -48,7 +47,7 @@ public class MainFive {
             @Override
             public void mouseMoved(GameSquare square, MouseEvent e) {
                 gm.getMapData().values().forEach(gameSquare -> gameSquare.setColor(COLOR_WALL));
-                List<Cord> cordList = Bresenham.BresenhamAlgorithm(Cord.get(20, 20), square.getCord());
+                List<Cord> cordList = MathUtil.BresenhamAlgorithm(Cord.get(20, 20), square.getCord());
 
                 cordList
                         .stream()

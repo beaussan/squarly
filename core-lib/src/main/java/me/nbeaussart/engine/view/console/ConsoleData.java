@@ -45,6 +45,7 @@ public final class ConsoleData {
         capacity = minCapacity;
     }
 
+
     void init(int columns, int rows) {
         ensureCapacity(rows * columns);
         this.rows = rows;
@@ -53,6 +54,12 @@ public final class ConsoleData {
 
     /**
      * Sets a single character position
+     * @param column column to set from
+     * @param row raw to set from
+     * @param c the char to be set
+     * @param fg the foreground to be set
+     * @param bg the background to be set
+     * @param f the font to be set
      */
     public void setDataAt(int column, int row, char c, Color fg, Color bg,
                           Font f) {
@@ -63,26 +70,61 @@ public final class ConsoleData {
         font[pos] = f;
     }
 
+    /**
+     * Get the char data at the console
+     * @param column column to get from
+     * @param row raw to get from
+     * @return the char from
+     */
     public char getCharAt(int column, int row) {
         int offset = column + row * columns;
         return text[offset];
     }
 
+    /**
+     * Get the foreground at the console
+     * @param column column to get from
+     * @param row raw to get from
+     * @return the foreground from
+     */
     public Color getForegroundAt(int column, int row) {
         int offset = column + row * columns;
         return foreground[offset];
     }
 
+    /**
+     * Get the background at the console
+     * @param column column to get from
+     * @param row raw to get from
+     * @return the background from
+     */
     public Color getBackgroundAt(int column, int row) {
         int offset = column + row * columns;
         return background[offset];
     }
 
+    /**
+     * Get the font at the console
+     * @param column column to get from
+     * @param row raw to get from
+     * @return the font from
+     */
     public Font getFontAt(int column, int row) {
         int offset = column + row * columns;
         return font[offset];
     }
 
+    /**
+     * fill a area in the data
+     * @param c the char to be set
+     * @param fg the foreground to be set
+     * @param bg the background to be set
+     * @param f the font to be set
+     * @param column the column to start from
+     * @param row the row to start from
+     * @param width the width to set
+     * @param height the height to set
+     */
     public void fillArea(char c, Color fg, Color bg, Font f, int column,
                          int row, int width, int height) {
         for (int q = Math.max(0, row); q < Math.min(row + height, rows); q++) {

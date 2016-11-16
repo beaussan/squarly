@@ -200,6 +200,7 @@ public class JConsole extends JComponent implements HierarchyListener {
         setPreferredSize(new Dimension(columns * fontWidth, rows * fontHeight));
     }
 
+    @Deprecated
     public void resize(int columns, int rows) {
         throw new UnsupportedOperationException();
     }

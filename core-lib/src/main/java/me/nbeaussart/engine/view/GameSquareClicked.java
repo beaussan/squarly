@@ -5,6 +5,7 @@ import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import java.awt.event.MouseEvent;
 
 /**
+ * class for a square event to the gui, basically a wrapper for mouseClicked and mouseMoved listeners
  * @author Nicolas Beaussart
  * @since 21/10/16
  */

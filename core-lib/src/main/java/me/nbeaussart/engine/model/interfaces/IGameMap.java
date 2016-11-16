@@ -1,16 +1,11 @@
 package me.nbeaussart.engine.model.interfaces;
 
-import com.google.common.base.Preconditions;
 import me.nbeaussart.engine.model.Cord;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
-import static me.nbeaussart.engine.util.StreamUtils.distinctByKey;
 
 /**
  * @author Nicolas Beaussart

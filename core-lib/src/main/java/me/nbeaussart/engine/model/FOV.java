@@ -2,7 +2,7 @@ package me.nbeaussart.engine.model;
 
 import me.nbeaussart.engine.model.interfaces.ICoordinateSquare;
 import me.nbeaussart.engine.model.interfaces.IGameMap;
-import me.nbeaussart.engine.util.Bresenham;
+import me.nbeaussart.engine.util.MathUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,22 +23,22 @@ public class FOV<T extends ICoordinateSquare> {
         for (int x = 0; x < map.sizeX(); x++) {
             if (x == 0 || x == map.sizeX() -1){
                 for (int y = 0; y < map.sizeY(); y++) {
-                    rays.add(Bresenham.BresenhamAlgorithm(source, Cord.get(x,y)));
+                    rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(x,y)));
                 }
             } else {
-                rays.add(Bresenham.BresenhamAlgorithm(source, Cord.get(x,0)));
-                rays.add(Bresenham.BresenhamAlgorithm(source, Cord.get(x,map.sizeY()-1)));
+                rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(x,0)));
+                rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(x,map.sizeY()-1)));
             }
         }
         */
         for (int y = 0; y < map.sizeY(); y++) {
             if (y == 0 || y == map.sizeY() - 1 ){
                 for (int x = 0; x < map.sizeX(); x++) {
-                    rays.add(Bresenham.BresenhamAlgorithm(source, Cord.get(x,y)));
+                    rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(x,y)));
                 }
             } else {
-                rays.add(Bresenham.BresenhamAlgorithm(source, Cord.get(0,y)));
-                rays.add(Bresenham.BresenhamAlgorithm(source, Cord.get(map.sizeX()-1,y)));
+                rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(0,y)));
+                rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(map.sizeX()-1,y)));
             }
         }
 

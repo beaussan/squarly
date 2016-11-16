@@ -16,6 +16,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.*;
 
 /**
+ * A map writer for drawing a map with simple colored squares
  * @author Nicolas Beaussart
  * @since 20/10/16
  */
@@ -57,6 +58,10 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
         return findSquareAt((int) point.getX(), (int)point.getY());
     }
 
+    /**
+     * Adding a game clicked event to the map printer
+     * @param gameSquareClicked the event listener to be added
+     */
     public void addGameClicked(GameSquareClicked<T> gameSquareClicked) {
         this.addMouseListener(new MouseListener() {
             @Override

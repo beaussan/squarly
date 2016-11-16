@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
+ * Frame for swing utilities class
+ *
  * @author Nicolas Beaussart
  * @since 01/11/16
  */
