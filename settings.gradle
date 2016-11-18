@@ -1,4 +1,4 @@
 rootProject.name = 'squarly'
-include 'squarly-core', 'example'
+include 'squarly-core', 'examples'
 include 'game'
 

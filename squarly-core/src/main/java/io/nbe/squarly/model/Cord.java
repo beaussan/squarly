@@ -50,12 +50,14 @@ public class Cord {
     public static Cord get(int x, int y){
         Pair hash = new Pair(x,y);
 
+        return cache.computeIfAbsent(hash, pair -> new Cord(pair.x, pair.y));
+        /*
         if (!cache.containsKey(hash)) {
             Cord c = new Cord(x,y);
             cache.put(hash, c);
             return c;
         }
-        return cache.get(hash);
+        return cache.get(hash);*/
     }
 
     private Cord(int x, int y) {

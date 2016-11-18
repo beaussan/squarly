@@ -41,11 +41,19 @@ public class CordTest {
 
     @Test
     public void testHashExtaned() throws Exception {
-        for (int x = -100; x < 100; x++) {
-            for (int y = -100; y < 100; y++) {
-                CordAssert.assertThat(Cord.get(x,y)).hasX(x).hasY(y);
+        final int BORN = 100;
+        for (int x = -BORN; x < BORN; x++) {
+            for (int y = -BORN; y < BORN; y++) {
+                int finalX = x;
+                int finalY = y;
+                CordAssert.assertThat(Cord.get(x,y))
+                        .hasX(x)
+                        .hasY(y)
+                        .matches(cord1 -> cord1 == Cord.get(finalX, finalY));
             }
         }
+
+
     }
 
     @Test

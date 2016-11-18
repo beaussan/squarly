@@ -1,9 +1,9 @@
 package io.nbe.squarly.model;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.allOf;
-import static org.assertj.core.api.Assertions.assertThat;
+import static io.nbe.squarly.model.ColorAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertTrue;
 
@@ -13,23 +13,86 @@ import static org.junit.Assert.assertTrue;
  */
 public class ColorTest {
 
-
     @Test
     public void testConstructor() throws Exception {
-        ColorAssert.assertThat(new Color(10,39,57))
+        assertThat(new Color(10,39,57))
                 .hasRed(10)
                 .hasGreen(39)
                 .hasBlue(57);
     }
 
     @Test
+    public void testBrighter() throws Exception {
+        assertThat(new Color(100,100,100).brighter())
+                .hasRed(142)
+                .hasGreen(142)
+                .hasBlue(142);
+    }
+
+
+    @Test
+    public void testBrighterOnlyOne() throws Exception {
+        final int startnumber = 100;
+        final int endingNumber = (int) (startnumber/Color.FACTOR);
+        testBatchEdit(startnumber, endingNumber);
+    }
+
+    private void testBatchEdit(int startnumber, int endingNumber){
+        assertThat(new Color(0,0,startnumber).brighter())
+                .hasRed(0)
+                .hasGreen(0)
+                .hasBlue(endingNumber);
+        assertThat(new Color(0,startnumber,0).brighter())
+                .hasRed(0)
+                .hasGreen(endingNumber)
+                .hasBlue(0);
+        assertThat(new Color(startnumber,0,0).brighter())
+                .hasRed(endingNumber)
+                .hasGreen(0)
+                .hasBlue(0);
+        assertThat(new Color(startnumber,0,startnumber).brighter())
+                .hasRed(endingNumber)
+                .hasGreen(0)
+                .hasBlue(endingNumber);
+        assertThat(new Color(startnumber,startnumber,0).brighter())
+                .hasRed(endingNumber)
+                .hasGreen(endingNumber)
+                .hasBlue(0);
+        assertThat(new Color(0,startnumber,startnumber).brighter())
+                .hasRed(0)
+                .hasGreen(endingNumber)
+                .hasBlue(endingNumber);
+        assertThat(new Color(startnumber,startnumber,startnumber).brighter())
+                .hasRed(endingNumber)
+                .hasGreen(endingNumber)
+                .hasBlue(endingNumber);
+    }
+
+
+    @Test
+    public void testBrighterDark() throws Exception {
+        int fact = (int) (1.0/(1.0-Color.FACTOR));
+        assertThat(new Color(0,0,0).brighter())
+                .hasBlue(fact)
+                .hasGreen(fact)
+                .hasRed(fact);
+    }
+
+
+    @Test
+    public void testDarker() throws Exception {
+        int startColor = 100;
+        testBatchEdit(startColor, (int) (startColor/Color.FACTOR));
+    }
+
+    @Test
     public void testToString() throws Exception {
-        assertThat(new Color(10,39,57).toString()).isEqualTo("Color{red=10, green=39, blue=57}");
+        Assertions.assertThat(new Color(10,39,57).toString()).isEqualTo("Color{red=10, green=39, blue=57}");
     }
 
     @Test
     public void testGenerateFromAWT() throws Exception {
-        ColorAssert.assertThat(Color.from(new java.awt.Color(20,30,40)))
+        assertThat(new Color(new java.awt.Color(20,30,40)))
                 .hasRed(20)
                 .hasGreen(30)
                 .hasBlue(40);
@@ -38,7 +101,7 @@ public class ColorTest {
     @Test
     public void testGeneratingAWT() throws Exception {
 
-        assertThat(new Color(20,30,40).getAwt()).matches(color -> color.getRed() == 20)
+        Assertions.assertThat(new Color(20,30,40).getAwt()).matches(color -> color.getRed() == 20)
                 .matches(color -> color.getGreen() == 30)
                 .matches(color -> color.getBlue() == 40);
     }
@@ -47,7 +110,7 @@ public class ColorTest {
     public void testToEquals() throws Exception {
         Color c1 = new Color(10,40,180);
         Color c2 = new Color(10,40,180);
-        ColorAssert.assertThat(c1).isEqualTo(c2);
+        assertThat(c1).isEqualTo(c2);
         assertTrue(c1.equals(c2) && c2.equals(c1));
         assertTrue(c1.hashCode() == c2.hashCode());
 

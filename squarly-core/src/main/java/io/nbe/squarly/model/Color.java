@@ -5,6 +5,7 @@ import com.google.common.base.MoreObjects;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Color class, basic rgb color system
@@ -18,8 +19,20 @@ public class Color {
     private final int blue;
     private final java.awt.Color awt;
 
+    public static final double FACTOR = 0.7;
+
+    @Deprecated
     public static Color from(java.awt.Color awt){
-        return new Color(awt.getRed(), awt.getGreen(), awt.getBlue());
+        return new Color(awt);
+    }
+
+
+
+    public Color(java.awt.Color awt){
+        this.red = checkNotNull(awt).getRed();
+        this.green = awt.getGreen();
+        this.blue = awt.getBlue();
+        this.awt = awt;
     }
 
     public Color(int red, int green, int blue) {
@@ -34,11 +47,32 @@ public class Color {
     }
 
     public Color darker() {
-        return from(awt.darker());
+        return new Color(Math.max((int)(getRed()  *FACTOR), 0),
+                Math.max((int)(getGreen()*FACTOR), 0),
+                Math.max((int)(getBlue() *FACTOR), 0));
     }
 
     public Color brighter() {
-        return from(awt.brighter());
+        int r = getRed();
+        int g = getGreen();
+        int b = getBlue();
+
+        /*
+         * 1. black.brighter() should return grey
+         * 2. applying brighter to blue will always return blue, brighter
+         * 3. non pure color (non zero rgb) will eventually return white
+         */
+        int i = (int)(1.0/(1.0-FACTOR));
+        if ( r == 0 && g == 0 && b == 0) {
+            return new Color(i, i, i);
+        }
+        if ( r > 0 && r < i ) r = i;
+        if ( g > 0 && g < i ) g = i;
+        if ( b > 0 && b < i ) b = i;
+
+        return new Color(Math.min((int)(r/FACTOR), 255),
+                Math.min((int)(g/FACTOR), 255),
+                Math.min((int)(b/FACTOR), 255));
     }
 
     public int getRed() {
