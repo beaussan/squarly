@@ -142,8 +142,8 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
-core-lib/src/test/java-gen
-game/src/test/java-gen
+
+java-gen/
 
 classes
 
