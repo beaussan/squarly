@@ -1,0 +1,18 @@
+<configuration scan="true">
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- comment this when final output
+    <logger name="iut.k2" level="DEBUG"/>
+    <logger name="iut.k2" level="TRACE"/>-->
+    <logger name="me.nbeaussart.engine" level="ALL"/>
+
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

@@ -1,5 +1,4 @@
-version 'SNAPSHOT-0'
-apply plugin: 'application'
+// use assertj generator from gradle example
 
 def assertjOutput = file('src/test/java-gen')
 
@@ -7,18 +6,19 @@ configurations {
     assertj
 }
 
-mainClassName = "io.nbe.game.Main"
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
 
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    compile project(':squarly-core')
+    // https://mvnrepository.com/artifact/es.usc.citius.hipster/hipster-all
+    compile group: 'es.usc.citius.hipster', name: 'hipster-all', version: '1.0.1'
+
+
+    // The production code uses the SLF4J logging API at compile time
+    compile 'org.slf4j:slf4j-api:1.7.12',
+            'ch.qos.logback:logback-classic:1.0.9'
+
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 
@@ -26,7 +26,8 @@ dependencies {
     testCompile group: 'org.assertj', name: 'assertj-guava', version: '3.0.0'
 
     assertj 'org.assertj:assertj-assertions-generator:2.0.0'
-    assertj project(':game')
+    assertj project(':squarly-core')
+
 }
 
 sourceSets {
@@ -57,8 +58,10 @@ task assertjGen(dependsOn: assertjClean, type: JavaExec) {
     classpath = files(configurations.assertj)
     workingDir = assertjOutput
     args = [
-            'me.nbeaussart.game'
+            //'-H',
+            'io.nbe.squarly.model'
     ]
 }
 
 compileTestJava.dependsOn(assertjGen)
+
