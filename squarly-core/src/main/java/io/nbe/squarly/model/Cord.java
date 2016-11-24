@@ -1,7 +1,7 @@
 package io.nbe.squarly.model;
 
 import com.google.common.base.MoreObjects;
-import javafx.util.Pair;
+import io.nbe.squarly.util.Pair;
 
 import java.util.Map;
 import java.util.Objects;
