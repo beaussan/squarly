@@ -1,7 +1,7 @@
 version: '2'
 services:
     testjh-sonar:
-        container_name: testjh-sonar
+        container_name: squarly-sonar
         image: sonarqube:6.1-alpine
         ports:
             - 9000:9000
