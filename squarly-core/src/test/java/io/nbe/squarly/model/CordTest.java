@@ -120,4 +120,9 @@ public class CordTest {
         Assert.assertTrue(c1.hashCode() == c2.hashCode());
     }
 
+    @Test
+    public void testNotEquals() throws Exception {
+        Assert.assertFalse(cord.equals(Cord.get(X+1, Y-1)));
+    }
+
 }

@@ -1,6 +1,7 @@
 package io.nbe.squarly.model;
 
 import com.google.common.base.MoreObjects;
+import javafx.util.Pair;
 
 import java.util.Map;
 import java.util.Objects;
@@ -13,33 +14,21 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 12/10/16
  */
 public class Cord {
-    private static class Pair{
-        private Pair(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-        int x;
-        int y;
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Pair pair = (Pair) o;
-            return x == pair.x &&
-                    y == pair.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return com.google.common.base.Objects.hashCode(x, y);
-        }
-    }
 
     private final int x;
     private final int y;
 
-    private static final Map<Pair, Cord> cache = new ConcurrentHashMap<>();
+    private static final Map<Pair<Integer, Integer>, Cord> cache = new ConcurrentHashMap<>();
+
+    /**
+     * Create a Cord from x y
+     * @param x the x Cord
+     * @param y the y Cord
+     */
+    private Cord(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     /**
      * Get a coordinate, if not cached, creating it
@@ -48,23 +37,9 @@ public class Cord {
      * @return the coordinate got
      */
     public static Cord get(int x, int y){
-        Pair hash = new Pair(x,y);
-
-        return cache.computeIfAbsent(hash, pair -> new Cord(pair.x, pair.y));
-        /*
-        if (!cache.containsKey(hash)) {
-            Cord c = new Cord(x,y);
-            cache.put(hash, c);
-            return c;
-        }
-        return cache.get(hash);*/
+        Pair<Integer, Integer> hash = new Pair<>(x,y);
+        return cache.computeIfAbsent(hash, pair -> new Cord(pair.getKey(), pair.getValue()));
     }
-
-    private Cord(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
 
     public int getX() {
         return x;
@@ -134,11 +109,7 @@ public class Cord {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Cord cord = (Cord) o;
-        return x == cord.x &&
-                y == cord.y;
+        return this == o;
     }
 
     @Override

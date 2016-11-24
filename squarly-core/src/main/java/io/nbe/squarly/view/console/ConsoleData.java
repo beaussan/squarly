@@ -1,6 +1,7 @@
 package io.nbe.squarly.view.console;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Class used for storing console data
@@ -8,7 +9,7 @@ import java.awt.*;
  * @since 01/11/16
  */
 
-public final class ConsoleData {
+public final class ConsoleData implements Serializable {
     private int capacity = 0;
     public int rows;
     public int columns;

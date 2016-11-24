@@ -26,16 +26,17 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class GameGenerator<T extends ICoordinateSquare> {
 
-    private final static Color COLOR_WALL=new Color(0,0,0);
-    private final static Color COLOR_ROOM=new Color(255,255,255);
-    private final static Color COLOR_DOOR=new Color(255,0,0);
-    private final static long PAUSE_DURATION = 5;
+    private static final Color COLOR_WALL=new Color(0,0,0);
+    private static final Color COLOR_ROOM=new Color(255,255,255);
+    private static final Color COLOR_DOOR=new Color(255,0,0);
+    private static final Color COLOR_DEFAULT = new Color(140, 140, 140);
+    private static final long PAUSE_DURATION = 5;
     private static final Logger log = LoggerFactory.getLogger(GameGenerator.class);
 
     private final IGameMap<T> gameMap;
     private final boolean isShowing;
     private AbsGenerator<T> usedGenerator;
-    //private List<Consumer<List<T>>> postProssesors = new ArrayList<>();
+
     private LinkedList<Consumer<List<T>>> postProssesors = new LinkedList<>();
 
     public GameGenerator(IGameMap<T> gameMap) {
@@ -68,19 +69,19 @@ public class GameGenerator<T extends ICoordinateSquare> {
     }
 
     public GameGenerator<T> useMazeGenerator(){
-        usedGenerator = new MazeGenerator<T>(this);
+        usedGenerator = new MazeGenerator<>(this);
         log.debug("Usinging mazeGenerator");
         return this;
     }
 
     public GameGenerator<T> useMazeGeneratorClean(){
-        usedGenerator = new MazeGeneratorClean<T>(this);
+        usedGenerator = new MazeGeneratorClean<>(this);
         log.debug("Using MazeGeneratorClean");
         return this;
     }
 
     public GameGenerator<T> useDungeonGenerator(){
-        usedGenerator = new DungeonGenerator<T>(this);
+        usedGenerator = new DungeonGenerator<>(this);
         log.debug("Using DungeonGenerator");
         return this;
     }
@@ -91,7 +92,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
         log.debug("Generating done, lanching postProsessors");
 
         while (! postProssesors.isEmpty())
-            postProssesors.remove().accept(new ArrayList<T>(gameMap.getMapData().values()));
+            postProssesors.remove().accept(new ArrayList<>(gameMap.getMapData().values()));
         gameMap.setChanged(null);
         log.debug("My job is done.");
         return gameMap;
@@ -134,7 +135,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
     }
 
     private class GameMapWrapper implements IGameMap<ColorWrapper>{
-        public Map<Cord, ColorWrapper> wrapper = new HashMap<>();
+        private Map<Cord, ColorWrapper> wrapper = new HashMap<>();
         private  List<Consumer<Optional<ColorWrapper>>> data = new ArrayList<>();
 
         @Override
@@ -184,10 +185,10 @@ public class GameGenerator<T extends ICoordinateSquare> {
                     if (t2.getCord().equals(getCord())){
                         setUpdated();
                         try {
-                            //System.out.println("Sleeping");
                             Thread.sleep(PAUSE_DURATION);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            log.warn("Error was thrown when sleeping for pause {}", e);
+                            Thread.currentThread().interrupt();
                         }
                     }
                 });
@@ -203,8 +204,9 @@ public class GameGenerator<T extends ICoordinateSquare> {
                     return COLOR_ROOM;
                 case WALL:
                     return COLOR_WALL;
+                default:
+                    return COLOR_DEFAULT;
             }
-            return null;
         }
 
         @Override
@@ -229,7 +231,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
 
         @Override
         public void setState(IState state) {
-
+            t.setState(state);
         }
     }
 }

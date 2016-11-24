@@ -20,13 +20,11 @@ import static com.google.common.base.Preconditions.*;
  * @since 20/10/16
  */
 public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JPanel {
-    private IGameMap<T> gameMap;
+    private transient IGameMap<T> gameMap;
 
     public MapPrinter(IGameMap<T> gameMap) {
         this.gameMap = checkNotNull(gameMap, "Game map should not be null.");
-        gameMap.addUpdatesHandlers(t -> {
-            repaint();
-        });
+        gameMap.addUpdatesHandlers(t -> repaint());
         setPreferredSize(new Dimension(getSizeWidth(), getSizeHeight()));
 
 
@@ -44,13 +42,8 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
 
     private Optional<T> findSquareAt(int x, int y) {
         int xReal = x / gameMap.getHeightPixel();
-        //int yReal = (y-gameMap.sizeY()-1)/gameMap.getHeightPixel();
         int yReal = gameMap.sizeY() - y / gameMap.getHeightPixel() - 1;
         return gameMap.getFromCords(Cord.get(xReal, yReal));
-        /*
-        return gameMap.getMapData().stream().filter(square -> square.getCord().getX() == xReal)
-                .filter(square -> square.getCord().getY() == yReal)
-                .findFirst();*/
     }
 
     private Optional<T> findSquareAt(Point point) {

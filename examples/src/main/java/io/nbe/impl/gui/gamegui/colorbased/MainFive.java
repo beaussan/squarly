@@ -36,7 +36,7 @@ public class MainFive {
         gm.setChanged(null);
         MapPrinter<GameSquare> mp = new MapPrinter<>(gm);
         GameScreen hello = GameScreen.createGameScreen("hello", mp);
-        MathUtil.BresenhamAlgorithm(Cord.get(20,20), Cord.get(40,28))
+        MathUtil.bresenhamAlgorithm(Cord.get(20,20), Cord.get(40,28))
                 .stream()
                 .map(gm::getFromCords)
                 .filter(Optional::isPresent)
@@ -47,7 +47,7 @@ public class MainFive {
             @Override
             public void mouseMoved(GameSquare square, MouseEvent e) {
                 gm.getMapData().values().forEach(gameSquare -> gameSquare.setColor(COLOR_WALL));
-                List<Cord> cordList = MathUtil.BresenhamAlgorithm(Cord.get(20, 20), square.getCord());
+                List<Cord> cordList = MathUtil.bresenhamAlgorithm(Cord.get(20, 20), square.getCord());
 
                 cordList
                         .stream()

@@ -22,31 +22,31 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
     private static final Logger log = LoggerFactory.getLogger(DungeonGenerator.class);
 
     private GameMapWrapper<T> gameMap;
-    private final int NMB_ROOM_TRY;
-    private final int ROOM_SIZE_MIN;
-    private final int ROOM_ADDING_RMD_BOUND;
+    private final int nmbRoomTry;
+    private final int roomSizeMin;
+    private final int roomAddingRmdBound;
     private List<Room<T>> lsRooms = new ArrayList<>();
 
 
 
     public DungeonGenerator(GameGenerator<T> gameGenerator) {
         super(gameGenerator);
-        NMB_ROOM_TRY = 100;
-        ROOM_SIZE_MIN = 5;
-        ROOM_ADDING_RMD_BOUND = 3;
+        nmbRoomTry = 100;
+        roomSizeMin = 5;
+        roomAddingRmdBound = 3;
     }
     public DungeonGenerator() {
         super();
-        NMB_ROOM_TRY = 100;
-        ROOM_SIZE_MIN = 5;
-        ROOM_ADDING_RMD_BOUND = 3;
+        nmbRoomTry = 100;
+        roomSizeMin = 5;
+        roomAddingRmdBound = 3;
     }
 
     public DungeonGenerator(int nmbRoomTry, int roomSizeMin, int roomAddingRmdBound) {
         super();
-        NMB_ROOM_TRY = nmbRoomTry;
-        ROOM_SIZE_MIN = roomSizeMin;
-        ROOM_ADDING_RMD_BOUND = roomAddingRmdBound;
+        this.nmbRoomTry = nmbRoomTry;
+        this.roomSizeMin = roomSizeMin;
+        this.roomAddingRmdBound = roomAddingRmdBound;
     }
 
     @Override
@@ -151,11 +151,11 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
 
 
     private void generateRooms(){
-        log.trace("Generating rooms, trying {} times", NMB_ROOM_TRY);
+        log.trace("Generating rooms, trying {} times", nmbRoomTry);
         int nmbRoomTry = 0;
         Room<T> room;
         boolean isGood = true;
-        while (nmbRoomTry < NMB_ROOM_TRY){
+        while (nmbRoomTry < this.nmbRoomTry){
             nmbRoomTry++;
             SquareWrapper<T> tmp;
             tmp = RmdUtils.getRandom(gameMap.getDataMapped().values(), r);
@@ -165,8 +165,8 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
 
             room = new Room<T>(
                     tmp.getCord(),
-                    ROOM_SIZE_MIN+ (r.nextInt(ROOM_ADDING_RMD_BOUND)*2),
-                    ROOM_SIZE_MIN + (r.nextInt(ROOM_ADDING_RMD_BOUND)*2),
+                    roomSizeMin + (r.nextInt(roomAddingRmdBound)*2),
+                    roomSizeMin + (r.nextInt(roomAddingRmdBound)*2),
                     gameMap);
 
             if (!room.canBePlaced()){

@@ -23,22 +23,22 @@ public class FOV<T extends ICoordinateSquare> {
         for (int x = 0; x < map.sizeX(); x++) {
             if (x == 0 || x == map.sizeX() -1){
                 for (int y = 0; y < map.sizeY(); y++) {
-                    rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(x,y)));
+                    rays.add(MathUtil.bresenhamAlgorithm(source, Cord.get(x,y)));
                 }
             } else {
-                rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(x,0)));
-                rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(x,map.sizeY()-1)));
+                rays.add(MathUtil.bresenhamAlgorithm(source, Cord.get(x,0)));
+                rays.add(MathUtil.bresenhamAlgorithm(source, Cord.get(x,map.sizeY()-1)));
             }
         }
         */
         for (int y = 0; y < map.sizeY(); y++) {
             if (y == 0 || y == map.sizeY() - 1 ){
                 for (int x = 0; x < map.sizeX(); x++) {
-                    rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(x,y)));
+                    rays.add(MathUtil.bresenhamAlgorithm(source, Cord.get(x,y)));
                 }
             } else {
-                rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(0,y)));
-                rays.add(MathUtil.BresenhamAlgorithm(source, Cord.get(map.sizeX()-1,y)));
+                rays.add(MathUtil.bresenhamAlgorithm(source, Cord.get(0,y)));
+                rays.add(MathUtil.bresenhamAlgorithm(source, Cord.get(map.sizeX()-1,y)));
             }
         }
 

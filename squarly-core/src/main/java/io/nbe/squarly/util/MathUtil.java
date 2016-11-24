@@ -14,8 +14,10 @@ import java.util.List;
  * @since 13/11/16
  */
 
-public class MathUtil {
+public final class MathUtil {
     private static final Logger log = LoggerFactory.getLogger(MathUtil.class);
+
+    private MathUtil(){}
 
     /**
      * return the absolute integer
@@ -33,8 +35,8 @@ public class MathUtil {
      * @param c2 the destination coordinate
      * @return a list of coordinates from c1 to c2
      */
-    public static List<Cord> BresenhamAlgorithm(Cord c1, Cord c2) {
-        log.debug("Called BresenhamAlgorithm for {} {}", c1, c2);
+    public static List<Cord> bresenhamAlgorithm(Cord c1, Cord c2) {
+        log.debug("Called bresenhamAlgorithm for {} {}", c1, c2);
 
         // MULTIPLE OCTANTS -- ACTIVE CODE
         // MathUtil algorithm for all 8 octants.
@@ -44,14 +46,14 @@ public class MathUtil {
 	   about the error = .5 case mentioned in Damian's e-mail. */
 
         // If slope is outside the range [-1,1], swap x and y
-        boolean xy_swap = false;
+        boolean xySwap = false;
         int x1 = c1.getX();
         int y1 = c1.getY();
         int x2 = c2.getX();
         int y2 = c2.getY();
         List<Cord> retVal = new LinkedList<>();
         if (abs(y2 - y1) > abs(x2 - x1)) {
-            xy_swap = true;
+            xySwap = true;
             int temp = x1;
             x1 = y1;
             y1 = temp;
@@ -70,44 +72,46 @@ public class MathUtil {
             y2 = temp;
         }
 
-        int x,                       // Current x position
-                y = y1,                  // Current y position
-                e = 0,                   // Current error
-                m_num = y2 - y1,         // Numerator of slope
-                m_denom = x2 - x1,       // Denominator of slope
-                threshold  = m_denom/2;  // Threshold between E and NE increment
+        int x;  // Threshold between E and NE increment
+        int y = y1; // Current y position
+        int e = 0;  // Current error
+        int mNum = y2 - y1; // Numerator of slope
+        int mDenom = x2 - x1; // Denominator of slope
+        int threshold  = mDenom/2; // Threshold between E and NE increment
 
         for (x = x1; x < x2; x++) {
-            if (xy_swap)
-                retVal.add(Cord.get(y,x));
-            else
-            retVal.add(Cord.get(x,y));
+            if (xySwap) {
+                retVal.add(Cord.get(y, x));
+            } else {
+                retVal.add(Cord.get(x, y));
+            }
 
-            e += m_num;
+            e += mNum;
 
             // Deal separately with lines sloping upward and those
             // sloping downward
-            if (m_num < 0) {
+            if (mNum < 0) {
                 if (e < -threshold) {
-                    e += m_denom;
+                    e += mDenom;
                     y--;
                 }
             }
             else if (e > threshold) {
-                e -= m_denom;
+                e -= mDenom;
                 y++;
             }
         }
 
-        if (xy_swap)
-            retVal.add(Cord.get(y,x));
-        else
-            retVal.add(Cord.get(x,y));
+        if (xySwap) {
+            retVal.add(Cord.get(y, x));
+        } else {
+            retVal.add(Cord.get(x, y));
+        }
 
         if (!retVal.get(0).equals(c1)){
             Collections.reverse(retVal);
         }
-        log.trace("Called BresenhamAlgorithm for {} {}, returning i0={} and ilast={}", c1, c2, retVal.get(0), retVal.get(retVal.size()-1));
+        log.trace("Called bresenhamAlgorithm for {} {}, returning i0={} and ilast={}", c1, c2, retVal.get(0), retVal.get(retVal.size()-1));
 
         return retVal;
     }

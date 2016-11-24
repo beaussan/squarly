@@ -26,6 +26,11 @@ public enum Direction {
     }
 
 
+    /**
+     * Adding a direction to this one, get the coordinate done
+     * @param direction the direction to add
+     * @return the coordinate got
+     */
     public Cord add(Direction direction){
         return cords.add(direction);
     }

@@ -296,9 +296,9 @@ public class JConsole extends JComponent implements HierarchyListener {
 
     public void setCursorPos(int column, int row) {
         if ((column < 0) || (column >= data.columns))
-            throw new Error("Invalid X cursor position: " + column);
+            throw new IllegalArgumentException("Invalid X cursor position: " + column);
         if ((row < 0) || (row >= data.rows))
-            throw new Error("Invalid Y cursor position: " + row);
+            throw new IllegalArgumentException("Invalid Y cursor position: " + row);
         cursorX = column;
         cursorY = row;
     }

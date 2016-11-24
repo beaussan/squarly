@@ -1,3 +1,24 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1"
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
+        classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
+        classpath "com.moowork.gradle:gradle-node-plugin:0.13"
+        classpath "com.moowork.gradle:gradle-gulp-plugin:0.13"
+        classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
+        //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
+    }
+}
+
+
 // use assertj generator from gradle example
 
 def assertjOutput = file('src/test/java-gen')
@@ -5,6 +26,20 @@ def assertjOutput = file('src/test/java-gen')
 configurations {
     assertj
 }
+
+apply plugin: "org.sonarqube"
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = '0.7.6.201602180812'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
 
 dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
