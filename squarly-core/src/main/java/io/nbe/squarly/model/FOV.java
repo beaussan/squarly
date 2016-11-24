@@ -7,30 +7,30 @@ import io.nbe.squarly.model.interfaces.IGameMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 /**
+ * Class for generating a FOV
+ * @param <T> The square of the map
+
  * @author Nicolas Beaussart
  * @since 13/11/16
  */
 public class FOV<T extends ICoordinateSquare> {
 
 
+    /**
+     * Generate a FOV according to the map
+     * @param source the cooridnate source of the item
+     * @param map the map to look at
+     * @return the list objects it can look
+     */
     public List<T> generateFOV(Cord source, IGameMap<T> map) {
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
         map.getFromCords(source).ifPresent(list::add);
         List<List<Cord>> rays = new ArrayList<>();
-/*
-        for (int x = 0; x < map.sizeX(); x++) {
-            if (x == 0 || x == map.sizeX() -1){
-                for (int y = 0; y < map.sizeY(); y++) {
-                    rays.add(MathUtil.bresenhamAlgorithm(source, Cord.get(x,y)));
-                }
-            } else {
-                rays.add(MathUtil.bresenhamAlgorithm(source, Cord.get(x,0)));
-                rays.add(MathUtil.bresenhamAlgorithm(source, Cord.get(x,map.sizeY()-1)));
-            }
-        }
-        */
+
         for (int y = 0; y < map.sizeY(); y++) {
             if (y == 0 || y == map.sizeY() - 1 ){
                 for (int x = 0; x < map.sizeX(); x++) {
@@ -43,22 +43,31 @@ public class FOV<T extends ICoordinateSquare> {
         }
 
         for (List<Cord> ray : rays) {
-            for (Cord cord : ray) {
-                Optional<T> fromCords = map.getFromCords(cord);
-                if (fromCords.isPresent()){
-                    T t = fromCords.get();
-                    if (t.isOpaque()){
-                        break;
-                    } else {
-                        list.add(t);
-                    }
-                } else {
-                    break;
-                }
-            }
+            handleSingleRay(map, list, ray);
         }
 
 
-        return list;
+        return list.stream().distinct().collect(Collectors.toList());
+    }
+
+    private void handleSingleRay(IGameMap<T> map, List<T> list, List<Cord> ray) {
+        boolean foundBlocking = false;
+
+        for (Cord cord : ray) {
+            if (foundBlocking){
+                break;
+            }
+            Optional<T> fromCords = map.getFromCords(cord);
+            if (fromCords.isPresent()){
+                T t = fromCords.get();
+                if (t.isOpaque()){
+                    foundBlocking = true;
+                } else {
+                    list.add(t);
+                }
+            } else {
+                foundBlocking = true;
+            }
+        }
     }
 }

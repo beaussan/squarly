@@ -27,16 +27,18 @@ public interface IGameMap<T extends ICoordinateSquare> {
     }
 
     default void removeOutOfBounds() {
-        List<Cord> toBeRemoved = new ArrayList<>();
-        getMapData().forEach((cord, t) -> {
-            if (cord.getX() < 0 ||
-                    cord.getY() < 0 ||
-                    sizeX() <= cord.getX() ||
-                    sizeY() <= cord.getY()){
-                toBeRemoved.add(cord);
-            }
-        });
-        toBeRemoved.forEach(cord -> getMapData().remove(cord));
+        if (getMapData() != null){
+            List<Cord> toBeRemoved = new ArrayList<>();
+            getMapData().forEach((cord, t) -> {
+                if (cord.getX() < 0 ||
+                        cord.getY() < 0 ||
+                        sizeX() <= cord.getX() ||
+                        sizeY() <= cord.getY()){
+                    toBeRemoved.add(cord);
+                }
+            });
+            toBeRemoved.forEach(cord -> getMapData().remove(cord));
+        }
     }
 
     List<Consumer<Optional<T>>> getUpdatesHandlers();

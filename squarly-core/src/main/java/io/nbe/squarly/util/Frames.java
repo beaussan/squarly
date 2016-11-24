@@ -11,19 +11,19 @@ import java.util.HashMap;
  */
 public class Frames {
 
-    private static final HashMap<String,JFrame> frames= new HashMap<>();
+    private static final HashMap<String,JFrame> currentFrames = new HashMap<>();
 
     /**
      * Create a frame or get an existing frame with the specified title
-     * @param title
-     * @return
+     * @param title the title of the frame
+     * @return the frame created
      */
     public static JFrame createFrame(String title) {
-        JFrame f=frames.get(title);
+        JFrame f= currentFrames.get(title);
 
         if (f==null) {
             f=new JFrame(title);
-            frames.put(title,f);
+            currentFrames.put(title,f);
 
             f.setVisible(true);
             f.pack();

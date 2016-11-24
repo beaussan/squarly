@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static io.nbe.squarly.model.ColorAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.filter;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -23,15 +24,55 @@ public class ColorTest {
 
     @Test
     public void testBrighter() throws Exception {
-        assertThat(new Color(100,100,100).brighter())
-                .hasRed(142)
-                .hasGreen(142)
-                .hasBlue(142);
+        final int i = (int) (1.0 / (1.0 - Color.FACTOR));
+        final int res = Math.min((int)(i/Color.FACTOR), 255);
+        final int startnumber = 100;
+        final int endingNumber = (int) (startnumber/Color.FACTOR);
+
+        assertThat(new Color(i,startnumber,startnumber).brighter())
+                .hasRed(res)
+                .hasGreen(endingNumber)
+                .hasBlue(endingNumber);
+        assertThat(new Color(startnumber,i,startnumber).brighter())
+                .hasRed(endingNumber)
+                .hasGreen(res)
+                .hasBlue(endingNumber);
+        assertThat(new Color(startnumber,startnumber,i).brighter())
+                .hasRed(endingNumber)
+                .hasGreen(endingNumber)
+                .hasBlue(res);
+    }
+    @Test
+    public void testBrighter2() throws Exception {
+        final int i = (int) (1.0 / (1.0 - Color.FACTOR))-1;
+        final int res = Math.min((int)((1.0 / (1.0 - Color.FACTOR)/Color.FACTOR)), 255);
+        final int startnumber = 100;
+        final int endingNumber = (int) (startnumber/Color.FACTOR);
+
+        assertThat(new Color(i,startnumber,startnumber).brighter())
+                .hasRed(res)
+                .hasGreen(endingNumber)
+                .hasBlue(endingNumber);
+        assertThat(new Color(startnumber,i,startnumber).brighter())
+                .hasRed(endingNumber)
+                .hasGreen(res)
+                .hasBlue(endingNumber);
+        assertThat(new Color(startnumber,startnumber,i).brighter())
+                .hasRed(endingNumber)
+                .hasGreen(endingNumber)
+                .hasBlue(res);
     }
 
 
     @Test
     public void testBrighterOnlyOne() throws Exception {
+        final int startnumber = 100;
+        final int endingNumber = (int) (startnumber/Color.FACTOR);
+        testBatchEdit(startnumber, endingNumber);
+    }
+
+    @Test
+    public void testBrighterLimit() throws Exception {
         final int startnumber = 100;
         final int endingNumber = (int) (startnumber/Color.FACTOR);
         testBatchEdit(startnumber, endingNumber);
@@ -80,9 +121,19 @@ public class ColorTest {
 
 
     @Test
-    public void testDarker() throws Exception {
+    public void testBrighterFull() throws Exception {
         int startColor = 100;
         testBatchEdit(startColor, (int) (startColor/Color.FACTOR));
+    }
+
+    @Test
+    public void testDarker() throws Exception {
+        final int startnumber = 100;
+        final int endingNumber = (int) (startnumber*Color.FACTOR);
+        assertThat(new Color(startnumber,startnumber,startnumber).darker())
+                .hasBlue(endingNumber)
+                .hasGreen(endingNumber)
+                .hasRed(endingNumber);
     }
 
     @Test
@@ -120,42 +171,42 @@ public class ColorTest {
     public void testExceptionRedNegate() throws Exception {
         assertThatThrownBy(() -> new Color(-1, 0, 0))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Red should be between 0 and 255");
+                .describedAs("Red should be between 0 and 255");
     }
 
     @Test
     public void testExceptionRedUnder255() throws Exception {
         assertThatThrownBy(() ->  new Color(256, 0, 0) )
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Red should be between 0 and 255");
+                .describedAs("Red should be between 0 and 255");
     }
 
     @Test
     public void testExceptionGreenNegate() throws Exception {
         assertThatThrownBy(() -> new Color( 0, -1, 0))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Green should be between 0 and 255");
+                .describedAs("Green should be between 0 and 255");
     }
 
     @Test
     public void testExceptionGreenUnder255() throws Exception {
         assertThatThrownBy(() ->  new Color( 0, 256, 0) )
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Green should be between 0 and 255");
+                .describedAs("Green should be between 0 and 255");
     }
 
     @Test
     public void testExceptionBlueNegate() throws Exception {
         assertThatThrownBy(() -> new Color(0, 0, -1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Blue should be between 0 and 255");
+                .describedAs("Blue should be between 0 and 255");
     }
 
     @Test
     public void testExceptionBlueUnder255() throws Exception {
         assertThatThrownBy(() ->  new Color(0, 0, 256) )
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Blue should be between 0 and 255");
+                .describedAs("Blue should be between 0 and 255");
     }
 
 }

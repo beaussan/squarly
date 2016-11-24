@@ -43,7 +43,7 @@ public class SquareWrapper<T extends ICoordinateSquare> implements ICoordinateSq
 
     @Override
     public void setUpdated() {
-        //t.getGameMap().setChanged(null);
+        //t.getGameMap().setChanged(t);
     }
 
     @Override

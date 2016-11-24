@@ -11,7 +11,10 @@ import java.util.function.Predicate;
  * @author Nicolas Beaussart
  * @since 31/10/16
  */
-public class StreamUtils {
+public final class StreamUtils {
+    private StreamUtils(){
+
+    }
 
     /**
      * filter stream for distinct by key

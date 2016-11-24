@@ -10,6 +10,9 @@ import java.util.Random;
  * @since 31/10/16
  */
 public final class RmdUtils {
+    private RmdUtils() {
+
+    }
 
     /**
      * Get a random item from a collection

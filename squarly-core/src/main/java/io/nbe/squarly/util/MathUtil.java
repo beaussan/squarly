@@ -17,16 +17,18 @@ import java.util.List;
 public final class MathUtil {
     private static final Logger log = LoggerFactory.getLogger(MathUtil.class);
 
-    private MathUtil(){}
+    private MathUtil(){
+
+    }
 
     /**
      * return the absolute integer
-     * @param a the integer
-     * @return the absolute of a
+     * @param number the integer
+     * @return the absolute of number
      */
-    static int abs(int a)
+    static int abs(int number)
     {
-        return (a < 0) ? -a : a;
+        return (number < 0) ? -number : number;
     }
 
     /**

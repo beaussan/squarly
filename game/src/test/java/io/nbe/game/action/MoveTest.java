@@ -1,5 +1,6 @@
 package io.nbe.game.action;
 
+import io.nbe.game.map.GameSquareAssert;
 import io.nbe.squarly.model.Cord;
 import io.nbe.squarly.model.Direction;
 import io.nbe.squarly.model.interfaces.IState;
@@ -7,7 +8,6 @@ import io.nbe.game.entity.Entity;
 import io.nbe.game.entity.Player;
 import io.nbe.game.map.GameMap;
 import io.nbe.game.map.GameSquare;
-import io.nbe.game.map.GameSquareAssert;
 import org.junit.Test;
 
 import java.util.Optional;

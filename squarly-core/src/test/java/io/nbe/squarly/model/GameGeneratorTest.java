@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
 /**
@@ -28,11 +29,33 @@ public class GameGeneratorTest {
 
         GameMap gm = new GameMap(30,30);
         final boolean[] isGood = {false};
-        new GameGenerator<CaraSquare>(gm).useMazeGeneratorClean().addPostProsessor(caraSquares -> {
+        new GameGenerator<>(gm).useMazeGeneratorClean().addPostProsessor(caraSquares -> {
             isGood[0] = true;
         }).generate();
         assertThat(isGood[0]).isTrue().describedAs("Post Porossesor called");
     }
+
+
+    @Test
+    public void drawedGood() throws Exception {
+
+        GameMap gm = new GameMap(30,30);
+        new GameGenerator<>(gm, true)
+                .useMazeGeneratorClean()
+                .generate();
+        //System.out.println(gm.getUpdatesHandlers());
+    }
+    @Test
+    public void testEqualsSetters() throws Exception {
+        GameMap gm = new GameMap(30,30);
+        assertThat(new GameGenerator<>(gm).useDungeonGenerator().getUsedGenerator())
+                .isInstanceOf(DungeonGenerator.class);
+        assertThat(new GameGenerator<>(gm).useMazeGenerator().getUsedGenerator())
+                .isInstanceOf(MazeGenerator.class);
+        assertThat(new GameGenerator<>(gm).useMazeGeneratorClean().getUsedGenerator())
+                .isInstanceOf(MazeGeneratorClean.class);
+    }
+
 
     @Test
     public void addPostProsessorInOrder() throws Exception {
@@ -59,9 +82,55 @@ public class GameGeneratorTest {
     }
 
     @Test
-    public void generate() throws Exception {
-
+    public void generateExceptionsizeX() throws Exception {
+        final GameMap gm = new GameMap(0,30);
+        assertThatThrownBy(() -> new GameGenerator<>(gm))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("SizeX should be over 0");
     }
+
+    @Test
+    public void generateExceptionSizeY() throws Exception {
+        final GameMap gm = new GameMap(30,0);
+        assertThatThrownBy(() -> new GameGenerator<>(gm))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("SizeY should be over 0");
+    }
+    @Test
+    public void generateExceptionNotNull() throws Exception {
+        assertThatThrownBy(() -> new GameGenerator<>(null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("GameMap should not be null");
+    }
+
+    @Test
+    public void generateExceptionNotNullData() throws Exception {
+        final GameMap gm = new GameMap(30,30);
+        gm.setMapData(null);
+        assertThatThrownBy(() -> new GameGenerator<>(gm))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Map data should not be null");
+    }
+    @Test
+    public void generateExceptionIncorectSize() throws Exception {
+        final GameMap gm = new GameMap(30,30);
+        gm.getMapData().remove(Cord.get(0,0));
+        assertThatThrownBy(() -> new GameGenerator<>(gm))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("The map is not the correct lenght, expected 900 but got 899 tiles");
+    }
+
+    /*
+
+
+    private void checkIntegrityMap(){
+        gameMap.removeOutOfBounds();
+        checkState(checkNotNull(gameMap.getMapData(), "Map data should not be null").size() ==
+                gameMap.sizeX()*gameMap.sizeY(), "The map is not the correct lenght, expected %s but got %s tiles",
+                gameMap.sizeX()*gameMap.sizeY(), gameMap.getMapData().size());
+    }
+
+     */
 
     @Test
     public void testAllConnectedEveryThing() throws Exception {
@@ -89,14 +158,14 @@ public class GameGeneratorTest {
                 return;
             }
 
-            startingSquare.setVisited(true);
+            startingSquare.setVisited();
 
             List<CaraSquare> nonVisited = new ArrayList<CaraSquare>();
             nonVisited.addAll(startingSquare.getNeiNonVisited());
 
             while (!nonVisited.isEmpty()){
                 CaraSquare remove = nonVisited.remove(0);
-                remove.setVisited(true);
+                remove.setVisited();
                 nonVisited.addAll(remove.getNeiNonVisited());
                 nonVisited.removeIf(CaraSquare::isVisited);
             }
@@ -163,14 +232,15 @@ public class GameGeneratorTest {
         @Override
         public void setState(IState state) {
             this.state = state;
+            setUpdated();
         }
 
         public boolean isVisited() {
             return visited;
         }
 
-        public void setVisited(boolean visited) {
-            this.visited = visited;
+        public void setVisited() {
+            this.visited = true;
         }
 
         @Override
@@ -203,9 +273,6 @@ public class GameGeneratorTest {
                     mapdata.put(Cord.get(x,y),new CaraSquare(Cord.get(x,y), this));
                 }
             }
-            System.out.println(mapdata.get(Cord.get(0, 0)));
-            System.out.println(mapdata.get(Cord.get(sizex, sizey)));
-            System.out.println(mapdata.size());
         }
 
         @Override

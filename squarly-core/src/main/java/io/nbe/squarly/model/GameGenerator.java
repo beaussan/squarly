@@ -20,9 +20,11 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
+
 /**
+ * A class for generating a dungeon
+ * @param <T> the type of cells in the dungeon
  * @author Nicolas Beaussart
- * @since 27/10/16
  */
 public class GameGenerator<T extends ICoordinateSquare> {
 
@@ -39,12 +41,21 @@ public class GameGenerator<T extends ICoordinateSquare> {
 
     private LinkedList<Consumer<List<T>>> postProssesors = new LinkedList<>();
 
+    /**
+     * Create a generator with the game map in parameters
+     * @param gameMap the game map to generate on
+     */
     public GameGenerator(IGameMap<T> gameMap) {
         this.gameMap = checkNotNull(gameMap, "GameMap should not be null");
         isShowing = false;
         checkIntegrityMap();
         setupMap();
     }
+    /**
+     * Create a generator with the game map in parameters
+     * @param gameMap the game map to generate on
+     * @param debugPrinting if set to true, will display a debug visual interface of the generation
+     */
     public GameGenerator(IGameMap<T> gameMap, boolean debugPrinting) {
         this.gameMap = checkNotNull(gameMap, "GameMap should not be null");
         isShowing = debugPrinting;
@@ -55,12 +66,22 @@ public class GameGenerator<T extends ICoordinateSquare> {
         }
     }
 
+    /**
+     * Add a post prosessor to the dungeon, will be called in order after the dungeon is generated.
+     * @param constor the consumer to add
+     * @return this object
+     */
     public GameGenerator<T> addPostProsessor(Consumer<List<T>> constor){
         postProssesors.add(constor);
         log.trace("Adding post prosessor");
         return this;
     }
 
+    /**
+     * Use a Generator for this generation
+     * @param generator a generator
+     * @return this object
+     */
     public GameGenerator<T> useGenerator(AbsGenerator<T> generator){
         generator.setGameGenerator(this);
         usedGenerator = generator;
@@ -68,17 +89,30 @@ public class GameGenerator<T extends ICoordinateSquare> {
         return this;
     }
 
+    /**
+     * Use a <code>{@link MazeGenerator}</code> for generation
+     * @return this object
+     */
     public GameGenerator<T> useMazeGenerator(){
         usedGenerator = new MazeGenerator<>(this);
         log.debug("Usinging mazeGenerator");
         return this;
     }
 
+    /**
+     * Use a <code>{@link MazeGeneratorClean}</code> for generation
+     * @return this object
+     */
     public GameGenerator<T> useMazeGeneratorClean(){
         usedGenerator = new MazeGeneratorClean<>(this);
         log.debug("Using MazeGeneratorClean");
         return this;
     }
+
+    /**
+     * Use a <code>{@link DungeonGenerator}</code> for generation
+     * @return this object
+     */
 
     public GameGenerator<T> useDungeonGenerator(){
         usedGenerator = new DungeonGenerator<>(this);
@@ -86,9 +120,17 @@ public class GameGenerator<T extends ICoordinateSquare> {
         return this;
     }
 
+    public AbsGenerator<T> getUsedGenerator() {
+        return usedGenerator;
+    }
+
+    /**
+     * Generate the dungeon
+     * @return the map generated
+     */
     public IGameMap<T> generate(){
         log.debug("Starting to generate dungeon");
-        usedGenerator.generate();
+        checkNotNull(usedGenerator, "The generator was null").generate();
         log.debug("Generating done, lanching postProsessors");
 
         while (! postProssesors.isEmpty())

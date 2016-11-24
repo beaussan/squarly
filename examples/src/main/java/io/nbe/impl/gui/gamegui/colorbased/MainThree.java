@@ -17,7 +17,7 @@ public class MainThree {
 
             }
         }
-        new GameGenerator<GameSquare>(gm, true).useDungeonGenerator().generate();
+        new GameGenerator<GameSquare>(gm, true).useMazeGeneratorClean().generate();
         System.out.println("Done");
     }
 }
