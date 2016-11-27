@@ -1,6 +1,7 @@
 package io.nbe.squarly.model;
 
-import com.google.common.base.MoreObjects;
+import com.google.common.base.*;
+import com.google.common.base.Objects;
 import io.nbe.squarly.model.generator.AbsGenerator;
 import io.nbe.squarly.model.generator.DungeonGenerator;
 import io.nbe.squarly.model.generator.MazeGenerator;
@@ -12,6 +13,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -35,13 +37,65 @@ public class GameGeneratorTest {
         assertThat(isGood[0]).isTrue().describedAs("Post Porossesor called");
     }
 
+    @Test
+    public void testSameWithSameRandom() throws Exception {
+        Random r = new Random(30);
+        Random r2 = new Random(30);
+        assertThat(new GameGenerator<>(new GameMap(30,30))
+                .useMazeGeneratorClean()
+                .useRandom(r)
+                .generate())
+                .isEqualTo(
+                        new GameGenerator<>(new GameMap(30,30))
+                                .useMazeGeneratorClean()
+                                .useRandom(r2)
+                                .generate());
+
+    }
+
+
+    @Test
+    public void testSameWithSameSeed() throws Exception {
+        String seed = "hello";
+        assertThat(new GameGenerator<>(new GameMap(30,30))
+                .useMazeGeneratorClean()
+                .useSeed(seed)
+                .generate())
+                .isEqualTo(
+                        new GameGenerator<>(new GameMap(30,30))
+                                .useMazeGeneratorClean()
+                                .useSeed(seed)
+                                .generate());
+
+    }
+
+    @Test
+    public void testGetterGenerator() throws Exception {
+
+        GameGenerator<CaraSquare> generator = new GameGenerator<>(new GameMap(30, 30)).useMazeGeneratorClean().useSeed("seed");
+        assertThat(generator.getUsedGenerator().getGameGenerator()).isEqualTo(generator);
+    }
+
+    @Test
+    public void testGeneratorFail() throws Exception {
+        assertThatThrownBy(() -> new AbsGenerator<CaraSquare>() {
+                @Override
+                public void doGenerate() {
+
+                }
+            }.generate())
+                .isInstanceOf(NullPointerException.class)
+                .describedAs("Game map is null");
+
+    }
+
 
     @Test
     public void drawedGood() throws Exception {
 
-        GameMap gm = new GameMap(30,30);
-        new GameGenerator<>(gm, true)
+        new GameGenerator<>(new GameMap(30,30), true)
                 .useMazeGeneratorClean()
+                .useSeed("seed")
                 .generate();
         //System.out.println(gm.getUpdatesHandlers());
     }
@@ -256,6 +310,22 @@ public class GameGeneratorTest {
                     .add("visited", visited)
                     .toString();
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            CaraSquare that = (CaraSquare) o;
+            return visited == that.visited &&
+                    Objects.equal(cord, that.cord) &&
+                    // Objects.equal(gameMap, that.gameMap) &&
+                    state == that.state;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(cord, state, visited);
+        }
     }
 
     private class GameMap implements IGameMap<CaraSquare> {
@@ -298,6 +368,23 @@ public class GameGeneratorTest {
         @Override
         public int sizeY() {
             return sizey;
+        }
+
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            GameMap gameMap = (GameMap) o;
+            return sizex == gameMap.sizex &&
+                    sizey == gameMap.sizey &&
+                    Objects.equal(mapdata, gameMap.mapdata) &&
+                    Objects.equal(updatesHandleurs, gameMap.updatesHandleurs);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(sizex, sizey, mapdata, updatesHandleurs);
         }
     }
 

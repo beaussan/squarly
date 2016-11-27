@@ -14,8 +14,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * Generate a dungeon
+ * @param <T> the type of game squares in the map
  * @author Nicolas Beaussart
- * @since 31/10/16
  */
 public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<T> {
 
@@ -28,13 +29,20 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
     private List<Room<T>> lsRooms = new ArrayList<>();
 
 
-
+    /**
+     * Generate a dungeon based on the gameGenerator
+     * @param gameGenerator the game generator to work on
+     */
     public DungeonGenerator(GameGenerator<T> gameGenerator) {
         super(gameGenerator);
         nmbRoomTry = 100;
         roomSizeMin = 5;
         roomAddingRmdBound = 3;
     }
+
+    /**
+     * Generate a dungeon with rooms
+     */
     public DungeonGenerator() {
         super();
         nmbRoomTry = 100;
@@ -42,6 +50,12 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
         roomAddingRmdBound = 3;
     }
 
+    /**
+     * Generate a dungeon with custom properties
+     * @param nmbRoomTry the number of try
+     * @param roomSizeMin the room size, must be odd
+     * @param roomAddingRmdBound the number of room to add
+     */
     public DungeonGenerator(int nmbRoomTry, int roomSizeMin, int roomAddingRmdBound) {
         super();
         this.nmbRoomTry = nmbRoomTry;
@@ -68,11 +82,10 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
         while (!isdone[0]){
             isdone[0] = true;
             data.forEach(tSquareWrapper -> {
-                if (tSquareWrapper.getState() == IState.ROOM){
-                    if (tSquareWrapper.getNeighs(IState.ROOM).size() <= 1){
-                        tSquareWrapper.setState(IState.WALL);
-                        isdone[0] = false;
-                    }
+                if (tSquareWrapper.getState() == IState.ROOM
+                        && tSquareWrapper.getNeighs(IState.ROOM).size() <= 1) {
+                    tSquareWrapper.setState(IState.WALL);
+                    isdone[0] = false;
                 }
             });
         }
@@ -86,9 +99,9 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
         lsRooms.forEach(tRoom -> {
             List<SquareWrapper<T>> neigh = tRoom.getNeigh();
 
-            RmdUtils.getRandom(neigh, r).setState(IState.ROOM);
+            RmdUtils.getRandom(neigh, getR()).setState(IState.ROOM);
             neigh.forEach(tSquareWrapper -> {
-                if (r.nextInt(10) > 8){
+                if (getR().nextInt(10) > 8){
                     tSquareWrapper.setState(IState.ROOM);
                 }
             });
@@ -152,47 +165,39 @@ public class DungeonGenerator<T extends ICoordinateSquare> extends AbsGenerator<
 
     private void generateRooms(){
         log.trace("Generating rooms, trying {} times", nmbRoomTry);
-        int nmbRoomTry = 0;
+        int currentRoomTry = 0;
         Room<T> room;
-        boolean isGood = true;
-        while (nmbRoomTry < this.nmbRoomTry){
-            nmbRoomTry++;
+        while (currentRoomTry < nmbRoomTry){
+            currentRoomTry++;
             SquareWrapper<T> tmp;
-            tmp = RmdUtils.getRandom(gameMap.getDataMapped().values(), r);
+            tmp = RmdUtils.getRandom(gameMap.getDataMapped().values(), getR());
             while (tmp == null || tmp.getState() == IState.ROOM){
-                tmp = RmdUtils.getRandom(gameMap.getDataMapped().values(), r);
+                tmp = RmdUtils.getRandom(gameMap.getDataMapped().values(), getR());
             }
 
-            room = new Room<T>(
+            room = new Room<>(
                     tmp.getCord(),
-                    roomSizeMin + (r.nextInt(roomAddingRmdBound)*2),
-                    roomSizeMin + (r.nextInt(roomAddingRmdBound)*2),
+                    roomSizeMin + (getR().nextInt(roomAddingRmdBound)*2),
+                    roomSizeMin + (getR().nextInt(roomAddingRmdBound)*2),
                     gameMap);
 
-            if (!room.canBePlaced()){
-                continue;
+            if (room.canBePlaced() && isNotOverlaping(room)) {
+                room.populateCords();
+                lsRooms.add(room);
             }
-
-            for (Room<T> roomList : lsRooms) {
-                if (roomList.isOverlapping(room)) {
-                    isGood = false;
-                    break;
-                }
-            }
-            if (!isGood){
-                continue;
-            }
-            room.populateCords();
-            lsRooms.add(room);
         }
         log.trace("Generating rooms done, we generated {} rooms.", lsRooms.size());
-        //     public Room(Cord startingCords, int width, int height, GameMapWrapper<T> gameMapWrapper) {
 
     }
 
-
-
-
+    private boolean isNotOverlaping(Room<T> room) {
+        for (Room<T> roomList : lsRooms) {
+            if (roomList.isOverlapping(room)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 }

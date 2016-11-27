@@ -1,13 +1,13 @@
 package io.nbe.squarly.model.generator.wrapper;
 
+import io.nbe.squarly.model.Cord;
 import io.nbe.squarly.model.Direction;
 import io.nbe.squarly.model.interfaces.ICoordinateSquare;
-import io.nbe.squarly.model.interfaces.IState;
-import io.nbe.squarly.model.Cord;
 import io.nbe.squarly.model.interfaces.IGameMap;
+import io.nbe.squarly.model.interfaces.IState;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class SquareWrapper<T extends ICoordinateSquare> implements ICoordinateSquare {
     private T t;
     private GameMapWrapper gmw;
-    Map<Direction, SquareWrapper<T>> neighs = new HashMap<>();
+    Map<Direction, SquareWrapper<T>> neighs = new EnumMap<>(Direction.class);
     List<SquareWrapper<T>> diagonals = new ArrayList<>();
 
     private boolean visited = false;

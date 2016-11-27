@@ -22,15 +22,31 @@ public final class RmdUtils {
      * @return item found
      */
     public static <T> T getRandom(Collection<T> collection, Random r){
-        int item = r.nextInt(collection.size()); // In real life, the Random object should be rather more shared than this
+        if (collection == null || collection.isEmpty()){
+            return null;
+        }
+        int item;
+        item = r.nextInt(collection.size());
         int i = 0;
+        T found = null;
         for(T obj : collection)
         {
-            if (i == item)
-                return obj;
+            if (i == item) {
+                found = obj;
+                break;
+            }
             i = i + 1;
         }
-        return null;
+        return found;
+    }
+
+    /**
+     * Generate a random instance from a string
+     * @param string the seed
+     * @return the random instance
+     */
+    public static Random getRandomFromString(String string){
+        return new Random(String.valueOf(string).hashCode());
     }
 
     /**

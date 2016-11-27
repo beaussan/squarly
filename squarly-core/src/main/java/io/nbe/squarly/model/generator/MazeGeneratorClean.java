@@ -1,55 +1,40 @@
 package io.nbe.squarly.model.generator;
 
-import io.nbe.squarly.model.generator.wrapper.GameMapWrapper;
-import io.nbe.squarly.model.interfaces.ICoordinateSquare;
-import io.nbe.squarly.model.interfaces.IState;
-import io.nbe.squarly.model.Cord;
 import io.nbe.squarly.model.GameGenerator;
 import io.nbe.squarly.model.generator.wrapper.SquareWrapper;
+import io.nbe.squarly.model.interfaces.ICoordinateSquare;
+import io.nbe.squarly.model.interfaces.IState;
 
-import java.util.*;
+import java.util.List;
 
 /**
+ * create a clean maze generator
+ * @param <T> the square type
  * @author Nicolas Beaussart
- * @since 27/10/16
  */
-public class MazeGeneratorClean<T extends ICoordinateSquare> extends AbsGenerator<T> {
-
+public class MazeGeneratorClean<T extends ICoordinateSquare> extends AbstractMazeGenerator<T> {
+    /**
+     * Creating a maze generator
+     * @param gameGenerator the gameGenerator wrapper
+     */
     public MazeGeneratorClean(GameGenerator<T> gameGenerator) {
         super(gameGenerator);
     }
 
+    /**
+     * Creating a maze generator
+     */
     public MazeGeneratorClean() {
         super();
     }
 
     @Override
-    public void doGenerate() {
-        GameMapWrapper<T> mapWrapper = getMapWrapper();
-
-        List<SquareWrapper<T>> wallList = new ArrayList<>();
-        Random r = new Random();
-
-        Optional<SquareWrapper<T>> fromCords = mapWrapper.getFromCords(Cord.get(1, 1));
-
-        if (fromCords.isPresent()) {
-            fromCords.get().setState(IState.ROOM);
-            wallList.addAll(fromCords.get().getNeighs(IState.WALL));
-
-        } else {
-            throw new IllegalStateException("The map is too small");
+    protected void handleSquare(List<SquareWrapper<T>> wallList, SquareWrapper<T> rmd) {
+        if (rmd.getNeighs(IState.ROOM).size() == 1 &&
+                rmd.getDiagonals(IState.WALL).size() >= 6){
+            rmd.setState(IState.ROOM);
+            wallList.addAll(rmd.getNeighs(IState.WALL));
         }
-
-        while (!wallList.isEmpty()){
-            SquareWrapper<T> rmd = wallList.remove(r.nextInt(wallList.size()));
-
-            if (rmd.getNeighs(IState.ROOM).size() == 1 &&
-                    rmd.getDiagonals(IState.WALL).size() >= 6){
-                rmd.setState(IState.ROOM);
-                wallList.addAll(rmd.getNeighs(IState.WALL));
-            }
-        }
-
     }
 
     /*

@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -41,6 +40,33 @@ public class RmdUtilsTest {
         int i = r2.nextInt(values.size());
         assertThat(RmdUtils.getRandom(values, r)).isEqualTo(""+i);
 
+    }
+
+
+    @Test
+    public void testEmptyList() throws Exception {
+        assertThat(RmdUtils.getRandom(new ArrayList<String>())).isNull();
+    }
+
+    @Test
+    public void getRandomFromString() throws Exception {
+        Random r = RmdUtils.getRandomFromString(null);
+        Random r2 = RmdUtils.getRandomFromString(null);
+        testIfTwoRandomsWorkSame(r, r2);
+
+        testIfTwoRandomsWorkSame(
+                RmdUtils.getRandomFromString("hello"),
+                RmdUtils.getRandomFromString("hello"));
+        testIfTwoRandomsWorkSame(
+                RmdUtils.getRandomFromString("hello2"),
+                RmdUtils.getRandomFromString("hello2"));
+
+    }
+
+    private void testIfTwoRandomsWorkSame(Random r1, Random r2){
+        for (int i = 0; i < 10_000; i++) {
+            assertThat(r1.nextInt()).isEqualTo(r2.nextInt());
+        }
     }
 
     @Test

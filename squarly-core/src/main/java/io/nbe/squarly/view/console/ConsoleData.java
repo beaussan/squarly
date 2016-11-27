@@ -144,55 +144,28 @@ public final class ConsoleData implements Serializable {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
     public int getRows() {
         return rows;
-    }
-
-    public void setRows(int rows) {
-        this.rows = rows;
     }
 
     public int getColumns() {
         return columns;
     }
 
-    public void setColumns(int columns) {
-        this.columns = columns;
-    }
-
     public Color[] getBackground() {
         return background;
-    }
-
-    public void setBackground(Color[] background) {
-        this.background = background;
     }
 
     public Color[] getForeground() {
         return foreground;
     }
 
-    public void setForeground(Color[] foreground) {
-        this.foreground = foreground;
-    }
-
     public Font[] getFont() {
         return font;
-    }
-
-    public void setFont(Font[] font) {
-        this.font = font;
     }
 
     public char[] getText() {
         return text;
     }
 
-    public void setText(char[] text) {
-        this.text = text;
-    }
 }

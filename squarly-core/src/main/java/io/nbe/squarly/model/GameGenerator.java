@@ -7,6 +7,7 @@ import io.nbe.squarly.model.generator.MazeGeneratorClean;
 import io.nbe.squarly.model.interfaces.IColoredSquare;
 import io.nbe.squarly.model.interfaces.ICoordinateSquare;
 import io.nbe.squarly.model.interfaces.IState;
+import io.nbe.squarly.util.RmdUtils;
 import io.nbe.squarly.view.GameScreen;
 import io.nbe.squarly.view.MapPrinter;
 import io.nbe.squarly.model.interfaces.IGameMap;
@@ -38,6 +39,7 @@ public class GameGenerator<T extends ICoordinateSquare> {
     private final IGameMap<T> gameMap;
     private final boolean isShowing;
     private AbsGenerator<T> usedGenerator;
+    private Random r = new Random();
 
     private LinkedList<Consumer<List<T>>> postProssesors = new LinkedList<>();
 
@@ -120,6 +122,26 @@ public class GameGenerator<T extends ICoordinateSquare> {
         return this;
     }
 
+    /**
+     * Use this random for this generator
+     * @param r the random generator to use
+     * @return this object
+     */
+    public GameGenerator<T> useRandom(Random r){
+        this.r = r;
+        return this;
+    }
+
+    /**
+     * Use seed for this generator
+     * @param string the seed to use to
+     * @return this object
+     */
+    public GameGenerator<T> useSeed(String string){
+        this.r = RmdUtils.getRandomFromString(string);
+        return this;
+    }
+
     public AbsGenerator<T> getUsedGenerator() {
         return usedGenerator;
     }
@@ -130,11 +152,13 @@ public class GameGenerator<T extends ICoordinateSquare> {
      */
     public IGameMap<T> generate(){
         log.debug("Starting to generate dungeon");
-        checkNotNull(usedGenerator, "The generator was null").generate();
+        checkNotNull(usedGenerator, "The generator was null").setR(r);
+        usedGenerator.generate();
         log.debug("Generating done, lanching postProsessors");
 
-        while (! postProssesors.isEmpty())
+        while (! postProssesors.isEmpty()) {
             postProssesors.remove().accept(new ArrayList<>(gameMap.getMapData().values()));
+        }
         gameMap.setChanged(null);
         log.debug("My job is done.");
         return gameMap;
