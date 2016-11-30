@@ -15,6 +15,6 @@ before_install:
 #jdk:
 #
 jdk:
-  - openjdk8
+  - oraclejdk8
 after_success:
   - bash <(curl -s https://codecov.io/bash)
