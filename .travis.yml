@@ -5,7 +5,7 @@ addons:
   apt:
     packages:
       - oracle-java8-installer
-jdk:
-  - openjdk8
+#jdk:
+#  - openjdk8
 after_success:
   - bash <(curl -s https://codecov.io/bash)
