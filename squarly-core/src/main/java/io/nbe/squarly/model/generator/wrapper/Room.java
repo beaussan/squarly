@@ -8,7 +8,6 @@ import io.nbe.squarly.model.interfaces.IState;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -52,17 +51,9 @@ public class Room<T extends ICoordinateSquare> {
                 })
                 .filter(tSquareWrapper -> tSquareWrapper.getNeighs(IState.ROOM).size() == 2)
                 .collect(Collectors.toList());
-       // System.out.println(list);
         return list;
     }
 
-    public void setVisited(){
-        for (int x = -1; x <= width; x++) {
-            for (int y = -1; y <= height; y++) {
-                gameMapWrapper.getFromCords(startingCords.add(x,y)).ifPresent(tSquareWrapper -> tSquareWrapper.setVisited(true));
-            }
-        }
-    }
 
     public void populateCords(){
         if (!canBePlaced()){
@@ -97,27 +88,6 @@ public class Room<T extends ICoordinateSquare> {
         return true;
 
     }
-    public boolean canBePlacedOld(){
-        Optional<SquareWrapper<T>> fc = gameMapWrapper.getFromCords(startingCords);
-
-        if (!fc.isPresent()) {
-            return false;
-        } else {
-            if (fc.get().getDiagonals(IState.WALL).size() != 8){
-                return false;
-            }
-        }
-        Optional<SquareWrapper<T>> fco = gameMapWrapper.getFromCords(otherCorner);
-        if (!fco.isPresent()) {
-            return false;
-        } else {
-            if (fco.get().getDiagonals(IState.WALL).size() != 8){
-                return false;
-            }
-        }
-        return true;
-
-    }
 
     public boolean isOverlapping(Room room){
         return rect.intersects(room.rect);
@@ -126,22 +96,6 @@ public class Room<T extends ICoordinateSquare> {
 
     public Cord getStartingCords() {
         return startingCords;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public Cord getOtherCorner() {
-        return otherCorner;
-    }
-
-    public GameMapWrapper<T> getGameMapWrapper() {
-        return gameMapWrapper;
     }
 
     @Override
@@ -156,11 +110,4 @@ public class Room<T extends ICoordinateSquare> {
                 .toString();
     }
 
-    public boolean isConnected() {
-        return isConnected;
-    }
-
-    public void setConnected(boolean connected) {
-        isConnected = connected;
-    }
 }

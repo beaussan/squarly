@@ -68,10 +68,6 @@ public class SquareWrapper<T extends ICoordinateSquare> implements ICoordinateSq
         return gmw;
     }
 
-    public void setGmw(GameMapWrapper gmw) {
-        this.gmw = gmw;
-    }
-
     public List<SquareWrapper<T>> getNeighs() {
         return new ArrayList<>(neighs.values());
     }
