@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import static io.nbe.squarly.model.ColorAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.filter;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -20,6 +19,16 @@ public class ColorTest {
                 .hasRed(10)
                 .hasGreen(39)
                 .hasBlue(57);
+    }
+
+    @Test
+    public void testEquals() throws Exception {
+        Assertions.assertThat(new Color(10,10,10).equals(true)).isFalse();
+        Assertions.assertThat(new Color(10,10,10).equals(null)).isFalse();
+        Assertions.assertThat(new Color(10,10,10).equals(new Color(10,10,10))).isTrue();
+        Assertions.assertThat(new Color(10,10,10).equals(new Color(11,10,10))).isFalse();
+        Assertions.assertThat(new Color(10,10,10).equals(new Color(10,11,10))).isFalse();
+        Assertions.assertThat(new Color(10,10,10).equals(new Color(10,10,11))).isFalse();
     }
 
     @Test
