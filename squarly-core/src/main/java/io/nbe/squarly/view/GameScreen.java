@@ -50,16 +50,12 @@ public class GameScreen extends JFrame {
     }
 
     private void initUIGame(String name, JComponent mapPrinter) {
-
         add(mapPrinter);
         setTitle(name);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         pack();
     }
-
-
-
 
 
 }
