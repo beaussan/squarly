@@ -1,4 +1,3 @@
 rootProject.name = 'squarly'
 include 'squarly-core', 'examples'
 include 'game'
-

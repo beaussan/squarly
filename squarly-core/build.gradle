@@ -12,7 +12,6 @@ buildscript {
     }
 }
 
-
 // use assertj generator from gradle example
 
 def assertjOutput = file('src/test/java-gen')

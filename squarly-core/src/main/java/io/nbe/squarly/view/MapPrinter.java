@@ -40,58 +40,14 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
         this.gameMap = gameMap;
     }
 
-    private Optional<T> findSquareAt(int x, int y) {
-        int xReal = x / gameMap.getHeightPixel();
-        int yReal = gameMap.sizeY() - y / gameMap.getHeightPixel() - 1;
-        return gameMap.getFromCords(Cord.get(xReal, yReal));
-    }
-
-    private Optional<T> findSquareAt(Point point) {
-        return findSquareAt((int) point.getX(), (int)point.getY());
-    }
-
     /**
      * Adding a game clicked event to the map printer
      * @param gameSquareClicked the event listener to be added
      */
     public void addGameClicked(GameSquareClicked<T> gameSquareClicked) {
-        this.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseClicked(square, e));
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mousePressed(square, e));
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseReleased(square, e));
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseEntered(square, e));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseExited(square, e));
-            }
-        });
-        addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseDragged(square, e));
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseMoved(square, e));
-            }
-        });
+        Listeners listener = new Listeners(gameSquareClicked);
+        addMouseListener(listener);
+        addMouseMotionListener(listener);
     }
 
     private void paintSquare(Graphics g, T gs) {
@@ -101,7 +57,7 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
         g.setColor(new Color(gs.getColor().getRed(), gs.getColor().getGreen(), gs.getColor().getBlue()));
         g.fillRect(
                 gs.getCord().getX() * gameMap.getWidthPixel(),
-                (gameMap.getHeightPixel() * (gameMap.sizeY() - gs.getCord().getY() - 1)),
+                gameMap.getHeightPixel() * (gameMap.sizeY() - gs.getCord().getY() - 1),
                 gameMap.getWidthPixel(),
                 gameMap.getHeightPixel()
         );
@@ -122,5 +78,55 @@ public class MapPrinter<T extends IColoredSquare & ICoordinateSquare> extends JP
     }
     public int getSizeWidth(){
         return gameMap.getWidthPixel() * (gameMap.sizeX());
+    }
+
+
+    private class Listeners implements MouseListener, MouseMotionListener{
+        final GameSquareClicked<T> gameSquareClicked;
+
+        public Listeners(GameSquareClicked<T> gameSquareClicked) {
+            this.gameSquareClicked = gameSquareClicked;
+        }
+
+        private Optional<T> findSquareAt(int x, int y) {
+            int xReal = x / gameMap.getHeightPixel();
+            int yReal = gameMap.sizeY() - y / gameMap.getHeightPixel() - 1;
+            return gameMap.getFromCords(Cord.get(xReal, yReal));
+        }
+
+        private Optional<T> findSquareAt(Point point) {
+            return findSquareAt((int) point.getX(), (int)point.getY());
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseDragged(square, e));
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseMoved(square, e));
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseClicked(square, e));
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {
+            findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mousePressed(square, e));
+        }
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseReleased(square, e));
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseEntered(square, e));
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+            findSquareAt(e.getPoint()).ifPresent(square -> gameSquareClicked.mouseExited(square, e));
+        }
     }
 }
