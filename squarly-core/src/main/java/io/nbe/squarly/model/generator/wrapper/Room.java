@@ -1,6 +1,5 @@
 package io.nbe.squarly.model.generator.wrapper;
 
-import com.google.common.base.MoreObjects;
 import io.nbe.squarly.model.Cord;
 import io.nbe.squarly.model.interfaces.ICoordinateSquare;
 import io.nbe.squarly.model.interfaces.IState;
@@ -21,10 +20,8 @@ public class Room<T extends ICoordinateSquare> {
     private final Cord startingCords;
     private final int width;
     private final int height;
-    private final Cord otherCorner;
     private final GameMapWrapper<T> gameMapWrapper;
     private Rectangle2D.Double rect;
-    private boolean isConnected = false;
 
     public Room(Cord startingCords, int width, int height, GameMapWrapper<T> gameMapWrapper) {
         this.startingCords = checkNotNull(startingCords);
@@ -33,7 +30,6 @@ public class Room<T extends ICoordinateSquare> {
         this.width = width;
         this.height = height;
         this.gameMapWrapper = checkNotNull(gameMapWrapper);
-        otherCorner = startingCords.add(width, height);
         rect = new Rectangle2D.Double(startingCords.getX(), startingCords.getY(), width, height);
     }
 
@@ -46,9 +42,7 @@ public class Room<T extends ICoordinateSquare> {
             }
         }
         list = list.stream()
-                .filter(tSquareWrapper -> {
-                    return tSquareWrapper.getState() == IState.WALL;
-                })
+                .filter(tSquareWrapper -> tSquareWrapper.getState() == IState.WALL)
                 .filter(tSquareWrapper -> tSquareWrapper.getNeighs(IState.ROOM).size() == 2)
                 .collect(Collectors.toList());
         return list;
@@ -56,12 +50,10 @@ public class Room<T extends ICoordinateSquare> {
 
 
     public void populateCords(){
-        if (!canBePlaced()){
-            return;
-        }
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                gameMapWrapper.getFromCords(startingCords.add(x,y)).ifPresent(tSquareWrapper -> {tSquareWrapper.setState(IState.ROOM);});
+                gameMapWrapper.getFromCords(startingCords.add(x,y))
+                        .ifPresent(tSquareWrapper -> tSquareWrapper.setState(IState.ROOM));
             }
         }
     }
@@ -96,18 +88,6 @@ public class Room<T extends ICoordinateSquare> {
 
     public Cord getStartingCords() {
         return startingCords;
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("startingCords", startingCords)
-                .add("width", width)
-                .add("height", height)
-                .add("otherCorner", otherCorner)
-                .add("rect", rect)
-                .add("gameMapWrapper", gameMapWrapper)
-                .toString();
     }
 
 }
