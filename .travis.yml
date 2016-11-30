@@ -1,7 +1,9 @@
 os:
   - linux
 language: java
-sudo: false # faster builds
+#sudo: false # faster builds
+sudo: required
+dist: trusty
 cache:
   directories:
     - $HOME/.gradle
