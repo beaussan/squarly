@@ -1,11 +1,12 @@
 package io.nbe.squarly.model;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import io.nbe.squarly.util.Pair;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Very simple coordinate system for a 2d environment
@@ -18,7 +19,13 @@ public class Cord {
     private final int x;
     private final int y;
 
-    private static final Map<Pair<Integer, Integer>, Cord> cache = new ConcurrentHashMap<>();
+    private static final LoadingCache<Pair<Integer, Integer>, Cord> cacheGraph = CacheBuilder.newBuilder()
+            .build(new CacheLoader<Pair<Integer, Integer>, Cord>() {
+                @Override
+                public Cord load(Pair<Integer, Integer> key) throws Exception {
+                    return new Cord(key.getKey(), key.getValue());
+                }
+            });
 
     /**
      * Create a Cord from x y
@@ -37,8 +44,7 @@ public class Cord {
      * @return the coordinate got
      */
     public static Cord get(int x, int y){
-        Pair<Integer, Integer> hash = new Pair<>(x,y);
-        return cache.computeIfAbsent(hash, pair -> new Cord(pair.getKey(), pair.getValue()));
+        return cacheGraph.getUnchecked(new Pair<>(x,y));
     }
 
     public int getX() {

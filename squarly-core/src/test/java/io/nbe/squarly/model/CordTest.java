@@ -50,6 +50,7 @@ public class CordTest {
                         .hasX(x)
                         .hasY(y)
                         .matches(cord1 -> cord1 == Cord.get(finalX, finalY));
+                //System.out.println(x + ":" + y);
             }
         }
 
