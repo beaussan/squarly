@@ -4,7 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import io.nbe.squarly.model.Color;
 import io.nbe.squarly.model.Cord;
-import io.nbe.squarly.model.interfaces.ICaracterSquare;
+import io.nbe.squarly.model.interfaces.ICharacterSquare;
 import io.nbe.squarly.model.interfaces.ICoordinateSquare;
 import io.nbe.squarly.model.interfaces.IState;
 import io.nbe.game.entity.Entity;
@@ -12,7 +12,7 @@ import io.nbe.game.entity.Entity;
 /**
  * Created by beaussan on 31/10/16.
  */
-public class GameSquare implements ICaracterSquare, ICoordinateSquare {
+public class GameSquare implements ICharacterSquare, ICoordinateSquare {
 
     private final static SquareContent COLOR_WALL = new SquareContent('#', new Color(64, 64, 64), new Color(192, 192, 192));
     private final static SquareContent COLOR_ROOM = new SquareContent('.', new Color(0,0,0),new Color(128, 128, 128));
