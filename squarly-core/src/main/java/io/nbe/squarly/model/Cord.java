@@ -47,10 +47,16 @@ public class Cord {
         return cacheGraph.getUnchecked(new Pair<>(x,y));
     }
 
+    /**
+     * @return the x coordinate
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * @return the y coordinate
+     */
     public int getY() {
         return y;
     }
@@ -66,7 +72,6 @@ public class Cord {
     }
 
     /**
-     *
      * Add a {@link Direction} to this one
      * @param direction The {@link Direction} to add to this one
      * @return The new {@link Cord} generated
@@ -76,7 +81,6 @@ public class Cord {
     }
 
     /**
-     *
      * Add a {@link Cord} to this one
      * @param cord The {@link Cord} to add to this one
      * @return The new {@link Cord} generated
