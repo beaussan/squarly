@@ -1,7 +1,7 @@
 package io.nbe.impl.gui.gamegui.textbased;
 
 import io.nbe.squarly.model.Color;
-import io.nbe.squarly.model.interfaces.ICaracterSquare;
+import io.nbe.squarly.model.interfaces.ICharacterSquare;
 import io.nbe.squarly.model.interfaces.ICoordinateSquare;
 import io.nbe.squarly.model.interfaces.IState;
 import io.nbe.squarly.model.Cord;
@@ -10,7 +10,7 @@ import io.nbe.squarly.model.Cord;
  * @author Nicolas Beaussart
  * @since 01/11/16
  */
-public class GameSquareText implements ICoordinateSquare, ICaracterSquare {
+public class GameSquareText implements ICoordinateSquare, ICharacterSquare {
 
     private final GameMap map;
     private final Cord cord;

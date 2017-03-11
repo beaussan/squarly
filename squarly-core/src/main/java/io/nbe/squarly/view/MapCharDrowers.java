@@ -1,6 +1,6 @@
 package io.nbe.squarly.view;
 
-import io.nbe.squarly.model.interfaces.ICaracterSquare;
+import io.nbe.squarly.model.interfaces.ICharacterSquare;
 import io.nbe.squarly.model.interfaces.ICoordinateSquare;
 import io.nbe.squarly.view.console.JConsole;
 import io.nbe.squarly.model.interfaces.IGameMap;
@@ -12,7 +12,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Nicolas Beaussart
  * @since 01/11/16
  */
-public class MapCharDrowers<T extends ICoordinateSquare & ICaracterSquare> {
+public class MapCharDrowers<T extends ICoordinateSquare & ICharacterSquare> {
 
     private final JConsole jConsole;
     private final IGameMap<T> gameMap;

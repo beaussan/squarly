@@ -8,7 +8,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Color class, basic rgb color system
+ * The Color class is used to represent the basic rgb color system
  *
  * @author Nicolas Beaussart
  * @since 12/10/16
@@ -85,6 +85,12 @@ public class Color {
                 Math.min((int)(b/FACTOR), 255));
     }
 
+    /**
+     * Check if a color is upper than the reference to keep the reference otherwise it return the input color
+     * @param ref reference semi brighter from factor
+     * @param real the input color
+     * @return the brighter's color
+     */
     private int brighterHelper(int ref, int real){
         if (real > 0 && real < ref){
             return ref;
@@ -93,14 +99,23 @@ public class Color {
         }
     }
 
+    /**
+     * @return the red component between 0 and 255
+     */
     public int getRed() {
         return red;
     }
 
+    /**
+     * @return the green component between 0 and 255
+     */
     public int getGreen() {
         return green;
     }
 
+    /**
+     * @return the blue component betwenn 0 and 255
+     */
     public int getBlue() {
         return blue;
     }
@@ -133,6 +148,9 @@ public class Color {
         return Objects.hash(red, green, blue);
     }
 
+    /**
+     * @return the awt.Color format of the color
+     */
     public java.awt.Color getAwt() {
         return awt;
     }
